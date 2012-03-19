@@ -32,8 +32,8 @@ namespace OSDConfig
         static long osd_home_distance = 0;          // distance from home
         static byte osd_home_direction = 0;             // Arrow direction pointing to home (1-16 to CW loop)
 
-        static SByte osd_pitch = -10;                  // pitch form DCM
-        static SByte osd_roll = 10;                   // roll form DCM
+        static SByte osd_pitch = 0;                  // pitch form DCM
+        static SByte osd_roll = 0;                   // roll form DCM
         //static byte osd_yaw = 0;                    // relative heading form DCM
         static float osd_heading = 0;                // ground course heading from GPS
         static float osd_alt = 200;                    // altitude

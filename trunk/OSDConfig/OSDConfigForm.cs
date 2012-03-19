@@ -400,10 +400,7 @@ namespace OSDConfig
                 bool fail = false;
                 //ArduinoSTK sp;
 
-                EnterCLI();
-                comPort.Write(Encoding.ASCII.GetBytes("R"), 0, 1);
-                comPort.ReadExisting();
-                comPort.Close();
+
 
 
                 MegaLoad sp = new MegaLoad();
@@ -415,8 +412,10 @@ namespace OSDConfig
                 sp.Connected += (s, ce) => { toolStripStatusLabel1.Text = "Programming"; };
                 try
                 {
-                    if (comPort.IsOpen)
-                        comPort.Close();
+                    EnterCLI();
+                    comPort.Write(Encoding.ASCII.GetBytes("R"), 0, 1);
+                    comPort.ReadExisting();
+                    comPort.Close();
 
                     //sp = new MegaLoad();
                     sp.PortName = CMB_ComPort.Text;
@@ -509,7 +508,7 @@ namespace OSDConfig
             //byte[] msg = new byte[] { 0x55, 3, 0x36, 1, 1, 0, 2, 3, 2, 0x76, 0xcb };
             //            ArdupilotMega.MAVLink.__mavlink_heartbeat_t hb = new ArdupilotMega.MAVLink.__mavlink_heartbeat_t();
             //          hb.autopilot = (byte)ArdupilotMega.MAVLink.MAV_TYPE.MAV_FIXED_WING;
-            MAVLink.__mavlink_attitude_t at = new MAVLink.__mavlink_attitude_t();
+            /*MAVLink.__mavlink_attitude_t at = new MAVLink.__mavlink_attitude_t();
             at.pitch = (float)(-10 * Math.PI / 180);
             at.roll = (float)(20 * Math.PI / 180);
             MAVLink.__mavlink_gps_status_t gs = new MAVLink.__mavlink_gps_status_t();
@@ -539,15 +538,15 @@ namespace OSDConfig
                 MAVLink.MAVLINK_MSG_ID_GPS_STATUS,
                 MAVLink.MAVLINK_MSG_ID_ATTITUDE,
                 MAVLink.MAVLINK_MSG_ID_VFR_HUD
-            };
+            };*/
 
 
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Tlog|*.tlog";
 
-            //ofd.ShowDialog();
+            ofd.ShowDialog();
 
-            //if (ofd.FileName != "")
+            if (ofd.FileName != "")
             {
                 if (comPort.IsOpen)
                     comPort.Close();
@@ -561,42 +560,42 @@ namespace OSDConfig
                 }
                 catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
-                //BinaryReader br = new BinaryReader(ofd.OpenFile());
+                BinaryReader br = new BinaryReader(ofd.OpenFile());
 
                 this.toolStripProgressBar1.Style = ProgressBarStyle.Marquee;
                 this.toolStripStatusLabel1.Text = "Sending TLOG data...";
 
-                //while (br.BaseStream.Position < br.BaseStream.Length && !this.IsDisposed)
-                while (true)
-                {
-                    try
+                while (br.BaseStream.Position < br.BaseStream.Length && !this.IsDisposed)
+                    while (true)
                     {
-                        //byte[] bytes = br.ReadBytes(20);
-                        for (int i = 0; i < msgs.Length; i++)
+                        try
                         {
-                            //if (i == 1)
-                            //    continue;
-                            byte[] bytes = MavLink.generatePacket(types[i], msgs[i]);
-                            comPort.Write(bytes, 0, bytes.Length);
-                            // comPort.Write(msg, 0, msg.Length);
+                            byte[] bytes = br.ReadBytes(20);
+                            /*for (int i = 0; i < msgs.Length; i++)
+                            {
+                                //if (i == 1)
+                                //    continue;
+                                byte[] bytes = MavLink.generatePacket(types[i], msgs[i]);
+                                comPort.Write(bytes, 0, bytes.Length);
+                                // comPort.Write(msg, 0, msg.Length);
 
-                            //System.Threading.Thread.Sleep(1000);
-                            System.Threading.Thread.Sleep(100);
-                            string ack = comPort.ReadExisting();
-                            //Console.Write("{0}:  ", MavLink.packetcount);
-                            if (!string.IsNullOrEmpty(ack))
-                                Console.WriteLine(ack);
+                                //System.Threading.Thread.Sleep(1000);
+                                System.Threading.Thread.Sleep(100);
+                                string ack = comPort.ReadExisting();
+                                //Console.Write("{0}:  ", MavLink.packetcount);
+                                if (!string.IsNullOrEmpty(ack))
+                                    Console.WriteLine(ack);
+                            }*/
+                            Thread.Sleep(10);
                         }
-                        Thread.Sleep(1000);
-                    }
-                    catch (Exception ce)
-                    {
-                        Console.WriteLine(ce.StackTrace);
-                        /*break;*/
-                    }
+                        catch (Exception ce)
+                        {
+                            Console.WriteLine(ce.StackTrace);
+                            /*break;*/
+                        }
 
-                    Application.DoEvents();
-                }
+                        Application.DoEvents();
+                    }
 
                 try
                 {
