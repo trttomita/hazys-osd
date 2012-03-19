@@ -1,0 +1,1359 @@
+   1               	# 1 "src/Stream/ftoa_engine.S"
+   1               	/* Copyright (c) 2005, Dmitry Xmelkov
+   0               	
+   0               	
+   2               	   All rights reserved.
+   3               	
+   4               	   Redistribution and use in source and binary forms, with or without
+   5               	   modification, are permitted provided that the following conditions are met:
+   6               	
+   7               	   * Redistributions of source code must retain the above copyright
+   8               	     notice, this list of conditions and the following disclaimer.
+   9               	   * Redistributions in binary form must reproduce the above copyright
+  10               	     notice, this list of conditions and the following disclaimer in
+  11               	     the documentation and/or other materials provided with the
+  12               	     distribution.
+  13               	   * Neither the name of the copyright holders nor the names of
+  14               	     contributors may be used to endorse or promote products derived
+  15               	     from this software without specific prior written permission.
+  16               	
+  17               	  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  18               	  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  19               	  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  20               	  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  21               	  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  22               	  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  23               	  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  24               	  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  25               	  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  26               	  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  27               	  POSSIBILITY OF SUCH DAMAGE. */
+  28               	
+  29               	/* $Id: ftoa_engine.S,v 1.3 2009/04/01 23:11:00 arcanum Exp $ */
+  30               	
+  31               	#ifndef	__DOXYGEN__
+  32               	
+  33               	#include "macros.inc"
+   1               	/* Copyright (c) 2002, 2005, 2006, 2007 Marek Michalkiewicz
+   2               	   Copyright (c) 2006 Dmitry Xmelkov
+   3               	   All rights reserved.
+   4               	
+   5               	   Redistribution and use in source and binary forms, with or without
+   6               	   modification, are permitted provided that the following conditions are met:
+   7               	
+   8               	   * Redistributions of source code must retain the above copyright
+   9               	     notice, this list of conditions and the following disclaimer.
+  10               	
+  11               	   * Redistributions in binary form must reproduce the above copyright
+  12               	     notice, this list of conditions and the following disclaimer in
+  13               	     the documentation and/or other materials provided with the
+  14               	     distribution.
+  15               	
+  16               	   * Neither the name of the copyright holders nor the names of
+  17               	     contributors may be used to endorse or promote products derived
+  18               	     from this software without specific prior written permission.
+  19               	
+  20               	  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21               	  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22               	  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23               	  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24               	  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25               	  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26               	  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27               	  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28               	  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29               	  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30               	  POSSIBILITY OF SUCH DAMAGE. */
+  31               	
+  32               	/*
+  33               	   macros.inc - macros for use in assembler sources
+  34               	
+  35               	   Contributors:
+  36               	     Created by Marek Michalkiewicz <marekm@linux.org.pl>
+  37               	 */
+  38               	
+  39               	#include <avr/io.h>
+   1               	/* Copyright (c) 2002,2003,2005,2006,2007 Marek Michalkiewicz, Joerg Wunsch
+   2               	   Copyright (c) 2007 Eric B. Weddington
+   3               	   All rights reserved.
+   4               	
+   5               	   Redistribution and use in source and binary forms, with or without
+   6               	   modification, are permitted provided that the following conditions are met:
+   7               	
+   8               	   * Redistributions of source code must retain the above copyright
+   9               	     notice, this list of conditions and the following disclaimer.
+  10               	
+  11               	   * Redistributions in binary form must reproduce the above copyright
+  12               	     notice, this list of conditions and the following disclaimer in
+  13               	     the documentation and/or other materials provided with the
+  14               	     distribution.
+  15               	
+  16               	   * Neither the name of the copyright holders nor the names of
+  17               	     contributors may be used to endorse or promote products derived
+  18               	     from this software without specific prior written permission.
+  19               	
+  20               	  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21               	  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22               	  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23               	  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24               	  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25               	  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26               	  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27               	  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28               	  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29               	  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30               	  POSSIBILITY OF SUCH DAMAGE. */
+  31               	
+  32               	/* $Id: io.h,v 1.52.2.28 2009/12/20 17:02:53 arcanum Exp $ */
+  33               	
+  34               	/** \file */
+  35               	/** \defgroup avr_io <avr/io.h>: AVR device-specific IO definitions
+  36               	    \code #include <avr/io.h> \endcode
+  37               	
+  38               	    This header file includes the apropriate IO definitions for the
+  39               	    device that has been specified by the <tt>-mmcu=</tt> compiler
+  40               	    command-line switch.  This is done by diverting to the appropriate
+  41               	    file <tt>&lt;avr/io</tt><em>XXXX</em><tt>.h&gt;</tt> which should
+  42               	    never be included directly.  Some register names common to all
+  43               	    AVR devices are defined directly within <tt>&lt;avr/common.h&gt;</tt>,
+  44               	    which is included in <tt>&lt;avr/io.h&gt;</tt>,
+  45               	    but most of the details come from the respective include file.
+  46               	
+  47               	    Note that this file always includes the following files:
+  48               	    \code 
+  49               	    #include <avr/sfr_defs.h>
+  50               	    #include <avr/portpins.h>
+  51               	    #include <avr/common.h>
+  52               	    #include <avr/version.h>
+  53               	    \endcode
+  54               	    See \ref avr_sfr for more details about that header file.
+  55               	
+  56               	    Included are definitions of the IO register set and their
+  57               	    respective bit values as specified in the Atmel documentation.
+  58               	    Note that inconsistencies in naming conventions,
+  59               	    so even identical functions sometimes get different names on
+  60               	    different devices.
+  61               	
+  62               	    Also included are the specific names useable for interrupt
+  63               	    function definitions as documented
+  64               	    \ref avr_signames "here".
+  65               	
+  66               	    Finally, the following macros are defined:
+  67               	
+  68               	    - \b RAMEND
+  69               	    <br>
+  70               	    The last on-chip RAM address.
+  71               	    <br>
+  72               	    - \b XRAMEND
+  73               	    <br>
+  74               	    The last possible RAM location that is addressable. This is equal to 
+  75               	    RAMEND for devices that do not allow for external RAM. For devices 
+  76               	    that allow external RAM, this will be larger than RAMEND.
+  77               	    <br>
+  78               	    - \b E2END
+  79               	    <br>
+  80               	    The last EEPROM address.
+  81               	    <br>
+  82               	    - \b FLASHEND
+  83               	    <br>
+  84               	    The last byte address in the Flash program space.
+  85               	    <br>
+  86               	    - \b SPM_PAGESIZE
+  87               	    <br>
+  88               	    For devices with bootloader support, the flash pagesize
+  89               	    (in bytes) to be used for the \c SPM instruction. 
+  90               	    - \b E2PAGESIZE
+  91               	    <br>
+  92               	    The size of the EEPROM page.
+  93               	    
+  94               	*/
+  95               	
+  96               	#ifndef _AVR_IO_H_
+  97               	#define _AVR_IO_H_
+  98               	
+  99               	#include <avr/sfr_defs.h>
+   1               	/* Copyright (c) 2002, Marek Michalkiewicz <marekm@amelek.gda.pl>
+ 100               	
+ 101               	#if defined (__AVR_AT94K__)
+ 102               	#  include <avr/ioat94k.h>
+ 103               	#elif defined (__AVR_AT43USB320__)
+ 104               	#  include <avr/io43u32x.h>
+ 105               	#elif defined (__AVR_AT43USB355__)
+ 106               	#  include <avr/io43u35x.h>
+ 107               	#elif defined (__AVR_AT76C711__)
+ 108               	#  include <avr/io76c711.h>
+ 109               	#elif defined (__AVR_AT86RF401__)
+ 110               	#  include <avr/io86r401.h>
+ 111               	#elif defined (__AVR_AT90PWM1__)
+ 112               	#  include <avr/io90pwm1.h>
+ 113               	#elif defined (__AVR_AT90PWM2__)
+ 114               	#  include <avr/io90pwmx.h>
+ 115               	#elif defined (__AVR_AT90PWM2B__)
+ 116               	#  include <avr/io90pwm2b.h>
+ 117               	#elif defined (__AVR_AT90PWM3__)
+ 118               	#  include <avr/io90pwmx.h>
+ 119               	#elif defined (__AVR_AT90PWM3B__)
+ 120               	#  include <avr/io90pwm3b.h>
+ 121               	#elif defined (__AVR_AT90PWM216__)
+ 122               	#  include <avr/io90pwm216.h>
+ 123               	#elif defined (__AVR_AT90PWM316__)
+ 124               	#  include <avr/io90pwm316.h>
+ 125               	#elif defined (__AVR_AT90PWM81__)
+ 126               	#  include <avr/io90pwm81.h>
+ 127               	#elif defined (__AVR_ATmega8U2__)
+ 128               	#  include <avr/iom8u2.h>
+ 129               	#elif defined (__AVR_ATmega16M1__)
+ 130               	#  include <avr/iom16m1.h>
+ 131               	#elif defined (__AVR_ATmega16U2__)
+ 132               	#  include <avr/iom16u2.h>
+ 133               	#elif defined (__AVR_ATmega16U4__)
+ 134               	#  include <avr/iom16u4.h>
+ 135               	#elif defined (__AVR_ATmega32C1__)
+ 136               	#  include <avr/iom32c1.h>
+ 137               	#elif defined (__AVR_ATmega32M1__)
+ 138               	#  include <avr/iom32m1.h>
+ 139               	#elif defined (__AVR_ATmega32U2__)
+ 140               	#  include <avr/iom32u2.h>
+ 141               	#elif defined (__AVR_ATmega32U4__)
+ 142               	#  include <avr/iom32u4.h>
+ 143               	#elif defined (__AVR_ATmega32U6__)
+ 144               	#  include <avr/iom32u6.h>
+ 145               	#elif defined (__AVR_ATmega64C1__)
+ 146               	#  include <avr/iom64c1.h>
+ 147               	#elif defined (__AVR_ATmega64M1__)
+ 148               	#  include <avr/iom64m1.h>
+ 149               	#elif defined (__AVR_ATmega128__)
+ 150               	#  include <avr/iom128.h>
+ 151               	#elif defined (__AVR_ATmega1280__)
+ 152               	#  include <avr/iom1280.h>
+ 153               	#elif defined (__AVR_ATmega1281__)
+ 154               	#  include <avr/iom1281.h>
+ 155               	#elif defined (__AVR_ATmega1284P__)
+ 156               	#  include <avr/iom1284p.h>
+ 157               	#elif defined (__AVR_ATmega128RFA1__)
+ 158               	#  include <avr/iom128rfa1.h>
+ 159               	#elif defined (__AVR_ATmega2560__)
+ 160               	#  include <avr/iom2560.h>
+ 161               	#elif defined (__AVR_ATmega2561__)
+ 162               	#  include <avr/iom2561.h>
+ 163               	#elif defined (__AVR_AT90CAN32__)
+ 164               	#  include <avr/iocan32.h>
+ 165               	#elif defined (__AVR_AT90CAN64__)
+ 166               	#  include <avr/iocan64.h>
+ 167               	#elif defined (__AVR_AT90CAN128__)
+ 168               	#  include <avr/iocan128.h>
+ 169               	#elif defined (__AVR_AT90USB82__)
+ 170               	#  include <avr/iousb82.h>
+ 171               	#elif defined (__AVR_AT90USB162__)
+ 172               	#  include <avr/iousb162.h>
+ 173               	#elif defined (__AVR_AT90USB646__)
+ 174               	#  include <avr/iousb646.h>
+ 175               	#elif defined (__AVR_AT90USB647__)
+ 176               	#  include <avr/iousb647.h>
+ 177               	#elif defined (__AVR_AT90USB1286__)
+ 178               	#  include <avr/iousb1286.h>
+ 179               	#elif defined (__AVR_AT90USB1287__)
+ 180               	#  include <avr/iousb1287.h>
+ 181               	#elif defined (__AVR_ATmega64__)
+ 182               	#  include <avr/iom64.h>
+ 183               	#elif defined (__AVR_ATmega640__)
+ 184               	#  include <avr/iom640.h>
+ 185               	#elif defined (__AVR_ATmega644__) || defined (__AVR_ATmega644A__)
+ 186               	#  include <avr/iom644.h>
+ 187               	#elif defined (__AVR_ATmega644P__)
+ 188               	#  include <avr/iom644p.h>
+ 189               	#elif defined (__AVR_ATmega644PA__)
+ 190               	#  include <avr/iom644pa.h>
+ 191               	#elif defined (__AVR_ATmega645__) || defined (__AVR_ATmega645A__) || defined (__AVR_ATmega645P__)
+ 192               	#  include <avr/iom645.h>
+ 193               	#elif defined (__AVR_ATmega6450__) || defined (__AVR_ATmega6450A__) || defined (__AVR_ATmega6450P__
+ 194               	#  include <avr/iom6450.h>
+ 195               	#elif defined (__AVR_ATmega649__) || defined (__AVR_ATmega649A__)
+ 196               	#  include <avr/iom649.h>
+ 197               	#elif defined (__AVR_ATmega6490__) || defined (__AVR_ATmega6490A__) || defined (__AVR_ATmega6490P__
+ 198               	#  include <avr/iom6490.h>
+ 199               	#elif defined (__AVR_ATmega649P__)
+ 200               	#  include <avr/iom649p.h>
+ 201               	#elif defined (__AVR_ATmega64HVE__)
+ 202               	#  include <avr/iom64hve.h>
+ 203               	#elif defined (__AVR_ATmega103__)
+ 204               	#  include <avr/iom103.h>
+ 205               	#elif defined (__AVR_ATmega32__)
+ 206               	#  include <avr/iom32.h>
+ 207               	#elif defined (__AVR_ATmega323__)
+ 208               	#  include <avr/iom323.h>
+ 209               	#elif defined (__AVR_ATmega324P__) || defined (__AVR_ATmega324A__)
+ 210               	#  include <avr/iom324.h>
+ 211               	#elif defined (__AVR_ATmega324PA__)
+ 212               	#  include <avr/iom324pa.h>
+ 213               	#elif defined (__AVR_ATmega325__)
+ 214               	#  include <avr/iom325.h>
+ 215               	#elif defined (__AVR_ATmega325P__)
+ 216               	#  include <avr/iom325.h>
+ 217               	#elif defined (__AVR_ATmega3250__)
+ 218               	#  include <avr/iom3250.h>
+ 219               	#elif defined (__AVR_ATmega3250P__)
+ 220               	#  include <avr/iom3250.h>
+ 221               	#elif defined (__AVR_ATmega328P__) || defined (__AVR_ATmega328__)
+ 222               	#  include <avr/iom328p.h>
+ 223               	#elif defined (__AVR_ATmega329__)
+ 224               	#  include <avr/iom329.h>
+ 225               	#elif defined (__AVR_ATmega329P__) || defined (__AVR_ATmega329PA__)
+ 226               	#  include <avr/iom329.h>
+ 227               	#elif defined (__AVR_ATmega3290__)
+ 228               	#  include <avr/iom3290.h>
+ 229               	#elif defined (__AVR_ATmega3290P__)
+ 230               	#  include <avr/iom3290.h>
+ 231               	#elif defined (__AVR_ATmega32HVB__)
+ 232               	#  include <avr/iom32hvb.h>
+ 233               	#elif defined (__AVR_ATmega406__)
+ 234               	#  include <avr/iom406.h>
+ 235               	#elif defined (__AVR_ATmega16__)
+ 236               	#  include <avr/iom16.h>
+   1               	/* Copyright (c) 2004 Eric B. Weddington
+ 237               	#elif defined (__AVR_ATmega16A__)
+ 238               	#  include <avr/iom16a.h>
+ 239               	#elif defined (__AVR_ATmega161__)
+ 240               	#  include <avr/iom161.h>
+ 241               	#elif defined (__AVR_ATmega162__)
+ 242               	#  include <avr/iom162.h>
+ 243               	#elif defined (__AVR_ATmega163__)
+ 244               	#  include <avr/iom163.h>
+ 245               	#elif defined (__AVR_ATmega164P__) || defined (__AVR_ATmega164A__)
+ 246               	#  include <avr/iom164.h>
+ 247               	#elif defined (__AVR_ATmega165__) || defined (__AVR_ATmega165A__)
+ 248               	#  include <avr/iom165.h>
+ 249               	#elif defined (__AVR_ATmega165P__)
+ 250               	#  include <avr/iom165p.h>
+ 251               	#elif defined (__AVR_ATmega168__) || defined (__AVR_ATmega168A__)
+ 252               	#  include <avr/iom168.h>
+ 253               	#elif defined (__AVR_ATmega168P__)
+ 254               	#  include <avr/iom168p.h>
+ 255               	#elif defined (__AVR_ATmega169__) || defined (__AVR_ATmega169A__)
+ 256               	#  include <avr/iom169.h>
+ 257               	#elif defined (__AVR_ATmega169P__)
+ 258               	#  include <avr/iom169p.h>
+ 259               	#elif defined (__AVR_ATmega169PA__)
+ 260               	#  include <avr/iom169pa.h>
+ 261               	#elif defined (__AVR_ATmega8HVA__)
+ 262               	#  include <avr/iom8hva.h>
+ 263               	#elif defined (__AVR_ATmega16HVA__)
+ 264               	#  include <avr/iom16hva.h>
+ 265               	#elif defined (__AVR_ATmega16HVA2__)
+ 266               	#  include <avr/iom16hva2.h>
+ 267               	#elif defined (__AVR_ATmega16HVB__)
+ 268               	#  include <avr/iom16hvb.h>
+ 269               	#elif defined (__AVR_ATmega8__)
+ 270               	#  include <avr/iom8.h>
+ 271               	#elif defined (__AVR_ATmega48__) || defined (__AVR_ATmega48A__)
+ 272               	#  include <avr/iom48.h>
+ 273               	#elif defined (__AVR_ATmega48P__)
+ 274               	#  include <avr/iom48p.h>
+ 275               	#elif defined (__AVR_ATmega88__) || defined (__AVR_ATmega88A__)
+ 276               	#  include <avr/iom88.h>
+ 277               	#elif defined (__AVR_ATmega88P__)
+ 278               	#  include <avr/iom88p.h>
+ 279               	#elif defined (__AVR_ATmega88PA__)
+ 280               	#  include <avr/iom88pa.h>
+ 281               	#elif defined (__AVR_ATmega8515__)
+ 282               	#  include <avr/iom8515.h>
+ 283               	#elif defined (__AVR_ATmega8535__)
+ 284               	#  include <avr/iom8535.h>
+ 285               	#elif defined (__AVR_AT90S8535__)
+ 286               	#  include <avr/io8535.h>
+ 287               	#elif defined (__AVR_AT90C8534__)
+ 288               	#  include <avr/io8534.h>
+ 289               	#elif defined (__AVR_AT90S8515__)
+ 290               	#  include <avr/io8515.h>
+ 291               	#elif defined (__AVR_AT90S4434__)
+ 292               	#  include <avr/io4434.h>
+ 293               	#elif defined (__AVR_AT90S4433__)
+ 294               	#  include <avr/io4433.h>
+ 295               	#elif defined (__AVR_AT90S4414__)
+ 296               	#  include <avr/io4414.h>
+ 297               	#elif defined (__AVR_ATtiny22__)
+ 298               	#  include <avr/iotn22.h>
+ 299               	#elif defined (__AVR_ATtiny26__)
+ 300               	#  include <avr/iotn26.h>
+ 301               	#elif defined (__AVR_AT90S2343__)
+ 302               	#  include <avr/io2343.h>
+ 303               	#elif defined (__AVR_AT90S2333__)
+ 304               	#  include <avr/io2333.h>
+ 305               	#elif defined (__AVR_AT90S2323__)
+ 306               	#  include <avr/io2323.h>
+ 307               	#elif defined (__AVR_AT90S2313__)
+ 308               	#  include <avr/io2313.h>
+ 309               	#elif defined (__AVR_ATtiny2313__)
+ 310               	#  include <avr/iotn2313.h>
+ 311               	#elif defined (__AVR_ATtiny2313A__)
+ 312               	#  include <avr/iotn2313a.h>
+ 313               	#elif defined (__AVR_ATtiny13__)
+ 314               	#  include <avr/iotn13.h>
+ 315               	#elif defined (__AVR_ATtiny13A__)
+ 316               	#  include <avr/iotn13a.h>
+ 317               	#elif defined (__AVR_ATtiny25__)
+ 318               	#  include <avr/iotn25.h>
+ 319               	#elif defined (__AVR_ATtiny4313__)
+ 320               	#  include <avr/iotn4313.h>
+ 321               	#elif defined (__AVR_ATtiny45__)
+ 322               	#  include <avr/iotn45.h>
+ 323               	#elif defined (__AVR_ATtiny85__)
+ 324               	#  include <avr/iotn85.h>
+ 325               	#elif defined (__AVR_ATtiny24__)
+ 326               	#  include <avr/iotn24.h>
+ 327               	#elif defined (__AVR_ATtiny24A__)
+ 328               	#  include <avr/iotn24a.h>
+ 329               	#elif defined (__AVR_ATtiny44__)
+ 330               	#  include <avr/iotn44.h>
+ 331               	#elif defined (__AVR_ATtiny44A__)
+ 332               	#  include <avr/iotn44a.h>
+ 333               	#elif defined (__AVR_ATtiny84__)
+ 334               	#  include <avr/iotn84.h>
+ 335               	#elif defined (__AVR_ATtiny261__)
+ 336               	#  include <avr/iotn261.h>
+ 337               	#elif defined (__AVR_ATtiny261A__)
+ 338               	#  include <avr/iotn261a.h>
+ 339               	#elif defined (__AVR_ATtiny461__)
+ 340               	#  include <avr/iotn461.h>
+ 341               	#elif defined (__AVR_ATtiny461A__)
+ 342               	#  include <avr/iotn461a.h>
+ 343               	#elif defined (__AVR_ATtiny861__)
+ 344               	#  include <avr/iotn861.h>
+ 345               	#elif defined (__AVR_ATtiny861A__)
+ 346               	#  include <avr/iotn861a.h>
+ 347               	#elif defined (__AVR_ATtiny43U__)
+ 348               	#  include <avr/iotn43u.h>
+ 349               	#elif defined (__AVR_ATtiny48__)
+ 350               	#  include <avr/iotn48.h>
+ 351               	#elif defined (__AVR_ATtiny88__)
+ 352               	#  include <avr/iotn88.h>
+ 353               	#elif defined (__AVR_ATtiny87__)
+ 354               	#  include <avr/iotn87.h>
+ 355               	#elif defined (__AVR_ATtiny167__)
+ 356               	#  include <avr/iotn167.h>
+ 357               	#elif defined (__AVR_AT90SCR100__)
+ 358               	#  include <avr/io90scr100.h>
+ 359               	#elif defined (__AVR_ATxmega16A4__)
+ 360               	#  include <avr/iox16a4.h>
+ 361               	#elif defined (__AVR_ATxmega16D4__)
+ 362               	#  include <avr/iox16d4.h>
+ 363               	#elif defined (__AVR_ATxmega32A4__)
+ 364               	#  include <avr/iox32a4.h>
+ 365               	#elif defined (__AVR_ATxmega32D4__)
+ 366               	#  include <avr/iox32d4.h>
+ 367               	#elif defined (__AVR_ATxmega64A1__)
+ 368               	#  include <avr/iox64a1.h>
+ 369               	#elif defined (__AVR_ATxmega64A3__)
+ 370               	#  include <avr/iox64a3.h>
+ 371               	#elif defined (__AVR_ATxmega64D3__)
+ 372               	#  include <avr/iox64d3.h>
+ 373               	#elif defined (__AVR_ATxmega128A1__)
+ 374               	#  include <avr/iox128a1.h>
+ 375               	#elif defined (__AVR_ATxmega128A3__)
+ 376               	#  include <avr/iox128a3.h>
+ 377               	#elif defined (__AVR_ATxmega128D3__)
+ 378               	#  include <avr/iox128d3.h>
+ 379               	#elif defined (__AVR_ATxmega192A3__)
+ 380               	#  include <avr/iox192a3.h>
+ 381               	#elif defined (__AVR_ATxmega192D3__)
+ 382               	#  include <avr/iox192d3.h>
+ 383               	#elif defined (__AVR_ATxmega256A3__)
+ 384               	#  include <avr/iox256a3.h>
+ 385               	#elif defined (__AVR_ATxmega256A3B__)
+ 386               	#  include <avr/iox256a3b.h>
+ 387               	#elif defined (__AVR_ATxmega256D3__)
+ 388               	#  include <avr/iox256d3.h>
+ 389               	#elif defined (__AVR_ATA6289__)
+ 390               	#  include <avr/ioa6289.h>
+ 391               	/* avr1: the following only supported for assembler programs */
+ 392               	#elif defined (__AVR_ATtiny28__)
+ 393               	#  include <avr/iotn28.h>
+ 394               	#elif defined (__AVR_AT90S1200__)
+ 395               	#  include <avr/io1200.h>
+ 396               	#elif defined (__AVR_ATtiny15__)
+ 397               	#  include <avr/iotn15.h>
+ 398               	#elif defined (__AVR_ATtiny12__)
+ 399               	#  include <avr/iotn12.h>
+ 400               	#elif defined (__AVR_ATtiny11__)
+ 401               	#  include <avr/iotn11.h>
+ 402               	#else
+ 403               	#  if !defined(__COMPILING_AVR_LIBC__)
+ 404               	#    warning "device type not defined"
+ 405               	#  endif
+ 406               	#endif
+ 407               	
+ 408               	#include <avr/portpins.h>
+   1               	/* Copyright (c) 2003  Theodore A. Roth
+ 409               	
+ 410               	#include <avr/common.h>
+   1               	/* Copyright (c) 2007 Eric B. Weddington
+ 411               	
+ 412               	#include <avr/version.h>
+   1               	/* Copyright (c) 2005, Joerg Wunsch                               -*- c -*-
+ 413               	
+ 414               	/* Include fuse.h after individual IO header files. */
+ 415               	#include <avr/fuse.h>
+   1               	/* Copyright (c) 2007, Atmel Corporation
+ 416               	
+ 417               	/* Include lock.h after individual IO header files. */
+ 418               	#include <avr/lock.h>
+   1               	/* Copyright (c) 2007, Atmel Corporation
+ 419               	
+  40               	//#include "sectionname.h"
+  41               	
+  42               	/* if not defined, assume old version with underscores */
+  43               	#ifndef __USER_LABEL_PREFIX__
+  44               	#define __USER_LABEL_PREFIX__ _
+  45               	#endif
+  46               	
+  47               	#ifndef __REGISTER_PREFIX__
+  48               	#define __REGISTER_PREFIX__
+  49               	#endif
+  50               	
+  51               	/* the assembler line separator (just in case it ever changes) */
+  52               	#define _L $
+  53               	
+  54               	#define CONCAT1(a, b) CONCAT2(a, b)
+  55               	#define CONCAT2(a, b) a ## b
+  56               	
+  57               	#define _U(x) CONCAT1(__USER_LABEL_PREFIX__, x)
+  58               	
+  59               	#define _R(x) CONCAT1(__REGISTER_PREFIX__, x)
+  60               	
+  61               	/* these should help to fix the "can't have function named r1()" bug
+  62               	   which may require adding '%' in front of register names.  */
+  63               	
+  64               	#define r0 _R(r0)
+  65               	#define r1 _R(r1)
+  66               	#define r2 _R(r2)
+  67               	#define r3 _R(r3)
+  68               	#define r4 _R(r4)
+  69               	#define r5 _R(r5)
+  70               	#define r6 _R(r6)
+  71               	#define r7 _R(r7)
+  72               	#define r8 _R(r8)
+  73               	#define r9 _R(r9)
+  74               	#define r10 _R(r10)
+  75               	#define r11 _R(r11)
+  76               	#define r12 _R(r12)
+  77               	#define r13 _R(r13)
+  78               	#define r14 _R(r14)
+  79               	#define r15 _R(r15)
+  80               	#define r16 _R(r16)
+  81               	#define r17 _R(r17)
+  82               	#define r18 _R(r18)
+  83               	#define r19 _R(r19)
+  84               	#define r20 _R(r20)
+  85               	#define r21 _R(r21)
+  86               	#define r22 _R(r22)
+  87               	#define r23 _R(r23)
+  88               	#define r24 _R(r24)
+  89               	#define r25 _R(r25)
+  90               	#define r26 _R(r26)
+  91               	#define r27 _R(r27)
+  92               	#define r28 _R(r28)
+  93               	#define r29 _R(r29)
+  94               	#define r30 _R(r30)
+  95               	#define r31 _R(r31)
+  96               	
+  97               	#ifndef __tmp_reg__
+  98               	#define __tmp_reg__ r0
+  99               	#endif
+ 100               	
+ 101               	#ifndef __zero_reg__
+ 102               	#define __zero_reg__ r1
+ 103               	#endif
+ 104               	
+ 105               	#if __AVR_MEGA__
+ 106               	  #define XJMP jmp
+ 107               	  #define XCALL call
+ 108               	#else
+ 109               	  #define XJMP rjmp
+ 110               	  #define XCALL rcall
+ 111               	#endif
+ 112               	
+ 113               	/* used only by fplib/strtod.S - libgcc internal function calls */
+ 114               	#define PROLOGUE_SAVES(offset) XJMP (__prologue_saves__ + 2 * (offset))
+ 115               	#define EPILOGUE_RESTORES(offset) XJMP (__epilogue_restores__ + 2 * (offset))
+ 116               	
+ 117               	#if FLASHEND > 0x10000  /* ATmega103 */
+ 118               	  #define BIG_CODE 1
+ 119               	#else
+ 120               	  #define BIG_CODE 0
+ 121               	#endif
+ 122               	
+ 123               	#ifndef __AVR_HAVE_MOVW__
+ 124               	#  if  defined(__AVR_ENHANCED__) && __AVR_ENHANCED__
+ 125               	#   define __AVR_HAVE_MOVW__ 1
+ 126               	#  endif
+ 127               	#endif
+ 128               	
+ 129               	#ifndef __AVR_HAVE_LPMX__
+ 130               	# if  defined(__AVR_ENHANCED__) && __AVR_ENHANCED__
+ 131               	#  define __AVR_HAVE_LPMX__ 1
+ 132               	# endif
+ 133               	#endif
+ 134               	
+ 135               	#ifndef __AVR_HAVE_MUL__
+ 136               	# if  defined(__AVR_ENHANCED__) && __AVR_ENHANCED__
+ 137               	#  define __AVR_HAVE_MUL__ 1
+ 138               	# endif
+ 139               	#endif
+ 140               	
+ 141               	/*
+ 142               	   Smart version of movw:
+ 143               	    - uses "movw" if possible (supported by MCU, and both registers even)
+ 144               	    - handles overlapping register pairs correctly
+ 145               	    - no instruction generated if source and destination are the same
+ 146               	   (may expand to 0, 1 or 2 instructions).
+ 147               	 */
+ 148               	
+ 149               	.macro  X_movw dst src
+ 150               		.L_movw_dst = -1
+ 151               		.L_movw_src = -1
+ 152               		.L_movw_n = 0
+ 153               		.irp  reg,	r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, \
+ 154               				r10,r11,r12,r13,r14,r15,r16,r17,r18,r19, \
+ 155               				r20,r21,r22,r23,r24,r25,r26,r27,r28,r29, \
+ 156               				r30,r31
+ 157               			.ifc  \reg,\dst
+ 158               				.L_movw_dst = .L_movw_n
+ 159               			.endif
+ 160               			.ifc  \reg,\src
+ 161               				.L_movw_src = .L_movw_n
+ 162               			.endif
+ 163               			.L_movw_n = .L_movw_n + 1
+ 164               		.endr
+ 165               		.L_movw_n = 0
+ 166               		.irp  reg,	R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, \
+ 167               				R10,R11,R12,R13,R14,R15,R16,R17,R18,R19, \
+ 168               				R20,R21,R22,R23,R24,R25,R26,R27,R28,R29, \
+ 169               				R30,R31
+ 170               			.ifc  \reg,\dst
+ 171               				.L_movw_dst = .L_movw_n
+ 172               			.endif
+ 173               			.ifc  \reg,\src
+ 174               				.L_movw_src = .L_movw_n
+ 175               			.endif
+ 176               			.L_movw_n = .L_movw_n + 1
+ 177               		.endr
+ 178               		.if   .L_movw_dst < 0
+ 179               			.L_movw_n = 0
+ 180               			.rept   32
+ 181               				.if \dst == .L_movw_n
+ 182               					.L_movw_dst = .L_movw_n
+ 183               				.endif
+ 184               				.L_movw_n = .L_movw_n + 1
+ 185               			.endr
+ 186               		.endif
+ 187               		.if   .L_movw_src < 0
+ 188               			.L_movw_n = 0
+ 189               			.rept   32
+ 190               				.if \src == .L_movw_n
+ 191               					.L_movw_src = .L_movw_n
+ 192               				.endif
+ 193               				.L_movw_n = .L_movw_n + 1
+ 194               			.endr
+ 195               		.endif
+ 196               		.if   (.L_movw_dst < 0) || (.L_movw_src < 0)
+ 197               			.err    ; Invalid 'X_movw' arg.
+ 198               		.endif
+ 199               	                
+ 200               		.if ((.L_movw_src) - (.L_movw_dst))  /* different registers */
+ 201               			.if (((.L_movw_src) | (.L_movw_dst)) & 0x01)
+ 202               				.if (((.L_movw_src)-(.L_movw_dst)) & 0x80) /* src < dest */
+ 203               					mov     (.L_movw_dst)+1, (.L_movw_src)+1
+ 204               					mov     (.L_movw_dst), (.L_movw_src)
+ 205               				.else                                      /* src > dest */
+ 206               					mov     (.L_movw_dst), (.L_movw_src)
+ 207               					mov     (.L_movw_dst)+1, (.L_movw_src)+1
+ 208               				.endif
+ 209               			.else  /* both even -> overlap not possible */
+ 210               	#if  defined(__AVR_HAVE_MOVW__) && __AVR_HAVE_MOVW__
+ 211               				movw    \dst, \src
+ 212               	#else
+ 213               				mov     (.L_movw_dst), (.L_movw_src)
+ 214               				mov     (.L_movw_dst)+1, (.L_movw_src)+1
+ 215               	#endif
+ 216               			.endif
+ 217               		.endif
+ 218               	.endm
+ 219               	
+ 220               	/* Macro 'X_lpm' extends enhanced lpm instruction for classic chips.
+ 221               	   Usage:
+ 222               		X_lpm	reg, dst
+ 223               	   where
+ 224               		reg	is 0..31, r0..r31 or R0..R31
+ 225               		dst	is z, Z, z+ or Z+
+ 226               	   It is possible to omit both arguments.
+ 227               	
+ 228               	   Possible results for classic chips:
+ 229               		lpm
+ 230               		lpm / mov Rd,r0
+ 231               		lpm / adiw ZL,1
+ 232               		lpm / mov Rd,r0 / adiw ZL,1
+ 233               		
+ 234               	   For enhanced chips it is one instruction always.
+ 235               	
+ 236               	   ATTENTION:  unlike enhanced chips SREG (S,V,N,Z,C) flags are
+ 237               	   changed in case of 'Z+' dst.  R0 is scratch.
+ 238               	 */
+ 239               	.macro	X_lpm	dst=r0, src=Z
+ 240               	
+ 241               	  /* dst evaluation	*/
+ 242               	  .L_lpm_dst = -1
+ 243               	
+ 244               	  .L_lpm_n = 0
+ 245               	  .irp  reg,  r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, \
+ 246               		     r10,r11,r12,r13,r14,r15,r16,r17,r18,r19, \
+ 247               		     r20,r21,r22,r23,r24,r25,r26,r27,r28,r29, \
+ 248               		     r30,r31
+ 249               	    .ifc  \reg,\dst
+ 250               	      .L_lpm_dst = .L_lpm_n
+ 251               	    .endif
+ 252               	    .L_lpm_n = .L_lpm_n + 1
+ 253               	  .endr
+ 254               	
+ 255               	  .L_lpm_n = 0
+ 256               	  .irp  reg,  R0, R1, R2, R3, R4, R5, R6, R7, R8, R9, \
+ 257               		     R10,R11,R12,R13,R14,R15,R16,R17,R18,R19, \
+ 258               		     R20,R21,R22,R23,R24,R25,R26,R27,R28,R29, \
+ 259               		     R30,R31
+ 260               	    .ifc  \reg,\dst
+ 261               	      .L_lpm_dst = .L_lpm_n
+ 262               	    .endif
+ 263               	    .L_lpm_n = .L_lpm_n + 1
+ 264               	  .endr
+ 265               	
+ 266               	  .if  .L_lpm_dst < 0
+ 267               	    .L_lpm_n = 0
+ 268               	    .rept 32
+ 269               	      .if  \dst == .L_lpm_n
+ 270               		.L_lpm_dst = .L_lpm_n
+ 271               	      .endif
+ 272               	      .L_lpm_n = .L_lpm_n + 1
+ 273               	    .endr
+ 274               	  .endif
+ 275               	
+ 276               	  .if  (.L_lpm_dst < 0)
+ 277               	    .err	; Invalid dst arg of 'X_lpm' macro.
+ 278               	  .endif
+ 279               	
+ 280               	  /* src evaluation	*/    
+ 281               	  .L_lpm_src = -1
+ 282               	  .L_lpm_n = 0
+ 283               	  .irp  reg,  z,Z,z+,Z+
+ 284               	    .ifc  \reg,\src
+ 285               	      .L_lpm_src = .L_lpm_n
+ 286               	    .endif
+ 287               	    .L_lpm_n = .L_lpm_n + 1
+ 288               	  .endr
+ 289               	
+ 290               	  .if  (.L_lpm_src < 0)
+ 291               	    .err	; Invalid src arg of 'X_lpm' macro.
+ 292               	  .endif
+ 293               	
+ 294               	  /* instruction(s)	*/    
+ 295               	  .if  .L_lpm_src < 2
+ 296               	    .if  .L_lpm_dst == 0
+ 297               		lpm
+ 298               	    .else
+ 299               	#if  defined(__AVR_HAVE_LPMX__) && __AVR_HAVE_LPMX__
+ 300               		lpm	.L_lpm_dst, Z
+ 301               	#else
+ 302               		lpm
+ 303               		mov	.L_lpm_dst, r0
+ 304               	#endif
+ 305               	    .endif
+ 306               	  .else
+ 307               	    .if  (.L_lpm_dst >= 30)
+ 308               	      .err	; Registers 30 and 31 are inhibited as 'X_lpm *,Z+' dst.
+ 309               	    .endif
+ 310               	#if  defined(__AVR_HAVE_LPMX__) && __AVR_HAVE_LPMX__
+ 311               		lpm	.L_lpm_dst, Z+
+ 312               	#else
+ 313               		lpm
+ 314               	    .if  .L_lpm_dst
+ 315               		mov	.L_lpm_dst, r0
+ 316               	    .endif
+ 317               		adiw	r30, 1
+ 318               	#endif
+ 319               	  .endif
+ 320               	.endm
+ 321               	
+ 322               	/*
+ 323               	   LPM_R0_ZPLUS_INIT is used before the loop to initialize RAMPZ
+ 324               	   for future devices with RAMPZ:Z auto-increment - [e]lpm r0, Z+.
+ 325               	
+ 326               	   LPM_R0_ZPLUS_NEXT is used inside the loop to load a byte from
+ 327               	   the program memory at [RAMPZ:]Z to R0, and increment [RAMPZ:]Z.
+ 328               	
+ 329               	   The argument in both macros is a register that contains the
+ 330               	   high byte (bits 23-16) of the address, bits 15-0 should be in
+ 331               	   the Z (r31:r30) register.  It can be any register except for:
+ 332               	   r0, r1 (__zero_reg__ - assumed to always contain 0), r30, r31.
+ 333               	 */
+ 334               	
+ 335               		.macro	LPM_R0_ZPLUS_INIT hhi
+ 336               	#if __AVR_ENHANCED__
+ 337               	  #if BIG_CODE
+ 338               		out	AVR_RAMPZ_ADDR, \hhi
+ 339               	  #endif
+ 340               	#endif
+ 341               		.endm
+ 342               	
+ 343               		.macro	LPM_R0_ZPLUS_NEXT hhi
+ 344               	#if __AVR_ENHANCED__
+ 345               	  #if BIG_CODE
+ 346               	    /* ELPM with RAMPZ:Z post-increment, load RAMPZ only once */
+ 347               		elpm	r0, Z+
+ 348               	  #else
+ 349               	    /* LPM with Z post-increment, max 64K, no RAMPZ (ATmega83/161/163/32) */
+ 350               		lpm	r0, Z+
+ 351               	  #endif
+ 352               	#else
+ 353               	  #if BIG_CODE
+  34               	#include "ftoa_engine.h"
+   1               	/* Copyright (c) 2005, Dmitry Xmelkov
+  35               	
+  36               	#if  defined(__AVR_HAVE_LPMX__) && __AVR_HAVE_LPMX__
+  37               	#  define AVR_ENH_LPM	1
+  38               	#else
+  39               	#  define AVR_ENH_LPM	0
+  40               	#endif
+  41               	
+  42               	/*
+  43               	   int __ftoa_engine (double val, char *buf,
+  44               	                      unsigned char prec, unsigned char maxdgs)
+  45               	 Input:
+  46               	    val    - value to convert
+  47               	    buf    - output buffer address
+  48               	    prec   - precision: number of decimal digits is 'prec + 1'
+  49               	    maxdgs - (0 if unused) precision restriction for "%f" specification
+  50               	
+  51               	 Output:
+  52               	    return     - decimal exponent of first digit
+  53               	    buf[0]     - flags (FTOA_***)
+  54               	    buf[1],... - decimal digits
+  55               	    Number of digits:
+  56               		maxdgs == 0 ? prec+1 :
+  57               		(buf[0] & FTOA_CARRY) == 0 || buf[1] != '1' ?
+  58               		    aver(1, maxdgs+exp, prec+1) :
+  59               		    aver(1, masdgs+exp-1, prec+1)
+  60               	
+  61               	 Notes:
+  62               	    * Output string is not 0-terminated. For possibility of user's buffer
+  63               	    usage in any case.
+  64               	    * If used, 'maxdgs' is a number of digits for value with zero exponent.
+  65               	*/
+  66               	
+  67               	    /* Input */
+  68               	#define maxdgs	r16
+  69               	#define	prec	r18
+  70               	#define	buf_lo	r20
+  71               	#define	buf_hi	r21
+  72               	#define	val_lo	r22
+  73               	#define	val_hi	r23
+  74               	#define	val_hlo	r24
+  75               	#define	val_hhi	r25
+  76               	
+  77               	    /* Float value parse	*/
+  78               	#define	flag	r19
+  79               	
+  80               	    /* Multiplication of mantisses	*/
+  81               	#define	exp_sv	r17
+  82               	#define	mlt_1	r19	/* lowest result byte	*/
+  83               	#define mlt_2	r14
+  84               	#define	mlt_3	r15
+  85               	#define	mlt_4	r20
+  86               	#define	mlt_5	r21
+  87               	#define	mlt_6	r28
+  88               	#define	mlt_7	r29
+  89               	
+  90               	    /* Conversion to string	*/
+  91               	#define	pwr_2	r1	/* lowest byte of 'powr10' element	*/
+  92               	#define	pwr_3	r17
+  93               	#define	pwr_4	r19
+  94               	#define	pwr_5	r22
+  95               	#define	pwr_6	r25
+  96               	#define	pwr_7	r0
+  97               	#define	digit	r23
+  98               	#define	exp10	r24
+  99               	
+ 100               	    /* Fixed */
+ 101               	#define	zero	r1
+ 102               	
+ 103               	/*    ASSEMBLY_CLIB_SECTION */
+ 104               		
+ 105               	    .global	__ftoa_engine
+ 107               	__ftoa_engine:
+ 108               	
+ 109               	/* --------------------------------------------------------------------
+ 110               	   Float value parse.
+ 111               	*/
+ 112               	  ; limit 'prec'
+ 113:src/Stream/ftoa_engine.S **** 	cpi	prec, 8
+ 114:src/Stream/ftoa_engine.S **** 	brlo	1f
+ 115:src/Stream/ftoa_engine.S **** 	ldi	prec, 7
+ 116               	1:
+ 117               	  ; init.
+ 118:src/Stream/ftoa_engine.S **** 	clr	flag
+ 119:src/Stream/ftoa_engine.S **** 	X_movw	XL, buf_lo
+ 120               	  ; val_hhi := exponent, sign test and remove
+ 121               	#if  FTOA_MINUS != 1
+ 122               	#  error  FTOA_MINUS must be 1:  add with carry used
+ 123               	#endif
+ 124:src/Stream/ftoa_engine.S **** 	lsl	val_hhi
+ 125:src/Stream/ftoa_engine.S **** 	adc	flag, zero		; FTOA_MINUS
+ 126:src/Stream/ftoa_engine.S **** 	sbrc	val_hlo, 7
+ 127:src/Stream/ftoa_engine.S **** 	ori	val_hhi, 1
+ 128               	  ; zero test
+ 129:src/Stream/ftoa_engine.S **** 	adiw	val_hlo, 0
+ 130:src/Stream/ftoa_engine.S **** 	cpc	val_lo, zero
+ 131:src/Stream/ftoa_engine.S **** 	cpc	val_hi, zero
+ 132:src/Stream/ftoa_engine.S **** 	brne	3f
+ 133               	  ; return 0
+ 134:src/Stream/ftoa_engine.S **** 	ori	flag, FTOA_ZERO
+ 135:src/Stream/ftoa_engine.S **** 	subi	prec, -2
+ 136:src/Stream/ftoa_engine.S **** 2:	st	X+, flag
+ 137:src/Stream/ftoa_engine.S **** 	ldi	flag, '0'
+ 138:src/Stream/ftoa_engine.S **** 	dec	prec
+ 139:src/Stream/ftoa_engine.S **** 	brne	2b
+ 140:src/Stream/ftoa_engine.S **** 	ret				; r24,r25 == 0
+ 141               	3:
+ 142               	  ; infinity, NaN ?
+ 143               	#if  FTOA_NAN != 2 * FTOA_INF
+ 144               	#  error  Must: FTOA_NAN == 2*FTOA_INF: 'rjmp' is absent
+ 145               	#endif
+ 146:src/Stream/ftoa_engine.S **** 	cpi	val_hhi, 0xff
+ 147:src/Stream/ftoa_engine.S **** 	brlo	6f
+ 148:src/Stream/ftoa_engine.S **** 	cpi	val_hlo, 0x80
+ 149:src/Stream/ftoa_engine.S **** 	cpc	val_hi, zero
+ 150:src/Stream/ftoa_engine.S **** 	cpc	val_lo, zero
+ 151:src/Stream/ftoa_engine.S **** 	breq	5f
+ 152:src/Stream/ftoa_engine.S **** 	subi	flag, -FTOA_INF		; FTOA_NAN
+ 153:src/Stream/ftoa_engine.S **** 5:	subi	flag, -FTOA_INF
+ 154               	6:
+ 155               	  ; write flags byte
+ 156:src/Stream/ftoa_engine.S **** 	st	X+, flag
+ 157               	  ; hidden bit
+ 158:src/Stream/ftoa_engine.S **** 	cpi	val_hhi, 1
+ 159:src/Stream/ftoa_engine.S **** 	brlo	7f			; if subnormal value
+ 160:src/Stream/ftoa_engine.S **** 	ori	val_hlo, 0x80
+ 161:src/Stream/ftoa_engine.S **** 7:	adc	val_hhi, zero
+ 162               	  ; pushes
+ 163:src/Stream/ftoa_engine.S **** 	push	r29
+ 164:src/Stream/ftoa_engine.S **** 	push	r28
+ 165:src/Stream/ftoa_engine.S **** 	push	r17
+ 166:src/Stream/ftoa_engine.S **** 	push	r16
+ 167:src/Stream/ftoa_engine.S **** 	push	r15
+ 168:src/Stream/ftoa_engine.S **** 	push	r14
+ 169               	
+ 170               	/* --------------------------------------------------------------------
+ 171               	   Multiplication of mantisses (val and table).
+ 172               	   At the begin:
+ 173               		val_hlo .. val_lo  - input value mantisse
+ 174               		val_hhi            - input value exponent
+ 175               		X                  - second byte address (string begin)
+ 176               	   At the end:
+ 177               		mlt_7 .. mlt_2     - multiplication result
+ 178               		exp10              - decimal exponent
+ 179               	*/
+ 180               	
+ 181               	  ; save
+ 182:src/Stream/ftoa_engine.S **** 	mov	exp_sv, val_hhi
+ 183               	  ; Z := & base10[exp / 8]	(sizeof(base10[0]) == 5)
+ 184:src/Stream/ftoa_engine.S **** 	andi	val_hhi, ~7
+ 185:src/Stream/ftoa_engine.S **** 	lsr	val_hhi			; (exp/8) * 4
+ 186:src/Stream/ftoa_engine.S **** 	mov	ZL, val_hhi
+ 187:src/Stream/ftoa_engine.S **** 	lsr	val_hhi
+ 188:src/Stream/ftoa_engine.S **** 	lsr	val_hhi			; exp/8
+ 189:src/Stream/ftoa_engine.S **** 	add	ZL, val_hhi		; (exp/8) * 5
+ 190:src/Stream/ftoa_engine.S **** 	clr	ZH
+ 191:src/Stream/ftoa_engine.S **** 	subi	ZL, lo8(-(.L_base10))
+ 192:src/Stream/ftoa_engine.S **** 	sbci	ZH, hi8(-(.L_base10))
+ 193               	  ; highest mantissa byte  (mult. shifting prepare)
+ 194:src/Stream/ftoa_engine.S **** 	clr	val_hhi
+ 195               	  ; result initializ.
+ 196:src/Stream/ftoa_engine.S **** 	clr	mlt_1
+ 197:src/Stream/ftoa_engine.S **** 	clr	mlt_2
+ 198:src/Stream/ftoa_engine.S **** 	clr	mlt_3
+ 199:src/Stream/ftoa_engine.S **** 	X_movw	mlt_4, mlt_2
+ 200:src/Stream/ftoa_engine.S **** 	X_movw	mlt_6, mlt_2
+ 201               	
+ 202               	  ; multiply to 1-st table byte
+ 203               	#if  AVR_ENH_LPM
+ 204:src/Stream/ftoa_engine.S **** 	lpm	r0, Z+
+ 205               	#else
+ 206               		lpm
+ 207               		adiw	ZL, 1
+ 208               	#endif
+ 209:src/Stream/ftoa_engine.S **** 	sec			; for loop end control
+ 210:src/Stream/ftoa_engine.S **** 	ror	r0
+ 211               	  ; addition
+ 212:src/Stream/ftoa_engine.S **** 10:	brcc	11f
+ 213:src/Stream/ftoa_engine.S **** 	add	mlt_1, val_lo
+ 214:src/Stream/ftoa_engine.S **** 	adc	mlt_2, val_hi
+ 215:src/Stream/ftoa_engine.S **** 	adc	mlt_3, val_hlo
+ 216:src/Stream/ftoa_engine.S **** 	adc	mlt_4, val_hhi
+ 217:src/Stream/ftoa_engine.S **** 	adc	mlt_5, zero
+ 218               	  ; arg shift
+ 219:src/Stream/ftoa_engine.S **** 11:	lsl	val_lo
+ 220:src/Stream/ftoa_engine.S **** 	rol	val_hi
+ 221:src/Stream/ftoa_engine.S **** 	rol	val_hlo
+ 222:src/Stream/ftoa_engine.S **** 	rol	val_hhi
+ 223               	  ; next bit
+ 224:src/Stream/ftoa_engine.S **** 	lsr	r0
+ 225:src/Stream/ftoa_engine.S **** 	brne	10b
+ 226               	
+ 227               	  ; second table byte
+ 228               	#if  AVR_ENH_LPM
+ 229:src/Stream/ftoa_engine.S **** 	lpm	r0, Z+		; C flag is stay 1
+ 230               	#else
+ 231               		lpm
+ 232               		adiw	ZL, 1
+ 233               		sec
+ 234               	#endif
+ 235:src/Stream/ftoa_engine.S **** 	ror	r0
+ 236               	  ; addition
+ 237:src/Stream/ftoa_engine.S **** 12:	brcc	13f
+ 238:src/Stream/ftoa_engine.S **** 	add	mlt_2, val_hi		; val_hi is the least byte now
+ 239:src/Stream/ftoa_engine.S **** 	adc	mlt_3, val_hlo
+ 240:src/Stream/ftoa_engine.S **** 	adc	mlt_4, val_hhi
+ 241:src/Stream/ftoa_engine.S **** 	adc	mlt_5, val_lo
+ 242:src/Stream/ftoa_engine.S **** 	adc	mlt_6, zero
+ 243               	  ; arg shift
+ 244:src/Stream/ftoa_engine.S **** 13:	lsl	val_hi
+ 245:src/Stream/ftoa_engine.S **** 	rol	val_hlo
+ 246:src/Stream/ftoa_engine.S **** 	rol	val_hhi
+ 247:src/Stream/ftoa_engine.S **** 	rol	val_lo
+ 248               	  ; next bit
+ 249:src/Stream/ftoa_engine.S **** 	lsr	r0
+ 250:src/Stream/ftoa_engine.S **** 	brne	12b
+ 251               	
+ 252               	  ; 3-t table byte
+ 253               	#if  AVR_ENH_LPM
+ 254:src/Stream/ftoa_engine.S **** 	lpm	r0, Z+		; C flag is stay 1
+ 255               	#else
+ 256               		lpm
+ 257               		adiw	ZL, 1
+ 258               		sec
+ 259               	#endif
+ 260:src/Stream/ftoa_engine.S **** 	ror	r0
+ 261               	  ; addition
+ 262:src/Stream/ftoa_engine.S **** 14:	brcc	15f
+ 263:src/Stream/ftoa_engine.S **** 	add	mlt_3, val_hlo		; val_hlo is the least byte now
+ 264:src/Stream/ftoa_engine.S **** 	adc	mlt_4, val_hhi
+ 265:src/Stream/ftoa_engine.S **** 	adc	mlt_5, val_lo
+ 266:src/Stream/ftoa_engine.S **** 	adc	mlt_6, val_hi
+ 267:src/Stream/ftoa_engine.S **** 	adc	mlt_7, zero
+ 268               	  ; arg shift
+ 269:src/Stream/ftoa_engine.S **** 15:	lsl	val_hlo
+ 270:src/Stream/ftoa_engine.S **** 	rol	val_hhi
+ 271:src/Stream/ftoa_engine.S **** 	rol	val_lo
+ 272:src/Stream/ftoa_engine.S **** 	rol	val_hi
+ 273               	  ; next bit
+ 274:src/Stream/ftoa_engine.S **** 	lsr	r0
+ 275:src/Stream/ftoa_engine.S **** 	brne	14b
+ 276               	
+ 277               	  ; 4-t table byte
+ 278               	#if  AVR_ENH_LPM
+ 279:src/Stream/ftoa_engine.S **** 	lpm	r0, Z+		; C flag is stay 1
+ 280               	#else
+ 281               		lpm
+ 282               	#endif
+ 283:src/Stream/ftoa_engine.S **** 	ror	r0
+ 284               	  ; addition
+ 285:src/Stream/ftoa_engine.S **** 16:	brcc	17f
+ 286:src/Stream/ftoa_engine.S **** 	add	mlt_4, val_hhi		; val_hhi is the least byte now
+ 287:src/Stream/ftoa_engine.S **** 	adc	mlt_5, val_lo
+ 288:src/Stream/ftoa_engine.S **** 	adc	mlt_6, val_hi
+ 289:src/Stream/ftoa_engine.S **** 	adc	mlt_7, val_hlo
+ 290               	  ; arg shift
+ 291:src/Stream/ftoa_engine.S **** 17:	lsl	val_hhi
+ 292:src/Stream/ftoa_engine.S **** 	rol	val_lo
+ 293:src/Stream/ftoa_engine.S **** 	rol	val_hi
+ 294:src/Stream/ftoa_engine.S **** 	rol	val_hlo
+ 295               	  ; next bit
+ 296:src/Stream/ftoa_engine.S **** 	lsr	r0
+ 297:src/Stream/ftoa_engine.S **** 	brne	16b
+ 298               	
+ 299               	  ; decimal exponent
+ 300               	#if  AVR_ENH_LPM
+ 301:src/Stream/ftoa_engine.S **** 	lpm	exp10, Z
+ 302               	#else
+ 303               		adiw	ZL, 1
+ 304               		lpm
+ 305               		mov	exp10, r0
+ 306               	#endif
+ 307               	
+ 308               	  ; result shift:  mlt_7..2 >>= (~exp & 7)
+ 309:src/Stream/ftoa_engine.S **** 	com	exp_sv
+ 310:src/Stream/ftoa_engine.S **** 	andi	exp_sv, 7
+ 311:src/Stream/ftoa_engine.S **** 	breq	19f
+ 312:src/Stream/ftoa_engine.S **** 18:	lsr	mlt_7
+ 313:src/Stream/ftoa_engine.S **** 	ror	mlt_6
+ 314:src/Stream/ftoa_engine.S **** 	ror	mlt_5
+ 315:src/Stream/ftoa_engine.S **** 	ror	mlt_4
+ 316:src/Stream/ftoa_engine.S **** 	ror	mlt_3
+ 317:src/Stream/ftoa_engine.S **** 	ror	mlt_2
+ 318:src/Stream/ftoa_engine.S **** 	dec	exp_sv
+ 319:src/Stream/ftoa_engine.S **** 	brne	18b
+ 320               	19:
+ 321               	
+ 322               	/* --------------------------------------------------------------------
+ 323               	   Conversion to string.
+ 324               	
+ 325               	   Registers usage:
+ 326               	      mlt_7 .. mlt_2	- new mantissa (multiplication result)
+ 327               	      pwr_7 .. pwr_2	- 'powr10' table element
+ 328               	      Z			- 'powr10' table pointer
+ 329               	      X			- output string pointer
+ 330               	      maxdgs		- number of digits
+ 331               	      prec		- number of digits stays to output
+ 332               	      exp10		- decimal exponent
+ 333               	      digit		- conversion process
+ 334               	
+ 335               	   At the end:
+ 336               	      X			- end of buffer (nonfilled byte)
+ 337               	      exp10		- corrected dec. exponent
+ 338               	      mlt_7 .. mlt_2	- remainder
+ 339               	      pwr_7 .. pwr_2	- last powr10[] element
+ 340               	
+ 341               	   Notes:
+ 342               	     * It is possible to leave out powr10'x table with subnormal value.
+ 343               	      Result: accuracy degrease on the rounding phase.  No matter: high
+ 344               	      precision with subnormals is not needed. (Now 0x00000001 is converted
+ 345               	      exactly on prec = 5, i.e. 6 digits.)
+ 346               	*/
+ 347               	
+ 348               	  ; to find first digit
+ 349:src/Stream/ftoa_engine.S **** 	ldi	ZL, lo8(.L_powr10)
+ 350:src/Stream/ftoa_engine.S **** 	ldi	ZH, hi8(.L_powr10)
+ 351:src/Stream/ftoa_engine.S **** 	set
+ 352               	  ; 'pwr10' element reading
+ 353               	.L_digit:
+ 354:src/Stream/ftoa_engine.S **** 	X_lpm	pwr_2, Z+
+ 355:src/Stream/ftoa_engine.S **** 	X_lpm	pwr_3, Z+
+ 356:src/Stream/ftoa_engine.S **** 	X_lpm	pwr_4, Z+
+ 357:src/Stream/ftoa_engine.S **** 	X_lpm	pwr_5, Z+
+ 358:src/Stream/ftoa_engine.S **** 	X_lpm	pwr_6, Z+
+ 359:src/Stream/ftoa_engine.S **** 	X_lpm	pwr_7, Z+
+ 360               	  ; 'digit' init.
+ 361:src/Stream/ftoa_engine.S **** 	ldi	digit, '0' - 1
+ 362               	  ; subtraction loop
+ 363:src/Stream/ftoa_engine.S **** 20:	inc	digit
+ 364:src/Stream/ftoa_engine.S **** 	sub	mlt_2, pwr_2
+ 365:src/Stream/ftoa_engine.S **** 	sbc	mlt_3, pwr_3
+ 366:src/Stream/ftoa_engine.S **** 	sbc	mlt_4, pwr_4
+ 367:src/Stream/ftoa_engine.S **** 	sbc	mlt_5, pwr_5
+ 368:src/Stream/ftoa_engine.S **** 	sbc	mlt_6, pwr_6
+ 369:src/Stream/ftoa_engine.S **** 	sbc	mlt_7, pwr_7
+ 370:src/Stream/ftoa_engine.S **** 	brsh	20b
+ 371               	  ; restore mult
+ 372:src/Stream/ftoa_engine.S **** 	add	mlt_2, pwr_2
+ 373:src/Stream/ftoa_engine.S **** 	adc	mlt_3, pwr_3
+ 374:src/Stream/ftoa_engine.S **** 	adc	mlt_4, pwr_4
+ 375:src/Stream/ftoa_engine.S **** 	adc	mlt_5, pwr_5
+ 376:src/Stream/ftoa_engine.S **** 	adc	mlt_6, pwr_6
+ 377:src/Stream/ftoa_engine.S **** 	adc	mlt_7, pwr_7
+ 378               	  ; analisys
+ 379:src/Stream/ftoa_engine.S **** 	brtc	25f
+ 380:src/Stream/ftoa_engine.S **** 	cpi	digit, '0'
+ 381:src/Stream/ftoa_engine.S **** 	brne	21f		; this is the first digit finded
+ 382:src/Stream/ftoa_engine.S **** 	dec	exp10
+ 383:src/Stream/ftoa_engine.S **** 	rjmp	.L_digit
+ 384               	  ; now is the first digit
+ 385:src/Stream/ftoa_engine.S **** 21:	clt
+ 386               	  ; number of digits
+ 387:src/Stream/ftoa_engine.S **** 	subi	maxdgs, 1
+ 388:src/Stream/ftoa_engine.S **** 	brlo	23f			; maxdgs was 0
+ 389:src/Stream/ftoa_engine.S **** 	add	maxdgs, exp10
+ 390:src/Stream/ftoa_engine.S **** 	brpl	22f
+ 391:src/Stream/ftoa_engine.S **** 	clr	maxdgs
+ 392:src/Stream/ftoa_engine.S **** 22:	cp	maxdgs, prec
+ 393:src/Stream/ftoa_engine.S **** 	brsh	23f
+ 394:src/Stream/ftoa_engine.S **** 	mov	prec, maxdgs
+ 395:src/Stream/ftoa_engine.S **** 23:	inc	prec
+ 396:src/Stream/ftoa_engine.S **** 	mov	maxdgs, prec	
+ 397               	  ; operate digit
+ 398:src/Stream/ftoa_engine.S **** 25:	cpi	digit, '0' + 10
+ 399:src/Stream/ftoa_engine.S **** 	brlo	27f
+ 400               	  ; overflow, digit > '9'
+ 401:src/Stream/ftoa_engine.S **** 	ldi	digit, '9'
+ 402:src/Stream/ftoa_engine.S **** 26:	st	X+, digit
+ 403:src/Stream/ftoa_engine.S **** 	dec	prec
+ 404:src/Stream/ftoa_engine.S **** 	brne	26b
+ 405:src/Stream/ftoa_engine.S **** 	rjmp	.L_up
+ 406               	  ; write digit
+ 407:src/Stream/ftoa_engine.S **** 27:	st	X+, digit
+ 408:src/Stream/ftoa_engine.S **** 	dec	prec
+ 409:src/Stream/ftoa_engine.S **** 	brne	.L_digit
+ 410               	
+ 411               	/* --------------------------------------------------------------------
+ 412               	    Rounding.
+ 413               	*/
+ 414               	.L_round:
+ 415               	  ; pwr10 /= 2
+ 416:src/Stream/ftoa_engine.S **** 	lsr	pwr_7
+ 417:src/Stream/ftoa_engine.S **** 	ror	pwr_6
+ 418:src/Stream/ftoa_engine.S **** 	ror	pwr_5
+ 419:src/Stream/ftoa_engine.S **** 	ror	pwr_4
+ 420:src/Stream/ftoa_engine.S **** 	ror	pwr_3
+ 421:src/Stream/ftoa_engine.S **** 	ror	pwr_2
+ 422               	  ; mult -= pwr10  (half of last 'pwr10' value)
+ 423:src/Stream/ftoa_engine.S **** 	sub	mlt_2, pwr_2
+ 424:src/Stream/ftoa_engine.S **** 	sbc	mlt_3, pwr_3
+ 425:src/Stream/ftoa_engine.S **** 	sbc	mlt_4, pwr_4
+ 426:src/Stream/ftoa_engine.S **** 	sbc	mlt_5, pwr_5
+ 427:src/Stream/ftoa_engine.S **** 	sbc	mlt_6, pwr_6
+ 428:src/Stream/ftoa_engine.S **** 	sbc	mlt_7, pwr_7
+ 429               	  ; rounding direction?
+ 430:src/Stream/ftoa_engine.S **** 	brlo	.L_rest
+ 431               	  ; round to up
+ 432               	.L_up:
+ 433:src/Stream/ftoa_engine.S **** 	inc	prec
+ 434:src/Stream/ftoa_engine.S **** 	ld	digit, -X
+ 435:src/Stream/ftoa_engine.S **** 	inc	digit
+ 436:src/Stream/ftoa_engine.S **** 	cpi	digit, '9' + 1
+ 437:src/Stream/ftoa_engine.S **** 	brlo	31f
+ 438:src/Stream/ftoa_engine.S **** 	ldi	digit, '0'
+ 439:src/Stream/ftoa_engine.S **** 31:	st	X, digit
+ 440:src/Stream/ftoa_engine.S **** 	cpse	prec, maxdgs
+ 441:src/Stream/ftoa_engine.S **** 	brsh	.L_up
+ 442               	  ; it was a carry to master digit
+ 443:src/Stream/ftoa_engine.S **** 	ld	digit, -X		; flags
+ 444:src/Stream/ftoa_engine.S **** 	ori	digit, FTOA_CARRY	; 'C' is not changed
+ 445:src/Stream/ftoa_engine.S **** 	st	X+, digit
+ 446:src/Stream/ftoa_engine.S **** 	brlo	.L_rest			; above comparison
+ 447               	  ; overflow
+ 448:src/Stream/ftoa_engine.S **** 	inc	exp10
+ 449:src/Stream/ftoa_engine.S **** 	ldi	digit, '1'
+ 450:src/Stream/ftoa_engine.S **** 32:	st	X+, digit
+ 451:src/Stream/ftoa_engine.S **** 	ldi	digit, '0'
+ 452:src/Stream/ftoa_engine.S **** 	dec	prec
+ 453:src/Stream/ftoa_engine.S **** 	brne	32b
+ 454               	  ; restore
+ 455               	.L_rest:
+ 456:src/Stream/ftoa_engine.S **** 	clr	zero
+ 457:src/Stream/ftoa_engine.S **** 	pop	r14
+ 458:src/Stream/ftoa_engine.S **** 	pop	r15
+ 459:src/Stream/ftoa_engine.S **** 	pop	r16
+ 460:src/Stream/ftoa_engine.S **** 	pop	r17
+ 461:src/Stream/ftoa_engine.S **** 	pop	r28
+ 462:src/Stream/ftoa_engine.S **** 	pop	r29
+ 463               	  ; return
+ 464:src/Stream/ftoa_engine.S **** 	clr	r25
+ 465:src/Stream/ftoa_engine.S **** 	sbrc	exp10, 7		; high byte
+ 466:src/Stream/ftoa_engine.S **** 	com	r25
+ 467:src/Stream/ftoa_engine.S **** 	ret
+ 468               	
+ 470               	
+ 471               	/* --------------------------------------------------------------------
+ 472               	    Tables.  '.L_powr10' is placed first -- for subnormals stability.
+ 473               	*/
+ 474               	    .section .progmem.data,"a",@progbits
+ 475               	
+ 477               	.L_powr10:
+ 478 0000 0040 7A10 		.byte	0, 64, 122, 16, 243, 90	; 100000000000000
+ 478      F35A 
+ 479 0006 00A0 724E 		.byte	0, 160, 114, 78, 24, 9	; 10000000000000
+ 479      1809 
+ 480 000c 0010 A5D4 		.byte	0, 16, 165, 212, 232, 0	; 1000000000000
+ 480      E800 
+ 481 0012 00E8 7648 		.byte	0, 232, 118, 72, 23, 0	; 100000000000
+ 481      1700 
+ 482 0018 00E4 0B54 		.byte	0, 228, 11, 84, 2, 0	; 10000000000
+ 482      0200 
+ 483 001e 00CA 9A3B 		.byte	0, 202, 154, 59, 0, 0	; 1000000000
+ 483      0000 
+ 484 0024 00E1 F505 		.byte	0, 225, 245, 5, 0, 0	; 100000000
+ 484      0000 
+ 485 002a 8096 9800 		.byte	128, 150, 152, 0, 0, 0	; 10000000
+ 485      0000 
+ 486 0030 4042 0F00 		.byte	64, 66, 15, 0, 0, 0	; 1000000
+ 486      0000 
+ 487 0036 A086 0100 		.byte	160, 134, 1, 0, 0, 0	; 100000
+ 487      0000 
+ 488 003c 1027 0000 		.byte	16, 39, 0, 0, 0, 0	; 10000
+ 488      0000 
+ 489 0042 E803 0000 		.byte	232, 3, 0, 0, 0, 0	; 1000
+ 489      0000 
+ 490 0048 6400 0000 		.byte	100, 0, 0, 0, 0, 0	; 100
+ 490      0000 
+ 491 004e 0A00 0000 		.byte	10, 0, 0, 0, 0, 0	; 10
+ 491      0000 
+ 492 0054 0100 0000 		.byte	1, 0, 0, 0, 0, 0	; 1
+ 492      0000 
+ 494               	
+ 496               	.L_base10:
+ 497 005a 2C76 D888 		.byte	44, 118, 216, 136, -36	; 2295887404
+ 497      DC
+ 498 005f 674F 0823 		.byte	103, 79, 8, 35, -33	; 587747175
+ 498      DF
+ 499 0064 C1DF AE59 		.byte	193, 223, 174, 89, -31	; 1504632769
+ 499      E1
+ 500 0069 B1B7 96E5 		.byte	177, 183, 150, 229, -29	; 3851859889
+ 500      E3
+ 501 006e E453 C63A 		.byte	228, 83, 198, 58, -26	; 986076132
+ 501      E6
+ 502 0073 5199 7696 		.byte	81, 153, 118, 150, -24	; 2524354897
+ 502      E8
+ 503 0078 E6C2 8426 		.byte	230, 194, 132, 38, -21	; 646234854
+ 503      EB
+ 504 007d 898C 9B62 		.byte	137, 140, 155, 98, -19	; 1654361225
+ 504      ED
+ 505 0082 407C 6FFC 		.byte	64, 124, 111, 252, -17	; 4235164736
+ 505      EF
+ 506 0087 BC9C 9F40 		.byte	188, 156, 159, 64, -14	; 1084202172
+ 506      F2
+ 507 008c BAA5 6FA5 		.byte	186, 165, 111, 165, -12	; 2775557562
+ 507      F4
+ 508 0091 9005 5A2A 		.byte	144, 5, 90, 42, -9	; 710542736
+ 508      F7
+ 509 0096 5C93 6B6C 		.byte	92, 147, 107, 108, -7	; 1818989404
+ 509      F9
+ 510 009b 676D C11B 		.byte	103, 109, 193, 27, -4	; 465661287
+ 510      FC
+ 511 00a0 E0E4 0D47 		.byte	224, 228, 13, 71, -2	; 1192092896
+ 511      FE
+ 512 00a5 F520 E6B5 		.byte	245, 32, 230, 181, 0	; 3051757813
+ 512      00
+ 513 00aa D0ED 902E 		.byte	208, 237, 144, 46, 3	; 781250000
+ 513      03
+ 514 00af 0094 3577 		.byte	0, 148, 53, 119, 5	; 2000000000
+ 514      05
+ 515 00b4 0080 841E 		.byte	0, 128, 132, 30, 8	; 512000000
+ 515      08
+ 516 00b9 0000 204E 		.byte	0, 0, 32, 78, 10	; 1310720000
+ 516      0A
+ 517 00be 0000 00C8 		.byte	0, 0, 0, 200, 12	; 3355443200
+ 517      0C
+ 518 00c3 3333 3333 		.byte	51, 51, 51, 51, 15	; 858993459
+ 518      0F
+ 519 00c8 986E 1283 		.byte	152, 110, 18, 131, 17	; 2199023256
+ 519      11
+ 520 00cd 41EF 8D21 		.byte	65, 239, 141, 33, 20	; 562949953
+ 520      14
+ 521 00d2 893B E655 		.byte	137, 59, 230, 85, 22	; 1441151881
+ 521      16
+ 522 00d7 CFFE E6DB 		.byte	207, 254, 230, 219, 24	; 3689348815
+ 522      18
+ 523 00dc D184 4B38 		.byte	209, 132, 75, 56, 27	; 944473297
+ 523      1B
+ 524 00e1 F77C 1D90 		.byte	247, 124, 29, 144, 29	; 2417851639
+ 524      1D
+ 525 00e6 A4BB E424 		.byte	164, 187, 228, 36, 32	; 618970020
+ 525      20
+ 526 00eb 3284 725E 		.byte	50, 132, 114, 94, 34	; 1584563250
+ 526      22
+ 527 00f0 8100 C9F1 		.byte	129, 0, 201, 241, 36	; 4056481921
+ 527      24
+ 528 00f5 ECA1 E53D 		.byte	236, 161, 229, 61, 39	; 1038459372
+ 528      27
+ 530               	
+ 531               		.end
+DEFINED SYMBOLS
+src/Stream/ftoa_engine.S:107    .text:00000000 __ftoa_engine
+
+NO UNDEFINED SYMBOLS
