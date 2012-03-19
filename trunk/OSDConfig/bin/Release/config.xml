@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Config>
+  <ComPort>COM12</ComPort>
+  <BootBuadRate>9600</BootBuadRate>
+  <OsdBuadRate>57600</OsdBuadRate>
+  <Pal>True</Pal>
+</Config>
