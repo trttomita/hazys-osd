@@ -312,8 +312,6 @@ static volatile unsigned char UART1_RxTail;
 static volatile unsigned char UART1_LastRxError;
 #endif
 
-static uint8_t of = 0;
-
 ISR(UART0_RECEIVE_INTERRUPT)
 /*************************************************************************
 Function: UART Receive Complete interrupt
@@ -348,15 +346,6 @@ Purpose:  called when the UART has received a character
     {
         /* error: receive buffer overflow */
         lastRxError = UART_BUFFER_OVERFLOW >> 8;
-        //uart_putc('F');
-        if (of <128)
-        	of++;
-        else
-        {
-        	uart_putc('A' + UART_RxHead);
-        	uart_putc('A' + UART_RxTail);
-        	of = 125;
-        }
     }
     else
     {
@@ -364,7 +353,6 @@ Purpose:  called when the UART has received a character
         UART_RxHead = tmphead;
         /* store received data in buffer */
         UART_RxBuf[tmphead] = data;
-        of = 0;
     }
     UART_LastRxError = lastRxError;
 }
