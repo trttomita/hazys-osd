@@ -179,6 +179,7 @@ namespace OSDConfig
         private void BUT_WriteOSD_Click(object sender, EventArgs e)
         {
             toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
+            toolStripProgressBar1.Value = 0;
             this.toolStripStatusLabel1.Text = "";
 
             int size = 4 + osd.Setting.coord.Length;
@@ -191,6 +192,7 @@ namespace OSDConfig
                 ck += buf[i];
             buf[size + 1] = (byte)ck;
 
+            bool fail = true;
             try
             {
                 EnterCLI();
@@ -202,9 +204,17 @@ namespace OSDConfig
                     int ack = comPort.ReadByte();
                     if (ack != '!')
                         MessageBox.Show("write setting error");
+                    else
+                        fail = false;
                 }
+                comPort.Close();
             }
             catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+
+            if (fail)
+                toolStripStatusLabel1.Text = "Write OSD Failed";
+            else
+                toolStripStatusLabel1.Text = "Write OSD Done";
         }
 
 
@@ -234,7 +244,7 @@ namespace OSDConfig
             toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
             this.toolStripStatusLabel1.Text = "";
 
-            bool fail = false;
+            bool fail = true;
             //ArduinoSTK sp;
 
             try
@@ -268,13 +278,18 @@ namespace OSDConfig
                         for (int i = 0; i < OSDItemName.Name.Length; i++)
                             if (OSDItemName.Name[i] != null)
                                 LIST_items.Items.Add(OSDItemName.Name[i], osd.Setting.IsEnabled((OSDItem)i));
-
+                        fail = false;
                         osd.Draw();
                     }
                 }
+                comPort.Close();
             }
             catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
+            if (fail)
+                toolStripStatusLabel1.Text = "Read OSD Failed";
+            else
+                toolStripStatusLabel1.Text = "Read OSD Done";
         }
 
 
@@ -711,6 +726,8 @@ namespace OSDConfig
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "mcm|*.mcm";
 
+            bool fail = true;
+
             if (ofd.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -760,8 +777,11 @@ namespace OSDConfig
             {
                 byte[] ck = new byte[1];
                 toolStripProgressBar1.Value = 0;
-
-                for (int i = 0; i < fonts.Length; i++)
+                int x = comPort.BytesToRead;
+                //int x1 = comPort.ReadByte();
+                //int x2 = comPort.ReadByte();
+                int i = 0;
+                for (; i < fonts.Length; i++)
                 {
                     //Console.Write("font {0} ", i);
 
@@ -784,108 +804,24 @@ namespace OSDConfig
                     }
                     else
                     {
-                        Console.WriteLine("done");
+                        //Console.WriteLine("writedone");
                         toolStripProgressBar1.Value = i + 1;
                     }
                 }
+                fail = i != 256;
             }
             catch (TimeoutException te)
             {
                 Console.WriteLine("read timeout");
             }
 
-            /*
-            using (var stream = ofd.OpenFile())
-            {
 
-                //BinaryReader br = new BinaryReader(stream);
-                StreamReader sr2 = new StreamReader(stream);
-
-                string device = sr2.ReadLine();
-
-                if (device != "MAX7456")
-                {
-                    MessageBox.Show("Invalid MCM");
-                    comPort.Close();
-                    return;
-                }
-
-                //br.BaseStream.Seek(0, SeekOrigin.Begin);
-
-                //long length = br.BaseStream.Length;
-                int length = (int)stream.Length;
-                string line = null;
-
-                int pos = 0;
-                toolStripStatusLabel1.Text = "CharSet Uploading";
-                int byte_count = 0;
-
-                while ((line = sr2.ReadLine()) != null)//br.BaseStream.Position < br.BaseStream.Length && !this.IsDisposed)
-                {
-                    try
-                    {
-                        pos += line.Length + 2;
-                        toolStripProgressBar1.Value = pos * 100 / length;//(int)((br.BaseStream.Position / (float)br.BaseStream.Length) * 100);
-
-                        byte[] buffer = Encoding.ASCII.GetBytes(line + "\r\n");
-                        //
-                        for (int i = 0; i < buffer.Length; i++)
-                        {
-                            comPort.Write(buffer, i, 1);
-                            Thread.Sleep(1);
-                        }
-
-
-                        //comPort.Write(buffer, 0, buffer.Length);
-                        byte_count++;
-                        Thread.Sleep(10);
-
-                        int timeout = 0;
-
-                        if (byte_count == 64)
-                        {
-                            while (comPort.BytesToRead == 0)
-                            {
-                                System.Threading.Thread.Sleep(10);
-                                timeout++;
-
-                                if (timeout > 10)
-                                {
-                                    MessageBox.Show("CharSet upload failed - no response");
-                                    comPort.Close();
-                                    return;
-                                }
-                            }
-                            Console.WriteLine(comPort.ReadExisting());
-                            byte_count = 0;
-                        }
-
-                    }
-                    catch { break; }
-
-                    Application.DoEvents();
-                }
-
-                /*
-                comPort.WriteLine("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-
-                comPort.DtrEnable = false;
-                comPort.RtsEnable = false;
-
-                System.Threading.Thread.Sleep(50);
-
-                comPort.DtrEnable = true;
-                comPort.RtsEnable = true;
-
-                System.Threading.Thread.Sleep(50);
-                */
             comPort.Close();
 
-            //comPort.DtrEnable = false;
-            //comPort.RtsEnable = false;
-
-            //toolStripProgressBar1.Value = 100;
-            toolStripStatusLabel1.Text = "CharSet Done";
+            if (fail)
+                toolStripStatusLabel1.Text = "Update CharSet Failed";
+            else
+                toolStripStatusLabel1.Text = "CharSet Done";
             //}
             //}
         }
