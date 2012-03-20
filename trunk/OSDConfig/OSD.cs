@@ -84,7 +84,8 @@ namespace OSDConfig
 
         int row, col, startRow, startCol;
 
-        public bool ShowGrid { get; set; }
+        bool showGrid;
+        public bool ShowGrid { get { return showGrid; } set { if (showGrid != value) { showGrid = value; mod = true; } } }
 
         public OSD()
         {
