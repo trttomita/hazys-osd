@@ -121,22 +121,26 @@ void ArduOSD::uploadFont()
     closePanel();
 
     uart_putc('F');
-
+    
     while(font_count < 256)
     {
         //ack = '@';
         //loop until uart available
         checksum = 0;
-        wdt_reset();
+       
         for (uint8_t i = 0; i < 54; i++)
         {
-            uint8_t b = uart_wait_getc();
+        		while (!uart_available())
+        			wdt_reset();
+            uint8_t b = (uint8_t)uart_getc();
             character_bitmap[i] = b;
             checksum += b;
         }
-        wdt_reset();
+        //wdt_reset();
 
-        uint8_t ck = uart_wait_getc();
+				while (!uart_available())
+					wdt_reset();
+        uint8_t ck = (uint8_t)uart_getc();
 
         if (ck == checksum)
         {
