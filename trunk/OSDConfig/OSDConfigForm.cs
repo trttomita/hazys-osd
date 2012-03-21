@@ -25,7 +25,7 @@ namespace OSDConfig
         /// <summary>
         /// background image
         /// </summary>
-        bool incli = false;
+        //bool incli = false;
 
         SerialPort comPort = new SerialPort();
 
@@ -144,16 +144,6 @@ namespace OSDConfig
             // if (((CheckedListBox)sender).SelectedItem != null && ((CheckedListBox)sender).SelectedItem.ToString() == "Horizon")
             if (((CheckedListBox)sender).SelectedItem != null)
             {
-                /*    if (((CheckedListBox)sender).SelectedItem.ToString() == "Horizon" && e.NewValue == CheckState.Checked)
-                    {
-                        int index = LIST_items.Items.IndexOf("Center");
-                        LIST_items.SetItemChecked(index, false);
-                    }
-                    else if (((CheckedListBox)sender).SelectedItem.ToString() == "Center" && e.NewValue == CheckState.Checked)
-                    {
-                        int index = LIST_items.Items.IndexOf("Horizon");
-                        LIST_items.SetItemChecked(index, false);
-                    }*/
                 OSDItem item = (OSDItem)Array.IndexOf(OSDItemName.Name, ((CheckedListBox)sender).SelectedItem);
                 if (item == OSDItem.Hor && e.NewValue == CheckState.Checked)
                 {
@@ -180,6 +170,7 @@ namespace OSDConfig
         {
             toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
             toolStripProgressBar1.Value = 0;
+            toolStripProgressBar1.Maximum = 100;
             this.toolStripStatusLabel1.Text = "";
 
             int size = 4 + osd.Setting.coord.Length;
@@ -212,9 +203,15 @@ namespace OSDConfig
             catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
             if (fail)
+            {
                 toolStripStatusLabel1.Text = "Write OSD Failed";
+                toolStripProgressBar1.Value = 0;
+            }
             else
+            {
+                toolStripProgressBar1.Value = 100;
                 toolStripStatusLabel1.Text = "Write OSD Done";
+            }
         }
 
 
@@ -242,6 +239,8 @@ namespace OSDConfig
         private void BUT_ReadOSD_Click(object sender, EventArgs e)
         {
             toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
+            toolStripProgressBar1.Maximum = 100;
+            toolStripProgressBar1.Value = 0;
             this.toolStripStatusLabel1.Text = "";
 
             bool fail = true;
@@ -259,7 +258,9 @@ namespace OSDConfig
 
                     int tl = 0;
                     while ((tl += comPort.Read(buf, tl, size + 1 - tl)) < size + 1)
-                        ;
+                    {
+                        toolStripProgressBar1.Value = tl * 100 / (size + 1);
+                    }
 
                     byte ck = 0;
                     for (int i = 0; i < size; i++)
@@ -287,9 +288,15 @@ namespace OSDConfig
             catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
             if (fail)
+            {
                 toolStripStatusLabel1.Text = "Read OSD Failed";
+                toolStripProgressBar1.Value = 0;
+            }
             else
+            {
+                toolStripProgressBar1.Value = 100;
                 toolStripStatusLabel1.Text = "Read OSD Done";
+            }
         }
 
 
@@ -804,7 +811,6 @@ namespace OSDConfig
                     }
                     else
                     {
-                        //Console.WriteLine("writedone");
                         toolStripProgressBar1.Value = i + 1;
                     }
                 }
