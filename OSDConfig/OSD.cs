@@ -16,7 +16,7 @@ namespace OSDConfig
     {
         public Bitmap[] Chars { set; get; }
 
-        public Image BackgroundImage { get; set; }
+        public new Image BackgroundImage { get; set; }
 
 
         //public PanelSetting Setting { get; set; }

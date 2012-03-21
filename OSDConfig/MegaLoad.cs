@@ -22,126 +22,230 @@ namespace OSDConfig
         int pageSize;
         int bootSize;
         int eepromSize;
+        char memType;
 
-        public int GetFlashSize(int s)
+        int retry = 0;
+        int pagePtr = 0;
+
+        int bytePtr = 0;
+
+        byte[] flash;
+        byte[] eeprom;
+
+
+
+
+        public void SendFlashPage()
         {
-            if (s <= 'i')
-                return 1024 << (s - 'g');
-            else
-                return 1024 << (3 + s - 'l');
-        }
-
-        public int GetPageSize(int s)
-        {
-            return 32 << (s - 'Q');
-        }
-
-        public int GetBootSize(int s)
-        {
-            return 128 << (s - 'a');
-        }
-
-        public int GetEEpromSize(int s)
-        {
-            return 64 << (s - '.');
-        }
 
 
-        public bool WriteFlash(byte[] flash)
-        {
-            byte[] buffer = new byte[1024];
-            int error = 0;
-
-            for (int i = 0; i < (flash.Length + pageSize - 1) / pageSize; )
+            WriteByte((byte)(pagePtr >> 8 & 255));
+            WriteByte((byte)(pagePtr & 255));
+            byte b = 0;
+            Write(flash, pagePtr * pageSize, pageSize);
+            for (int i = 0; i < pageSize; i++)
             {
-                Array.Clear(buffer, 0, pageSize);
-                buffer[0] = (byte)((i >> 8) & 0xFF);
-                buffer[1] = (byte)(i & 0xff);
-                Write(buffer, 0, 2);
-
-                Array.Copy(flash, i * pageSize, buffer, 0, Math.Min(pageSize, flash.Length - i * pageSize));
-                for (int j = 0; j < pageSize / 32; j++)
-                {
-                    Write(buffer, j * 32, 32);
-                    Thread.Sleep(5);
-                }
-                //Write(buffer, 0, pageSize);
-
-                byte checksum = 0;
-                //buffer[0] = 0;
-                for (int j = 0; j < pageSize; j++)
-                    checksum += buffer[j];
-
-                buffer[0] = checksum;
-
-                Write(buffer, 0, 1);
-                int ack = ReadByte();
-                if (ack == '!')
-                {
-                    Console.WriteLine("flash page {0} done", i);
-                    i++;
-                    error = 0;
-                    progress = i * 100 / totalPage;
-                    Console.WriteLine("progress {0}", progress);
-                    if (Progress != null)
-                        Progress(progress);
-                }
-                else
-                {
-                    Console.WriteLine("{0} flash error, retry page {1}", (char)ack, i);
-                    if (++error >= 5)
-                    {
-                        Console.WriteLine("fail too many times");
-                        //return false;
-                        break;
-                    }
-                }
-                Application.DoEvents();
+                b += flash[pagePtr * pageSize + i];
             }
+            WriteByte(b);
+            //this.SendMessage("Sending Page #" + this.PagePtr.ToString());
+            //if (this.PageSizeInt > 0)
+            //{
+            //    this.SetProgressBar(this.FlashMax / this.PageSizeInt, this.PagePtr);
+            //}
 
-            buffer[0] = buffer[1] = 0xff;
-            Write(buffer, 0, 2);
-            return error == 0;
         }
 
-        public bool WriteEEprom(byte[] eeprom)
+        public void SendEEpromByte()
         {
-            byte[] buffer = new byte[10];
-            for (int i = 0; i < eeprom.Length; )
-            {
-                buffer[0] = (byte)((i >> 8) & 0xff);
-                buffer[1] = (byte)(i & 0xff);
-                Write(buffer, 0, 2);
-                Write(eeprom, i, 1);
-                //checksum += eeprom[i];
-                Write(eeprom, i, 1);
-                if (ReadByte() == '!')
-                {
-                    i++;
-                }
-                else
-                    Console.WriteLine("eeprom error, retry");
-            }
 
-            buffer[0] = buffer[1] = 0xff;
-            Write(buffer, 0, 2);
+            //while (!this.EEpromUse[this.BytePtr] && this.BytePtr < 4094)
+            //{
+            //    this.BytePtr++;
+            //}
+            WriteByte((byte)(bytePtr >> 8 & 255));
+            WriteByte((byte)(bytePtr & 255));
+            WriteByte(eeprom[bytePtr]);
+            byte b = (byte)(bytePtr >> 8 & 255);
+            b += (byte)(bytePtr & 255);
+            b += eeprom[bytePtr];
+            WriteByte(b);
 
-            return true;
+            //if (this.EEpromSizeInt > 0)
+            //{
+            //    this.SetProgressBar(this.EEpromMax, this.BytePtr);
+            //}
+
+        }
+
+
+
+
+        public void WriteByte(byte b)
+        {
+            Write(new byte[] { b }, 0, 1);
+        }
+
+        public void WriteChar(char c)
+        {
+            WriteByte((byte)c);
         }
 
 
         public bool Upload(byte[] flash, byte[] eeprom)
         {
-
-            while (BytesToRead <= 0 || ReadByte() != '>')
+            if (flash != null)
             {
-                Thread.Sleep(100);
-                Console.WriteLine("Waiting...");
-                Application.DoEvents();
+                this.flash = new byte[flash.Length];
+                Array.Copy(flash, this.flash, flash.Length);
+            }
+            else
+                this.flash = null;
+
+            if (eeprom != null)
+            {
+                this.eeprom = new byte[eeprom.Length];
+                Array.Copy(eeprom, this.eeprom, eeprom.Length);
+            }
+            else
+                this.eeprom = null;
+
+            bool connected = false;
+            bool wait = true;
+            int waitCount = 0;
+            bool ok = false;
+
+            while (wait)
+            //while (BytesToRead > 0)
+            {
+                while (BytesToRead <= 0)
+                {
+                    if (connected && waitCount > 20)
+                    {
+                        wait = false;
+                        break;
+                    }
+                    else if (!connected && waitCount > 100)
+                    {
+                        wait = false;
+                        break;
+                    }
+
+                    Thread.Sleep(100);
+                    Application.DoEvents();
+                }
+
+                char c = (char)ReadByte();
+
+                switch (c)
+                {
+                    case 'U':
+                        WriteByte(85);
+                        break;
+                    case '>':
+                        WriteChar('<');
+                        if (Connected != null)
+                            Connected(this, new EventArgs());
+
+                        if (flash != null)
+                        {
+                            memType = 'F';
+                            retry = 0;
+                            pagePtr = 0;
+                        }
+                        else
+                        {
+                            memType = 'E';
+                            WriteByte(255);
+                            WriteByte(255);
+                            ReadChar();
+                        }
+                        break;
+                    case '!':
+                        if (memType == 'F')
+                        {
+                            if (pagePtr * pageSize >= flash.Length)
+                            {
+                                WriteByte(255);
+                                WriteByte(255);
+                                pagePtr = 0;
+                                //if (eeprom == null)
+                                //    ok = true;
+                            }
+                            else
+                            {
+                                SendFlashPage();
+                                pagePtr++;
+                            }
+                        }
+                        else if (memType == 'E')
+                        {
+                            if (eeprom == null || bytePtr >= eeprom.Length)
+                            {
+                                WriteByte(255);
+                                WriteByte(255);
+                                bytePtr = 0;
+                                ok = true;
+                                wait = false;
+                            }
+                            SendEEpromByte();
+                            bytePtr++;
+                        }
+                        break;
+                    case '@':
+                        if (retry > 3)
+                        {
+                            wait = false;
+                            break;
+                        }
+                        else if (memType == 'F')
+                        {
+                            pagePtr--;
+                            retry++;
+                            SendFlashPage();
+                            pagePtr++;
+                        }
+                        else if (memType == 'E')
+                        {
+                            bytePtr--;
+                            retry++;
+                            SendEEpromByte();
+                            bytePtr++;
+                        }
+                        break;
+                    case ')':
+                        memType = 'E';
+                        retry = 0;
+                        break;
+                    case '%':
+                        //lockbit;
+                        break;
+                }
+                if (c >= 'A' && c <= 'P' || c >= '\u0080' && c <= '\u0089')
+                {
+                    //device id
+                }
+                else if (c >= 'Q' && c <= 'T' || c == 'V')
+                {
+                    pageSize = c == 'V' ? 512 : (32 << (c - 'Q'));
+                    if (this.flash != null && this.flash.Length % pageSize != 0)
+                        Array.Resize(ref this.flash, ((this.flash.Length + pageSize - 1) / pageSize) * pageSize);
+                }
+                else if (c >= 'a' && c <= 'f')
+                    bootSize = 128 << (c - 'a');
+                else if (c >= 'g' && c <= 'i')
+                    flashSize = 1024 << (c - 'g');
+                else if (c >= 'l' && c <= 'r')
+                    flashSize = 4096 << (c - 'l');
+                else if (c >= '.' && c <= '1')
+                    eepromSize = 512;
+                else if (c >= '2' && c <= '4')
+                    eepromSize = 1024 << (c - '2');
             }
 
-            byte[] buffer = new byte[1024];
+            return ok;
 
+            /*
             int error = 0;
             try
             //if (ReadByte() == '>')
@@ -182,7 +286,7 @@ namespace OSDConfig
             catch (TimeoutException te)
             {
                 return false;
-            }
+            }*/
         }
     }
 }
