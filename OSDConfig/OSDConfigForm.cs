@@ -41,12 +41,6 @@ namespace OSDConfig
             // load default font
             osd.Chars = mcm.readMCM2("OSD_SA_v5.mcm");
             // load default bg picture
-
-            //var chars = mcm.readMCM2("OSD_SA_v5.mcm");
-            //for (int i = 0; i < osd.Chars.Length; i++)
-            //    osd.Chars[i].Save(i.ToString() + ".png");
-
-
             try
             {
                 osd.BackgroundImage/*bgpicture*/ = Image.FromFile("vlcsnap-2012-01-28-07h46m04s95.png");
@@ -78,7 +72,6 @@ namespace OSDConfig
                 LIST_items.SelectedItem = null;
             else
                 LIST_items.SelectedItem = OSDItemName.Name[(int)osd.SelectedItem];
-            //throw new NotImplementedException();
         }
 
 
@@ -102,7 +95,6 @@ namespace OSDConfig
 
         private void OSD_Load(object sender, EventArgs e)
         {
-
             string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.Text = this.Text + " " + strVersion;
 
@@ -113,13 +105,11 @@ namespace OSDConfig
 
             xmlconfig(false);
 
-            //osdDraw();
             osd.Draw();
         }
 
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void LIST_items_SelectedIndexChanged(object sender, EventArgs e)
         {
-
             if (((CheckedListBox)sender).SelectedItem == null)
             {
                 NUM_X.Value = NUM_Y.Value = 0;
@@ -139,7 +129,7 @@ namespace OSDConfig
             }
         }
 
-        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        private void LIST_items_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             // if (((CheckedListBox)sender).SelectedItem != null && ((CheckedListBox)sender).SelectedItem.ToString() == "Horizon")
             if (((CheckedListBox)sender).SelectedItem != null)
@@ -200,7 +190,7 @@ namespace OSDConfig
                 }
                 comPort.Close();
             }
-            catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+            catch { }
 
             if (fail)
             {
@@ -215,22 +205,9 @@ namespace OSDConfig
         }
 
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_Click(object sender, EventArgs e)
-        {
-            CMB_ComPort.Items.Clear();
-            CMB_ComPort.Items.AddRange(GetPortNames());
-        }
-
-
-
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            osd.ShowGrid = checkBox1.Checked;
+            osd.ShowGrid = showGrid.Checked;
             osd.Draw();
         }
 
@@ -285,7 +262,7 @@ namespace OSDConfig
                 }
                 comPort.Close();
             }
-            catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+            catch { }
 
             if (fail)
             {
@@ -298,9 +275,6 @@ namespace OSDConfig
                 toolStripStatusLabel1.Text = "Read OSD Done";
             }
         }
-
-
-
 
         void sp_Progress(int progress)
         {
@@ -330,9 +304,7 @@ namespace OSDConfig
         {
             SaveFileDialog sfd = new SaveFileDialog() { Filter = "*.osd|*.osd" };
 
-            sfd.ShowDialog();
-
-            if (sfd.FileName != "")
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
@@ -357,9 +329,7 @@ namespace OSDConfig
         {
             OpenFileDialog ofd = new OpenFileDialog() { Filter = "*.osd|*.osd" };
 
-            ofd.ShowDialog();
-
-            if (ofd.FileName != "")
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
@@ -386,7 +356,6 @@ namespace OSDConfig
         {
             osd.Setting = new OSDSetting();
             osd.Draw();
-            //setupFunctions();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -402,9 +371,7 @@ namespace OSDConfig
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "*.hex|*.hex";
 
-            ofd.ShowDialog();
-
-            if (ofd.FileName != "")
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 byte[] FLASH;
                 try
@@ -422,15 +389,12 @@ namespace OSDConfig
                 bool fail = false;
                 //ArduinoSTK sp;
 
-
-
-
                 MegaLoad sp = new MegaLoad();
                 toolStripProgressBar1.Maximum = 100;
                 toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
                 toolStripProgressBar1.Value = 0;
 
-                sp.Progress += (p) => { toolStripProgressBar1.Value = p; };
+                sp.Progress += sp_Progress;
                 sp.Connected += (s, ce) => { toolStripStatusLabel1.Text = "Programming"; };
                 try
                 {
@@ -458,70 +422,29 @@ namespace OSDConfig
                 sp.Close();
 
                 if (!fail)
-                //if (!fail)
                 {
-                    toolStripStatusLabel1.Text = "Done";
-                    MessageBox.Show("Done!");
+                    toolStripStatusLabel1.Text = "Program Done";
                 }
                 else
                 {
-                    toolStripStatusLabel1.Text = "Failed";
+                    toolStripStatusLabel1.Text = "Program Failed";
                 }
-
-
-                //    ).Start();
-                /*
-                if (sp.connectAP())
-                {
-                    sp.Progress += new ArduinoSTK.ProgressEventHandler(sp_Progress);
-                    try
-                    {
-                        if (!sp.uploadflash(FLASH, 0, FLASH.Length, 0))
-                        {
-                            if (sp.IsOpen)
-                                sp.Close();
-
-                            MessageBox.Show("Upload failed. Lost sync. Try using Arduino to upload instead",
-                                "Error",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        fail = true;
-                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                }
-                else
-                {
-                    MessageBox.Show("Failed to talk to bootloader");
-                }
-                */
-
-
-
             }
         }
 
         private void customBGPictureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "jpg or bmp|*.jpg;*.bmp";
+            ofd.Filter = "jpg, bmp or png|*.jpg;*.bmp;*.png";
 
-            ofd.ShowDialog();
-
-            if (ofd.FileName != "")
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
                     osd.BackgroundImage = Image.FromFile(ofd.FileName);
-
+                    osd.Draw();
                 }
                 catch { MessageBox.Show("Bad Image"); }
-
-                osd.Draw();
             }
         }
 
@@ -633,7 +556,6 @@ namespace OSDConfig
         private void OSD_FormClosed(object sender, FormClosedEventArgs e)
         {
             xmlconfig(true);
-
         }
 
         private void xmlconfig(bool write)
@@ -743,7 +665,6 @@ namespace OSDConfig
             try
             {
                 EnterCLI();
-                //comPort.ReadTimeout = 1000;
 
                 comPort.Write("F");
 
@@ -774,19 +695,10 @@ namespace OSDConfig
                 {
                     Console.WriteLine("connected");
                 }
-            }
-            catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
-
-
-
-            try
-            {
                 byte[] ck = new byte[1];
                 toolStripProgressBar1.Value = 0;
-                int x = comPort.BytesToRead;
-                //int x1 = comPort.ReadByte();
-                //int x2 = comPort.ReadByte();
+
                 int i = 0;
                 for (; i < fonts.Length; i++)
                 {
@@ -803,7 +715,7 @@ namespace OSDConfig
                     ck[0] = checksum;
                     comPort.Write(ck, 0, 1);
 
-                    int ack = comPort.ReadByte();
+                    ack = comPort.ReadByte();
                     if (ack != '!')
                     {
                         Console.WriteLine("write error");
@@ -844,10 +756,6 @@ namespace OSDConfig
 
         private void EnterCLI()
         {
-            //if (incli)
-            //    return;
-            //incli = true;
-
             if (comPort.IsOpen)
                 comPort.Close();
 
@@ -857,15 +765,7 @@ namespace OSDConfig
             comPort.ReadTimeout = 3000;
             comPort.Open();
 
-            //comPort.DtrEnable = false;
-            //comPort.RtsEnable = false;
-
-            //System.Threading.Thread.Sleep(50);
-
-            //comPort.DtrEnable = true;
-            //comPort.RtsEnable = true;
-
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(200);
 
             comPort.ReadExisting();
             for (int i = 0; i < 4; i++)
@@ -882,6 +782,18 @@ namespace OSDConfig
                 osd.Draw();
             }
             catch { return; }
+        }
+
+        private void CMB_ComPort_Click(object sender, EventArgs e)
+        {
+            CMB_ComPort.Items.Clear();
+            CMB_ComPort.Items.AddRange(GetPortNames());
+        }
+
+        private void showGrid_Click(object sender, EventArgs e)
+        {
+            osd.ShowGrid = showGrid.Checked;
+            osd.Draw();
         }
     }
 }
