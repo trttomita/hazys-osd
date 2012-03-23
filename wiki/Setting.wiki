@@ -1,23 +1,16 @@
 #summary One-sentence summary of this page.
 
-= ArduCAM OSD Config =
-
-Thanks to Michael Oborne, we have now an incredible customization and the easiest setup of all ArduCAM OSD's resources.<br>
-With ArduCAM OSD Config you can do all the job in just one place.<br>
-Everything, from update firmware or charset to enable/disable and positioning panels.
-
-You can download it from our [http://code.google.com/p/arducam-osd/downloads/list Download Section].
+= hazy's OSD Config =
 
 http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/front.jpg
 
-<br><br>
 == Select, Enable or Disable Panels ==
 Are you looking for customization? So, Make you own layout by enabling or disabling from the panel list.
 http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/select_list.jpg
 
 <br><br>
 == Select and Drag Panels ==
-Just click on a panel an drag it from its upper-left corner to positioning. Easy, eh!?
+Just click on a panel an drag it to positioning. Easy, eh!?
 
 http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/drag.jpg
 
@@ -35,11 +28,3 @@ ArduCAM firmware has an adaptive layout. Now you can easily check on how it will
 http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/switching_modes.jpg
 
 <br><br>
-== Plenty More Options ==
-  * Set Grid ON/OFF;
-  * Update Firmware ([http://code.google.com/p/arducam-osd/wiki/Update_Firmware Tutorial]);
-  * Update !CharSet ([http://code.google.com/p/arducam-osd/wiki/Update_CharSet Tutorial]);
-  * Customize the Background Picture;
-  * Check the layout using TLogs from !ArduPilot Mission Planner;
-
-http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/menu_grid_log_updates.jpg
