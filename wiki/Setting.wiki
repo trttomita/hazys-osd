@@ -2,8 +2,6 @@
 
 = hazy's OSD Config =
 
-http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/front.jpg
-
 == Select, Enable or Disable Panels ==
 Are you looking for customization? So, Make you own layout by enabling or disabling from the panel list.
 http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/select_list.jpg
