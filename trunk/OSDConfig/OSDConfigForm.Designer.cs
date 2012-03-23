@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OSDConfigForm));
-            OSDConfig.OSDSetting osdSetting1 = new OSDConfig.OSDSetting();
+            OSDConfig.OSDSetting osdSetting2 = new OSDConfig.OSDSetting();
             this.LIST_items = new System.Windows.Forms.CheckedListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -54,7 +54,7 @@
             this.nTSCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CHK_pal = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.checkBox1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.showGrid = new System.Windows.Forms.ToolStripMenuItem();
             this.customBGPictureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.updateFirmwareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,8 +74,8 @@
             this.LIST_items.FormattingEnabled = true;
             resources.ApplyResources(this.LIST_items, "LIST_items");
             this.LIST_items.Name = "LIST_items";
-            this.LIST_items.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
-            this.LIST_items.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
+            this.LIST_items.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.LIST_items_ItemCheck);
+            this.LIST_items.SelectedIndexChanged += new System.EventHandler(this.LIST_items_SelectedIndexChanged);
             // 
             // groupBox1
             // 
@@ -131,8 +131,7 @@
             resources.ApplyResources(this.CMB_ComPort, "CMB_ComPort");
             this.CMB_ComPort.FormattingEnabled = true;
             this.CMB_ComPort.Name = "CMB_ComPort";
-            this.CMB_ComPort.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            this.CMB_ComPort.Click += new System.EventHandler(this.comboBox1_Click);
+            this.CMB_ComPort.Click += new System.EventHandler(this.CMB_ComPort_Click);
             // 
             // BUT_ReadOSD
             // 
@@ -245,7 +244,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.checkBox1,
+            this.showGrid,
             this.customBGPictureToolStripMenuItem,
             this.toolStripSeparator3,
             this.updateFirmwareToolStripMenuItem,
@@ -254,14 +253,15 @@
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             resources.ApplyResources(this.optionsToolStripMenuItem, "optionsToolStripMenuItem");
             // 
-            // checkBox1
+            // showGrid
             // 
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckOnClick = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Name = "checkBox1";
-            resources.ApplyResources(this.checkBox1, "checkBox1");
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.showGrid.Checked = true;
+            this.showGrid.CheckOnClick = true;
+            this.showGrid.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showGrid.Name = "showGrid";
+            resources.ApplyResources(this.showGrid, "showGrid");
+            this.showGrid.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.showGrid.Click += new System.EventHandler(this.showGrid_Click);
             // 
             // customBGPictureToolStripMenuItem
             // 
@@ -305,7 +305,7 @@
             this.osd.Mode = OSDConfig.VideoMode.PAL;
             this.osd.Name = "osd";
             this.osd.SelectedItem = OSDConfig.OSDItem.NULL;
-            this.osd.Setting = osdSetting1;
+            this.osd.Setting = osdSetting2;
             this.osd.ShowGrid = true;
             // 
             // OSDConfigForm
@@ -359,7 +359,7 @@
         private System.Windows.Forms.ToolStripMenuItem loadFromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadDefaultsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem checkBox1;
+        private System.Windows.Forms.ToolStripMenuItem showGrid;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
