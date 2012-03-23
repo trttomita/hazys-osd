@@ -1,1 +1,8 @@
-[Introduction Introduction]
+ [Introduction Introduction]
+ * *Hardware*
+  * [Remzibi Remzibi's OSD]
+  * [Wiring Wire Connection]
+ * *Configuration*
+  * [Firmware Uploading Firmware]
+  * [Charset Uploading Charset]
+  * [Setting Set Display Information]
