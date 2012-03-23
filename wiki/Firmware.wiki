@@ -6,6 +6,7 @@ The basic Remzibi's OSD comes with a MegaLoad bootloader, which allows us to upl
 
 There are two tools you can use to upload the firmware, the MegaLoad.NET software, or the OSD config tool. 
 
+-----
 
 == Upload using MegaLoad ==
  # Connect your USB-to-TTL adapter (e.g. FTDI table) to your computer
@@ -15,8 +16,11 @@ There are two tools you can use to upload the firmware, the MegaLoad.NET softwar
  # Connect the Power wire to the OSD. The MegaLoad software should upload the firmware now.
  # Wait till the firmware has been uploaded.
 
+-----
 == Upload using OSDConfig Tool ==
+
 === Upload firmware for the first time ===
+
  # Connect your USB-to-TTL adapter (e.g. FTDI table) to your computer
  # Connect the TX, RX and GND wire to the OSD's serial port, leaving the Power unconnected. 
  # Open OSDConfig tool, select the proper CommPort.
@@ -25,10 +29,10 @@ There are two tools you can use to upload the firmware, the MegaLoad.NET softwar
  # Wait till the firmware has been uploaded.
 
 === Update firmware ===
+
 If previous version of hazys-osd software has been uploaded, the OSDConfig tool can reboot the OSD itself.
  # Connect your USB-to-TTL adapter (e.g. FTDI table) to your computer
  # Connect the TX, RX, GND and Power wire to the OSD's serial port. 
  # Open OSDConfig tool, select the proper CommPort.
  # Open the OSD firmware file (.hex)
  # Wait till the firmware has been uploaded.
-
