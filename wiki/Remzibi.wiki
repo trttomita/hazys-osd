@@ -1,13 +1,9 @@
 #summary One-sentence summary of this page.
 
-= Introduction =
+http://www.mictronics.de/blog_content/_uploads_/2010/02/top_legend.jpg
 
-Add your content here.
+http://www.mictronics.de/blog_content/_uploads_/2010/02/bottom_legend.jpg
 
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+==hardware==
+The hardware is based on a MAX7456 OSD chip controlled by micro-controller Atmel ATmega16 by SPI bus, a GPS module connected to the OSD provides all necessary data about latitude, longitude, ground speed, altitude etc. Using this data and the saved Home position, the main information like Home-course and Home-distance is calculated. This helps any pilot to return home during flight - what is a main function of this OSD.
