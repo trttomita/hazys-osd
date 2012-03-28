@@ -1,7 +1,7 @@
 ====[Introduction Introduction]====
 ====Hardware====
- =====[Remzibi Remzibi's OSD]=====
- =====[Wiring Wire Connection]=====
+ [Remzibi Remzibi's OSD]<br/>
+ [Wiring Wire Connection]
 ====Configuration====
  =====[Firmware Uploading Firmware]=====
  =====[Charset Uploading Charset]=====
