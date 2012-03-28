@@ -1,13 +1,17 @@
 #summary One-sentence summary of this page.
 
-= Introduction =
+= About this project =
 
-Add your content here.
+This project aims to port the MAVLink based OSD software (MinimOSD) to the hardware of Remzibi's OSD. The advantage of MAVLink based OSD is that it does not need any modification in the APM's software, thus you easily integrate this OSD with APM/ACM, and use the up-to-date APM's software.
 
+= What do I need =
+ * A APM 1 or AMP 2 (Otherwise you should use the original Remzibi's OSD)
+ * A Remzibi's OSD hardware. (If you don't have one, I suggest you buy a MinimOSD OSD  instead. It's cheaper, and has better MCU than Remzibi's)
+ * A Serial table (Or a Usb-to-serial adapter)
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= What should I do =
+In order to use this software, you need to
+ # [Firmware Upload the hazy's osd software]
+ # [Charset Upload the charset]
+ # [Setting Set the displayed information]
+ # and [Wiring Connect to your APM]
