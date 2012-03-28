@@ -1,0 +1,18 @@
+#summary One-sentence summary of this page.
+
+= 上传 MAX7456 字符集 =
+
+hazy's OSD (Minim OSD) 代码采用了一个优化的方法来快速绘制画面。它采用了特别的技术减少 SPI 传输，并用了一个基于 ASCII 的新字符集替换原有的 MAX7456 字符集。
+
+你可以使用 OSD 配置工具上传字符集，如下所述。
+
+== OSD 配置 (上传字符集) ==
+
+ # 连接 FTDI 串口适配器;
+ # 选择正确的串口 (下图中是 COM12。但你的机器可能不同);
+ # 到"选项"菜单，单击"上传字符集".
+ # 选择 .mcm 文件，单击打开;
+
+http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/Serial.jpg
+
+上传过程需要几秒钟。如果你的 OSD 连接了一个监视器，屏幕会变黑。你得观察 OSD 配置工具底部的进度条。

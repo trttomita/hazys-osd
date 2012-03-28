@@ -1,0 +1,28 @@
+#summary One-sentence summary of this page.
+
+= hazy's OSD 配置 =
+
+== 选择, 启用或禁用信息 ==
+你想个性化吗？你可以设置自己的布局，只要在信息列表中单击选择或者取消相应信息就行了。
+http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/select_list.jpg
+
+<br><br>
+== 选择并拖动信息 ==
+在一个信息上单击并拖动到想要的位置就行了，很简单吧
+
+http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/drag.jpg
+
+<br><br>
+== 保存和加载布局文件 ==
+你可以保存你喜欢的布局，并与朋友分享。<br>
+你也可以直接从 OSD 板中读取配置，并保存到另一个板子上去。
+
+http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/load_save_layout.jpg
+
+<br><br>
+== 变换视频制式并调整布局 ==
+hazy's OSD 固件带有自适应的布局。你可以查看它在 PAL 或者 NTSC 上的样子。
+
+http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/switching_modes.jpg
+
+<br><br>

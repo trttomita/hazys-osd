@@ -1,0 +1,5 @@
+#summary One-sentence summary of this page.
+
+这里我用了一个 MinimOSD 的图片来介绍连线。Hazh's OSD 上的连线是一样的。与原版 Remzibi OSD 相比，你的 OSD 不再连到 GPS 上，而是连接到 APM 的遥测口上。
+
+http://arducam-osd.googlecode.com/svn/wiki/images/DiagramaMinimOSD.jpg

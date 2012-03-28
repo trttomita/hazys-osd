@@ -1,0 +1,25 @@
+#summary 上传固件
+
+= 上传 OSD 固件 =
+
+原版 Remzibi's OSD 带有 !MegaLoad bootloader, 可以让我们通过串口上传固件。
+
+== 第一次上传固件 ==
+在使用原版 Remzibi 固件的时候, OSD 配置工具无法自动重启 OSD，因此你需要先选择好固件，然后手动重启 OSD。
+
+ # 把 USB-to-TTL 适配器 (例如 FTDI table) 插到电脑上，
+ # 把 TX, RX 和 GND 接到 OSD 的串口上，不要接电源线，
+ # 打开 OSD 配置程序，选择正确的串口，
+ # 打开 OSD 固件文件(.hex)，
+ # 把电源连接到 OSD 上。OSD 配置工具应该上传固件，
+ # 等待固件上传结束。
+
+== 更新固件 ==
+
+如果你之前上传过 hazy's OSD 固件，那么 OSD 配置工具可以自动重启 OSD 并上传固件。
+
+ # 把 USB-to-TTL 适配器 (例如 FTDI table) 插到电脑上，，不要接电源线，
+ # 打开 OSD 配置程序，选择正确的串口，
+ # 打开 OSD 固件文件(.hex)，
+ # OSD 配置工具将自动重启 OSD，并上传固件，
+ # 等待固件上传结束。
