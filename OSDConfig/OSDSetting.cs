@@ -35,7 +35,8 @@ namespace OSDConfig
         Thr,
         FMod,
         Hor,
-        XXC, //Free
+        //XXC, //Free
+        SYS,
         NULL
     }
 
@@ -77,7 +78,8 @@ namespace OSDConfig
             "Velocity", 
             "Throttle", 
             "Flight Mode", 
-            "Horizon"};
+            "Horizon",
+            "System Status"};
 
         static readonly string[] name_zh = {
             "中心", 
@@ -104,21 +106,22 @@ namespace OSDConfig
             "速度", 
             "油门", 
             "飞行模式", 
-            "水平"};
+            "水平",
+            "系统状态"};
     }
 
     public class OSDSetting
     {
         public UInt32 enable = _BV(OSDItem.Pit) | _BV(OSDItem.Rol) | _BV(OSDItem.BatA) | _BV(OSDItem.GPSats) | _BV(OSDItem.GPL) | _BV(OSDItem.GPS)
         | _BV(OSDItem.Rose) | _BV(OSDItem.Head) | _BV(OSDItem.MavB) | _BV(OSDItem.HDir) | _BV(OSDItem.HDis)
-        | _BV(OSDItem.Alt) | _BV(OSDItem.Vel) | _BV(OSDItem.Thr) | _BV(OSDItem.FMod) | _BV(OSDItem.Hor);
+        | _BV(OSDItem.Alt) | _BV(OSDItem.Vel) | _BV(OSDItem.Thr) | _BV(OSDItem.FMod) | _BV(OSDItem.Hor) |_BV(OSDItem.SYS);
 
         public byte[,] coord = new byte[24, 2]
         {
             {13, 7}, //  panCenter_y_ADDR
             {22, 9}, //  panPitch_y_ADDR
             {11, 1}, //  panRoll_y_ADDR
-            {20, 1}, //  panBatt_A_y_ADDR
+            {21, 1}, //  panBatt_A_y_ADDR
             {21, 3}, //  panBatt_B_y_ADDR
             {2, 13}, // panGPSats_y_ADDR
             {5, 13}, // panGPL_y_ADDR
@@ -138,7 +141,7 @@ namespace OSDConfig
             {2, 4}, //  panThr_y_ADDR
             {17, 13}, // panFMod_y_ADDR
             {8, 7}, //  panHorizon_y_ADDR
-            {0,0}
+            {11,4}
         };
 
 

@@ -306,27 +306,27 @@ void ArduOSD::writePanels()
 
                 switch (i)
                 {
-                case Cen_BIT:
+                case OSD_ITEM_Cen:
                     //panCenter();
                     print_P(PSTR("\x05\x03\x04\x05|\x15\x13\x14\x15"));
                     break;
-                case Pit_BIT:
+                case OSD_ITEM_Pit:
                     //panPitch();
                     printf_P(PSTR("%4i\xb0\xb1"),osd_pitch);
                     break;
-                case Rol_BIT:
+                case OSD_ITEM_Rol:
                     //panRoll();
                     printf_P(PSTR("%4i\xb0\xb2"),osd_roll);
                     break;
-                case BatA_BIT:
+                case OSD_ITEM_BatA:
                     //panBatt_A();
                     printf_P(PSTR(" \xE2%5.2f\x8E"), (double)osd_vbat_A);
                     break;
-                case GPSats_BIT:
+                case OSD_ITEM_GPSats:
                     //panGPSats();
                     printf_P(PSTR("\x0f%2i"), osd_satellites_visible);
                     break;
-                case GPL_BIT:
+                case OSD_ITEM_GPL:
                     //panGPL();
                     switch(osd_fix_type)
                     {
@@ -340,20 +340,19 @@ void ArduOSD::writePanels()
                         break;
                     }
                     break;
-                case GPS_BIT:
+                case OSD_ITEM_GPS:
                     //panGPS();
                     printf_P(PSTR("\x83%11.6f|\x84%11.6f"), (double)osd_lat, (double)osd_lon);
                     break ;
-
-                case Rose_BIT:
+                case OSD_ITEM_Rose:
                     //panRose();
                     printf_P(PSTR("\x20\xc0\xc0\xc0\xc0\xc0\xc7\xc0\xc0\xc0\xc0\xc0\x20|\xd0%s\xd1"), getHeadingPatern(osd_heading));
                     break;
-                case Head_BIT:
+                case OSD_ITEM_Head:
                     //panHeading();
                     printf_P(PSTR("%4.0f\xb0"), (double)osd_heading);
                     break;//13x3
-                case MavB_BIT:
+                case OSD_ITEM_MavB:
                     //panMavBeat();
                     if(mavbeat == 1)
                     {
@@ -366,25 +365,25 @@ void ArduOSD::writePanels()
                     }
                     break;//13x3
 
-                case HDis_BIT:
+                case OSD_ITEM_HDis:
                     if (osd_got_home==1) printf_P(PSTR("\x1F%5.0f\x8D"), (double)osd_home_distance);
                     break;//13x3
-                case HDir_BIT:
+                case OSD_ITEM_HDir:
                     if (osd_got_home==1) showArrow();//panHomeDir(); //13x3
                     break;
-                case Alt_BIT:
+                case OSD_ITEM_Alt:
                     //panAlt(); //
                     printf_P(PSTR("\x85%5.0f\x8D"),(double)(osd_alt));
                     break;
-                case Vel_BIT:
+                case OSD_ITEM_Vel:
                     //panVel(); //
                     printf_P(PSTR("\x86%3.0f\x88"),(double)osd_groundspeed);
                     break;
-                case Thr_BIT:
+                case OSD_ITEM_Thr:
                     //panThr(); //
                     printf_P(PSTR("\x87%3.0i\x25"),osd_throttle);
                     break;
-                case FMod_BIT:
+                case OSD_ITEM_FMod:
                 {
                     const char*mode = getFlightModeString(apm_mav_type, osd_nav_mode, osd_mode);//getFlightModeString();
                     if (mode != NULL)
@@ -395,7 +394,7 @@ void ArduOSD::writePanels()
                     //panFlightMode();  //
                 }
                 break;
-                case Hor_BIT:
+                case OSD_ITEM_Hor:
                     //panHorizon(panel_setting.coord[Hor_BIT][0], panel_setting.coord[Hor_BIT][1]); //14x5
                     for (uint8_t j = 0; j < 5; j++)
                     {
@@ -407,11 +406,17 @@ void ArduOSD::writePanels()
                         write('|');
                     }
                     closePanel();
-                    showHorizon(setting.coord[Hor_BIT][0]+1, setting.coord[Hor_BIT][1]);
+                    showHorizon(setting.coord[OSD_ITEM_Hor][0]+1, setting.coord[OSD_ITEM_Hor][1]);
                     break;
+                case OSD_ITEM_SYS:
+                		if (osd_sys_status != MAV_STATE_ACTIVE)
+                				printf_P(PSTR("Disarmed"));
+                		else
+                				printf_P(PSTR("        "));
+                		break;
                 }
-
-                if (i != Hor_BIT)
+								
+                if (i != OSD_ITEM_Hor)
                     closePanel();
             }
         }

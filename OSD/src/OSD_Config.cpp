@@ -21,9 +21,9 @@ osd_setting_t setting_EE EEMEM;
 
 osd_setting_t ArduOSD::setting =
 {
-    _bv(Pit_BIT) | _bv(Rol_BIT) | _bv(BatA_BIT) | _bv(GPSats_BIT) | _bv(GPL_BIT) | _bv(GPS_BIT)
-    | _bv(Rose_BIT) | _bv(Head_BIT) | _bv(MavB_BIT)| _bv(HDir_BIT) | _bv(HDis_BIT)
-    | _bv(Alt_BIT) | _bv(Vel_BIT) | _bv(Thr_BIT) | _bv(FMod_BIT) | _bv(Hor_BIT),
+    _bv(OSD_ITEM_Pit) | _bv(OSD_ITEM_Rol) | _bv(OSD_ITEM_BatA) | _bv(OSD_ITEM_GPSats) | _bv(OSD_ITEM_GPL) | _bv(OSD_ITEM_GPS)
+    | _bv(OSD_ITEM_Rose) | _bv(OSD_ITEM_Head) | _bv(OSD_ITEM_MavB)| _bv(OSD_ITEM_HDir) | _bv(OSD_ITEM_HDis)
+    | _bv(OSD_ITEM_Alt) | _bv(OSD_ITEM_Vel) | _bv(OSD_ITEM_Thr) | _bv(OSD_ITEM_FMod) | _bv(OSD_ITEM_Hor) | _bv(OSD_ITEM_SYS),
 
 
     {   {13, 7}, 	// panCenter_y_ADDR
@@ -51,7 +51,7 @@ osd_setting_t ArduOSD::setting =
         {2, 4}, //  panThr_y_ADDR
         {17, 13}, // panFMod_y_ADDR
         {8, 7}, //  panHorizon_y_ADDR}
-        {0, 0}
+        {11, 4}, // sys status
     }
 };
 

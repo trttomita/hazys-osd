@@ -24,7 +24,7 @@ volatile float    ArduOSD::osd_home_alt;
 volatile long     ArduOSD::osd_home_distance;          // distance from home
 volatile uint8_t  ArduOSD::osd_home_direction;             // Arrow direction pointing to home (1-16 to CW loop)
 
-volatile int8_t	 ArduOSD::osd_pitch;                  // pitch form DCM
+volatile int8_t	 	ArduOSD::osd_pitch;                  // pitch form DCM
 volatile int8_t   ArduOSD::osd_roll;                   // roll form DCM
 volatile int8_t   ArduOSD::osd_yaw;                    // relative heading form DCM
 volatile float    ArduOSD::osd_heading;                // ground course heading from GPS
@@ -32,16 +32,18 @@ volatile float    ArduOSD::osd_alt;                    // altitude
 volatile float    ArduOSD::osd_groundspeed;            // ground speed
 volatile uint16_t ArduOSD::osd_throttle;               // throtle
 
+volatile uint8_t	ArduOSD::osd_sys_status;
+	
 //MAVLink session control
-volatile bool  	 ArduOSD::mavbeat;
-volatile long    ArduOSD::lastMAVBeat;
-volatile bool		 ArduOSD::waitingMAVBeats;
+volatile bool  	 	ArduOSD::mavbeat;
+volatile long    	ArduOSD::lastMAVBeat;
+volatile bool		 	ArduOSD::waitingMAVBeats;
 volatile uint8_t  ArduOSD::apm_mav_type;
 volatile uint8_t  ArduOSD::apm_mav_system;
 volatile uint8_t  ArduOSD::apm_mav_component;
-volatile bool  	 ArduOSD::enable_mav_request;
+volatile bool  	 	ArduOSD::enable_mav_request;
 
 //volatile uint8_t ArduOSD::modeScreen; //NTSC:0, PAL:1
 
-volatile bool ArduOSD::mavlink_active;
-volatile uint8_t ArduOSD::crlf_count;
+volatile bool 		ArduOSD::mavlink_active;
+volatile uint8_t 	ArduOSD::crlf_count;
