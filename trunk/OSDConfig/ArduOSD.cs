@@ -135,7 +135,9 @@ namespace OSDConfig
                         case OSDItem.Hor:
                             panHorizon(Setting.coord[(int)OSDItem.Hor, 0], Setting.coord[(int)OSDItem.Hor, 1]); //14x5
                             break;
-
+                        case OSDItem.SYS:
+                            print_P(PSTR("Disarmed"));
+                            break;
 
                     }
                     ClosePanel();

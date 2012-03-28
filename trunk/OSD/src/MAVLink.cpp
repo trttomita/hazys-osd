@@ -117,6 +117,7 @@ void ArduOSD::read_mavlink()
 #ifdef MAVLINK10
                 osd_mode = mavlink_msg_heartbeat_get_custom_mode(msg);
                 osd_nav_mode = 0;
+                osd_sys_status = mavlink_msg_heartbeat_get_system_status(msg);
 #endif
                 lastMAVBeat = millis();
                 if(waitingMAVBeats == 1)
@@ -131,6 +132,7 @@ void ArduOSD::read_mavlink()
                 osd_vbat_A = (mavlink_msg_sys_status_get_vbat(msg) / 1000.0f);
                 osd_mode = mavlink_msg_sys_status_get_mode(msg);
                 osd_nav_mode = mavlink_msg_sys_status_get_nav_mode(msg);
+                osd_sys_status = mavlink_msg_sys_status_get_status(msg);
 #else
                 osd_vbat_A = (mavlink_msg_sys_status_get_voltage_battery(msg) / 1000.0f);
 #endif

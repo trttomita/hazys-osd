@@ -336,10 +336,10 @@ namespace OSDConfig
             if (selected != OSDItem.NULL)
             {
                 int sc = c, sr = r;
-                while ((itemInPos[sc, sr] & (1U << (int)selected)) != 0)
+                while (sc >= 0 && (itemInPos[sc, sr] & (1U << (int)selected)) != 0)
                     sc--;
                 sc++;
-                while ((itemInPos[sc, sr] & (1U << (int)selected)) != 0)
+                while (sr >= 0 && (itemInPos[sc, sr] & (1U << (int)selected)) != 0)
                     sr--;
                 sr++;
                 offset = new Point(sc - c, sr - r);

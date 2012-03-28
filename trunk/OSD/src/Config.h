@@ -12,6 +12,7 @@
 
 // Panel 8bit REGISTER with BIT positions
 // panA_REG Byte has:
+/*
 #define Cen_BIT        0
 #define Pit_BIT        1
 #define Rol_BIT        2
@@ -40,6 +41,8 @@
 #define FMod_BIT       (16+5)
 #define Hor_BIT        (16+6)
 //#define XXC_BIT      7 //Free
+*/
+
 
 #define TELEMETRY_SPEED  57600  // How fast our MAVLink telemetry is coming to Serial port
 #define BOOTTIME         2000   // Time in milliseconds that we show boot loading bar and wait user input

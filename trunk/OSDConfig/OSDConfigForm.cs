@@ -31,7 +31,7 @@ namespace OSDConfig
 
         int bootRate = 9600;
         int osdRate = 57600;
-
+        string bgImage = "vlcsnap-2012-01-28-07h46m04s95.png";
 
 
         public OSDConfigForm()
@@ -39,13 +39,7 @@ namespace OSDConfig
             InitializeComponent();
 
             // load default font
-            osd.Chars = mcm.readMCM2("OSD_SA_v5.mcm");
-            // load default bg picture
-            try
-            {
-                osd.BackgroundImage/*bgpicture*/ = Image.FromFile("vlcsnap-2012-01-28-07h46m04s95.png");
-            }
-            catch { }
+            
 
             for (int i = 0; i < OSDItemName.Name.Length; i++)
                 if (OSDItemName.Name[i] != null)
@@ -105,6 +99,14 @@ namespace OSDConfig
 
             xmlconfig(false);
 
+            osd.Chars = mcm.readMCM2("OSD_SA_v5.mcm");
+            // load default bg picture
+            try
+            {
+                osd.BackgroundImage/*bgpicture*/ = Image.FromFile(bgImage);
+            }
+            catch { }
+
             osd.Draw();
         }
 
@@ -124,7 +126,6 @@ namespace OSDConfig
                 Point p = osd.GetItemPosition(sel);
                 NUM_X.Value = p.X;
                 NUM_Y.Value = p.Y;
-                //osdDraw();
                 osd.Draw();
             }
         }
@@ -443,6 +444,7 @@ namespace OSDConfig
                 {
                     osd.BackgroundImage = Image.FromFile(ofd.FileName);
                     osd.Draw();
+                    bgImage = ofd.FileName;
                 }
                 catch { MessageBox.Show("Bad Image"); }
             }
@@ -577,7 +579,7 @@ namespace OSDConfig
 
                     xmlwriter.WriteElementString("Pal", CHK_pal.Checked.ToString());//osd.Mode.ToString());
                     //xmlwriter.WriteElementString("Pal", CHK_pal.Checked.ToString());
-
+                    xmlwriter.WriteElementString("BackgroudImage", bgImage);
                     xmlwriter.WriteEndElement();
 
                     xmlwriter.WriteEndDocument();
@@ -624,6 +626,9 @@ namespace OSDConfig
                                     case "Config":
                                         break;
                                     case "xml":
+                                        break;
+                                    case "BackgroundImage":
+                                        bgImage = xmlreader.ReadString();
                                         break;
                                     default:
                                         if (xmlreader.Name == "") // line feeds
