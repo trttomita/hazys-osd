@@ -1,5 +1,4 @@
 [Introduction Introduction]
-
 *Hardware*
  * [Remzibi Remzibi's OSD]
  * [Wiring Wire Connection]
