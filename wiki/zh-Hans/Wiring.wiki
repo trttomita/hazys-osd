@@ -1,5 +1,5 @@
-#summary One-sentence summary of this page.
+ï»¿#summary One-sentence summary of this page.
 
-ÕâÀïÎÒÓÃÁËÒ»¸ö MinimOSD µÄÍ¼Æ¬À´½éÉÜÁ¬Ïß¡£Hazh's OSD ÉÏµÄÁ¬ÏßÊÇÒ»ÑùµÄ¡£ÓëÔ­°æ Remzibi OSD Ïà±È£¬ÄãµÄ OSD ²»ÔÙÁ¬µ½ GPS ÉÏ£¬¶øÊÇÁ¬½Óµ½ APM µÄÒ£²â¿ÚÉÏ¡£
+è¿™é‡Œæˆ‘ç”¨äº†ä¸€ä¸ª MinimOSD çš„å›¾ç‰‡æ¥ä»‹ç»è¿çº¿ã€‚Hazh's OSD ä¸Šçš„è¿çº¿æ˜¯ä¸€æ ·çš„ã€‚ä¸åŸç‰ˆ Remzibi OSD ç›¸æ¯”ï¼Œä½ çš„ OSD ä¸å†è¿åˆ° GPS ä¸Šï¼Œè€Œæ˜¯è¿æ¥åˆ° APM çš„é¥æµ‹å£ä¸Šã€‚
 
 http://arducam-osd.googlecode.com/svn/wiki/images/DiagramaMinimOSD.jpg

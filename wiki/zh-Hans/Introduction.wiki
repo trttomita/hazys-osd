@@ -1,17 +1,17 @@
-#summary One-sentence summary of this page.
+﻿#summary One-sentence summary of this page.
 
-= ���������Ŀ =
+= 关于这个项目 =
 
-�����Ŀ���ǽ����� MAVLink Э��� OSD ����(MinimOSD) ��ֲ�� Remzibi's OSD ��Ӳ���ϡ����� MAVLink �� OSD �������ŵ���������Ҫ�Ķ� APM/ACM ��Դ�룬��˿��Ժܷ������ APM/ACM ���ɣ�������ʱ���µ����µ� APM/ACM �̼���
+本项的目的是将基于 MAVLink 协议的 OSD 软件(MinimOSD) 移植到 Remzibi's OSD 的硬件上。基于 MAVLink 的 OSD 软件的优点是它不需要改动 APM/ACM 的源码，因此可以很方便地与 APM/ACM 集成，可以随时更新到最新的 APM/ACM 固件。
 
-= ��Ҫ�Ĳ��� =
- * һ�� APM 1 ���� AMP 2 (����Ļ���ʹ��ԭ�� Remzibi's OSD)
- * һ�� Remzibi's OSD Ӳ����(�����û�еĻ����������� MinimOSD��MinimOSD �õ�оƬ�� Remzibi �Ժã��Ժ������Ŀռ����)
- * һ�������� (���� USB ת TTL ��)
+= 需要的部件 =
+ * 一个 APM 1 或者 AMP 2 (否则的话请使用原版 Remzibi's OSD)
+ * 一个 Remzibi's OSD 硬件。(如果你没有的话，建议你买 MinimOSD。MinimOSD 用的芯片比 Remzibi 略好，以后升级的空间更大)
+ * 一条串口线 (或者 USB 转 TTL 线)
 
-= ��Ҫ��ô�� =
-Ҫʹ�ñ��̼�������Ҫ�����¼���
- # [Firmware �ϴ� hazy's osd �̼�]
- # [Charset �ϴ��ַ���]
- # [Setting ������ʾ��Ϣ]
- # [Wiring ���ӵ� APM]
+= 需要怎么做 =
+要使用本固件，你需要做以下几步
+ # [Firmware 上传 hazy's osd 固件]
+ # [Charset 上传字符集]
+ # [Setting 设置显示信息]
+ # [Wiring 连接到 APM]
