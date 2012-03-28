@@ -1,18 +1,8 @@
-<ul>
- <li>[Introduction Introduction]</li>
- <li>Hardware
-
- <ul>
-  <li>[Remzibi Remzibi's OSD]</li>
-  <li>[Wiring Wire Connection]</li>
- </ul>
- </li>
-
- <li>Configuration
- <ul>
-<li>[Firmware Uploading Firmware]</li>
-<li>[Charset Uploading Charset]</li>
-<li>[Setting Set Display Information]</li>
-</ul>
-</li>
-</ul>
+====[Introduction Introduction]====
+====Hardware====
+ =====[Remzibi Remzibi's OSD]=====
+ =====[Wiring Wire Connection]=====
+====Configuration====
+ =====[Firmware Uploading Firmware]=====
+ =====[Charset Uploading Charset]=====
+ =====[Setting Set Display Information]=====
