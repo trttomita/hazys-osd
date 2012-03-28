@@ -1,8 +1,8 @@
 [Introduction Introduction]
-*Hardware*
+==Hardware==
  * [Remzibi Remzibi's OSD]
  * [Wiring Wire Connection]
-*Configuration*
+==Configuration==
  * [Firmware Uploading Firmware]
  * [Charset Uploading Charset]
  * [Setting Set Display Information]
