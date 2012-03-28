@@ -1,6 +1,6 @@
 ====[Introduction Introduction]====
 ====Hardware====
- =====[Remzibi Remzibi's OSD]=====
+ =====[Remzibi About Remzibi's OSD]=====
  =====[Wiring Wire Connection]=====
 ====Configuration====
  =====[Firmware Uploading Firmware]=====
