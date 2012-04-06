@@ -6,15 +6,17 @@ The hazy's OSD (Minim OSD) base code has an optimized way to draw panels fast on
 
 If you got a .mcm file from our Download Section you can use our configuration tool as explained below.
 
-== ArduCAM OSD Config (Update CharSet) ==
+== ArduCAM OSD Config (Update !CharSet) ==
 
  # Connect your FTDI Serial adapter (Like this one);
  # Select the proper Serial COM Port (on the example bellow is COM12. Your adapter may use another one);
- # Go to menu Options and select Update CharSet.
+ # Go to menu Options and select Update !CharSet.
  # Select the desired .mcm file from your PC and press Open;
 
-http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/Serial.jpg
+http://hazys-osd.googlecode.com/svn/wiki/image/Serial.jpg
 
 When the process starts, you board go to the upload process in few seconds.
 If there is a video monitor attached to the OSD, the screen will turn to black.
 You have to observe the loading bar on the bottom of ArduCAM OSD Config screen.
+
+http://hazys-osd.googlecode.com/svn/wiki/image/charset.png

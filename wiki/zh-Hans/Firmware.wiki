@@ -14,6 +14,8 @@
  # 把电源连接到 OSD 上。OSD 配置工具应该上传固件，
  # 等待固件上传结束。
 
+http://hazys-osd.googlecode.com/svn/wiki/image/Serial.jpg
+
 == 更新固件 ==
 
 如果你之前上传过 hazy's OSD 固件，那么 OSD 配置工具可以自动重启 OSD 并上传固件。
@@ -23,3 +25,5 @@
  # 打开 OSD 固件文件(.hex)，
  # OSD 配置工具将自动重启 OSD，并上传固件，
  # 等待固件上传结束。
+ 
+ http://hazys-osd.googlecode.com/svn/wiki/image/firmware.png

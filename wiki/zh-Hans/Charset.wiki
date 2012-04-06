@@ -13,6 +13,8 @@ hazy's OSD (Minim OSD) 代码采用了一个优化的方法来快速绘制画面
  # 到"选项"菜单，单击"上传字符集".
  # 选择 .mcm 文件，单击打开;
 
-http://arducam-osd.googlecode.com/svn/wiki/images/config_imgs/Serial.jpg
+http://hazys-osd.googlecode.com/svn/wiki/image/Serial.jpg
 
 上传过程需要几秒钟。如果你的 OSD 连接了一个监视器，屏幕会变黑。你得观察 OSD 配置工具底部的进度条。
+
+http://hazys-osd.googlecode.com/svn/wiki/image/charset.png

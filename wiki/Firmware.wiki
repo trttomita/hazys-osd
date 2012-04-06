@@ -14,7 +14,9 @@ With original Remzibi's software, the OSD Config tool is unable to reboot the OS
  # Connect the Power wire to the OSD. The OSDConfig tool should upload the firmware now.
  # Wait till the firmware has been uploaded.
 
-=== Update firmware ===
+http://hazys-osd.googlecode.com/svn/wiki/image/Serial.jpg
+
+=== Update existing firmware ===
 
 If previous version of hazys-osd software has been uploaded, the OSDConfig tool can  automatically reboot the OSD itself and then talk to the bootloader.
 
@@ -23,3 +25,5 @@ If previous version of hazys-osd software has been uploaded, the OSDConfig tool 
  # Open OSDConfig tool, select the proper CommPort.
  # Open the OSD firmware file (.hex)
  # Wait till the firmware has been uploaded.
+ 
+ http://hazys-osd.googlecode.com/svn/wiki/image/firmware.png
