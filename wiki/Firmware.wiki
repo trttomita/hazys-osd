@@ -26,4 +26,4 @@ If previous version of hazys-osd software has been uploaded, the OSDConfig tool 
  # Open the OSD firmware file (.hex)
  # Wait till the firmware has been uploaded.
  
- http://hazys-osd.googlecode.com/svn/wiki/image/firmware.png
+ http://hazys-osd.googlecode.com/svn/wiki/image/firmware.jpg

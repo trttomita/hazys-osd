@@ -17,4 +17,4 @@ http://hazys-osd.googlecode.com/svn/wiki/image/Serial.jpg
 
 上传过程需要几秒钟。如果你的 OSD 连接了一个监视器，屏幕会变黑。你得观察 OSD 配置工具底部的进度条。
 
-http://hazys-osd.googlecode.com/svn/wiki/image/charset.png
+http://hazys-osd.googlecode.com/svn/wiki/image/charset.jpg

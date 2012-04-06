@@ -26,4 +26,4 @@ http://hazys-osd.googlecode.com/svn/wiki/image/Serial.jpg
  # OSD 配置工具将自动重启 OSD，并上传固件，
  # 等待固件上传结束。
  
- http://hazys-osd.googlecode.com/svn/wiki/image/firmware.png
+ http://hazys-osd.googlecode.com/svn/wiki/image/firmware.jpg

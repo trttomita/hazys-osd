@@ -19,4 +19,4 @@ When the process starts, you board go to the upload process in few seconds.
 If there is a video monitor attached to the OSD, the screen will turn to black.
 You have to observe the loading bar on the bottom of ArduCAM OSD Config screen.
 
-http://hazys-osd.googlecode.com/svn/wiki/image/charset.png
+http://hazys-osd.googlecode.com/svn/wiki/image/charset.jpg
