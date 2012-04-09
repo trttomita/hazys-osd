@@ -49,14 +49,16 @@ public:
 		static void read_data();
 		
 private:
-	  static  void request_mavlink_rates();
-    static  void read_mavlink();
+	  static void request_mavlink_rates();
+    static void read_mavlink();
     static void panLogo();
     static void showArrow();
     static inline void showHorizon(uint8_t start_col, uint8_t start_row);
     static inline void setHomeVars();
     //void clearRow(int row);
-
+		static inline void init_analog();
+		static uint16_t read_analog(uint8_t channel);
+		
 private:
     //panel_setting_t setting;
 
