@@ -58,6 +58,9 @@ osd_setting_t ArduOSD::setting =
 void ArduOSD::init()
 {
     OSD::init();
+    	
+    init_analog();
+    	
     panLogo();
 
     if (eeprom_read_byte(&mark_EE) != 'O' || eeprom_read_byte(&verison_EE) != VER)
