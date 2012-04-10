@@ -1,13 +1,8 @@
-﻿#include "ArduOSD.h"
-#include <avr/io.h>
+#include "analog.h"
 
-inline static void ArduOSD::init_analog()
+int16_t analog_read(uint8_t channel)
 {
-}
-	
-static uint16_t ArduOSD::read_analog(uint8_t channel)
-{
-		static uint16_t analog_sum = 0;
+		static int16_t analog_sum = 0;
 	
 		ADMUX = (ADMUX & 0xE0) | channel;
 		analog_sum = 0;

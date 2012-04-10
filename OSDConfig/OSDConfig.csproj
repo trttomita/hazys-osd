@@ -46,11 +46,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ADConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ADConfig.Designer.cs">
+      <DependentUpon>ADConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="ArduinoSTK.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ArduOSD.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ArduOSDPort.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="IntelHex.cs" />
     <Compile Include="MavLink.cs" />
@@ -82,6 +91,9 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ADConfig.resx">
+      <DependentUpon>ADConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OSD.resx">
       <DependentUpon>OSD.cs</DependentUpon>
     </EmbeddedResource>

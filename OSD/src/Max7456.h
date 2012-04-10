@@ -11,12 +11,10 @@
 //#define MAX7456_SELECT	(PORTB, PB3)//SS
 //#define MAX7456_VSYNC 2//INT0
 
-#define NTSC 0
-#define PAL 1
-#define MAX7456_MODE_MASK_PAL 0x40 //PAL mask 01000000
+#define MAX7456_MODE_PAL 0x40 //PAL mask 01000000
 #define MAX7456_CENTER_PAL 0x8
 
-#define MAX7456_MODE_MASK_NTCS 0x00 //NTSC mask 00000000 ("|" will do nothing)
+#define MAX7456_MODE_NTCS 0x00 //NTSC mask 00000000 ("|" will do nothing)
 #define MAX7456_CENTER_NTSC 0x6
 
 //MAX7456 reg read addresses
@@ -92,7 +90,7 @@ public:
     static void detectMode(void);
     static void setMode(int mode);
     static void openSingle(uint8_t x, uint8_t y);
-    static int getMode(void);
+    inline static int getMode(void) {return video_mode;}
     inline static int getCenter(void) {return video_center;}
     //virtual int     available(void);
     //virtual int     read(void);

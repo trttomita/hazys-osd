@@ -32,7 +32,7 @@ namespace OSDConfig
         byte[] flash;
         byte[] eeprom;
 
-        public void SendFlashPage()
+        void SendFlashPage()
         {
             WriteByte((byte)(pagePtr >> 8 & 255));
             WriteByte((byte)(pagePtr & 255));
@@ -45,7 +45,7 @@ namespace OSDConfig
             WriteByte(b);
         }
 
-        public void SendEEpromByte()
+        void SendEEpromByte()
         {
             WriteByte((byte)(bytePtr >> 8 & 255));
             WriteByte((byte)(bytePtr & 255));
@@ -56,12 +56,13 @@ namespace OSDConfig
             WriteByte(b);
         }
 
-        public void WriteByte(byte b)
+        void WriteByte(byte b)
         {
             Write(new byte[] { b }, 0, 1);
         }
 
-        public void WriteChar(char c)
+
+        void WriteChar(char c)
         {
             WriteByte((byte)c);
         }
