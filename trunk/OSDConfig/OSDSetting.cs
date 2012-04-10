@@ -58,7 +58,7 @@ namespace OSDConfig
             "Pitch", 
             "Roll", 
             "Battery A", 
-            null, 
+            "Battery B (ADC)",
             "Visible Sats", 
             "GPS Lock", 
             "GPS Coord", 
@@ -70,7 +70,7 @@ namespace OSDConfig
             "Home Distance", 
             null,
             null,
-            null,
+            "RSSI (ADC)",
 
             null,
             null,
@@ -86,7 +86,7 @@ namespace OSDConfig
             "俯仰", 
             "侧倾", 
             "电池A", 
-            null, 
+            "电池B (ADC)", 
             "卫星数量", 
             "GPS锁定", 
             "GPS坐标", 
@@ -98,7 +98,7 @@ namespace OSDConfig
             "回家距离", 
             null,
             null,
-            null,
+            "RSSI (ADC)",
 
             null,
             null,
@@ -133,7 +133,7 @@ namespace OSDConfig
             {2, 1}, //  panHomeDis_y_ADDR
             {0, 0}, //  panWPDir_y_ADDR
             {0, 0}, //  panWPDis_y_ADDR
-            {21, 5}, ////  panRSSI_y_ADDR
+            {22, 5}, ////  panRSSI_y_ADDR
             {21, 2}, //  panCur_A_y_ADDR
             {21, 4}, //  panCur_B_y_ADDR
             {2, 2}, //  panAlt_y_ADDR
@@ -143,6 +143,11 @@ namespace OSDConfig
             {8, 7}, //  panHorizon_y_ADDR
             {11,4}
         };
+
+        public short volt_value;
+        public short volt_read;
+        public short rssi_min;
+        public short rssi_range;
 
 
         static UInt32 _BV(OSDItem bi)

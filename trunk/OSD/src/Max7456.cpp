@@ -57,7 +57,7 @@ void OSD::detectMode()
     spi_transfer(MAX7456_STAT_reg_read);//status register
     byte osdstat_r = spi_transfer(0xff);
 
-    setMode((0x02 & osdstat_r)?0:1);
+    setMode((0x02 & osdstat_r)?MAX7456_MODE_NTCS:MAX7456_MODE_PAL);
     deSelect();;
 }
 
@@ -65,33 +65,10 @@ void OSD::detectMode()
 
 void OSD::setMode(int themode)
 {
-    switch(themode)
-    {
-    case 0:
-        video_mode = MAX7456_MODE_MASK_NTCS;
-        video_center = MAX7456_CENTER_NTSC;
-        break;
-    case 1:
-        video_mode = MAX7456_MODE_MASK_PAL;
-        video_center = MAX7456_CENTER_PAL;
-        break;
-    }
+		video_mode = themode;
+		video_center = themode == MAX7456_MODE_NTCS? MAX7456_CENTER_NTSC: MAX7456_CENTER_PAL;
 }
 
-//------------------ Get Mode (PAL 0/NTSC 1) --------------------------------
-
-int OSD::getMode()
-{
-    switch(video_mode)
-    {
-    case MAX7456_MODE_MASK_NTCS:
-        return 0;
-        break;
-    case MAX7456_MODE_MASK_PAL:
-        return 1;
-        break;
-    }
-}
 
 //------------------ clear ---------------------------------------------------
 

@@ -27,7 +27,8 @@ namespace OSDConfig
         /// </summary>
         //bool incli = false;
 
-        SerialPort comPort = new SerialPort();
+        //SerialPort comPort = new SerialPort();
+        ArduOSDPort osdPort = new ArduOSDPort();
 
         int bootRate = 9600;
         int osdRate = 57600;
@@ -39,7 +40,7 @@ namespace OSDConfig
             InitializeComponent();
 
             // load default font
-            
+
 
             for (int i = 0; i < OSDItemName.Name.Length; i++)
                 if (OSDItemName.Name[i] != null)
@@ -71,6 +72,7 @@ namespace OSDConfig
 
         private string[] GetPortNames()
         {
+
             string[] devs = new string[0];
 
             if (Directory.Exists("/dev/"))
@@ -84,6 +86,7 @@ namespace OSDConfig
             ports.CopyTo(all, devs.Length);
 
             return all;
+
         }
 
 
@@ -99,7 +102,18 @@ namespace OSDConfig
 
             xmlconfig(false);
 
+            osdPort.BaudRate = osdRate;
+
             osd.Chars = mcm.readMCM2("OSD_SA_v5.mcm");
+            /*
+            Bitmap m = new Bitmap(12 * 16, 18 * 16);
+            Graphics g = Graphics.FromImage(m);
+            for (int i = 0; i < 16; i++)
+                for (int j = 0; j < 16; j++)
+                {
+                    g.DrawImage(osd.Chars[i * 16 + j], j * 12, i * 18);
+                }
+            m.Save("fonts.png");*/
             // load default bg picture
             try
             {
@@ -164,44 +178,16 @@ namespace OSDConfig
             toolStripProgressBar1.Maximum = 100;
             this.toolStripStatusLabel1.Text = "";
 
-            int size = 4 + osd.Setting.coord.Length;
-            byte[] buf = new byte[1 + size + 1];
-            buf[0] = (byte)size;
-            Array.Copy(BitConverter.GetBytes(osd.Setting.enable), 0, buf, 1, 4);
-            Buffer.BlockCopy(osd.Setting.coord, 0, buf, 5, osd.Setting.coord.Length);
-            int ck = 0;
-            for (int i = 1; i < size + 1; i++)
-                ck += buf[i];
-            buf[size + 1] = (byte)ck;
-
-            bool fail = true;
-            try
-            {
-                EnterCLI();
-                comPort.Write("S");
-                if (comPort.ReadByte() == 'S')
-                {
-                    comPort.Write(buf, 0, buf.Length);
-
-                    int ack = comPort.ReadByte();
-                    if (ack != '!')
-                        MessageBox.Show("write setting error");
-                    else
-                        fail = false;
-                }
-                comPort.Close();
-            }
-            catch { }
-
-            if (fail)
-            {
-                toolStripStatusLabel1.Text = "Write OSD Failed";
-                toolStripProgressBar1.Value = 0;
-            }
-            else
+            osdPort.PortName = CMB_ComPort.Text;
+            if (osdPort.UploadSetting(osd.Setting))
             {
                 toolStripProgressBar1.Value = 100;
                 toolStripStatusLabel1.Text = "Write OSD Done";
+            }
+            else
+            {
+                toolStripStatusLabel1.Text = "Write OSD Failed";
+                toolStripProgressBar1.Value = 0;
             }
         }
 
@@ -221,59 +207,26 @@ namespace OSDConfig
             toolStripProgressBar1.Value = 0;
             this.toolStripStatusLabel1.Text = "";
 
-            bool fail = true;
             //ArduinoSTK sp;
-
-            try
+            OSDSetting setting;
+            osdPort.PortName = CMB_ComPort.Text;
+            if (osdPort.GetSetting(out setting))
             {
-                EnterCLI();
-                comPort.Write("s");
+                osd.Setting = setting;
 
-                if (comPort.ReadByte() == 's')
-                {
-                    int size = comPort.ReadByte();
-                    byte[] buf = new byte[size + 1];
-
-                    int tl = 0;
-                    while ((tl += comPort.Read(buf, tl, size + 1 - tl)) < size + 1)
-                    {
-                        toolStripProgressBar1.Value = tl * 100 / (size + 1);
-                    }
-
-                    byte ck = 0;
-                    for (int i = 0; i < size; i++)
-                        ck = (byte)(ck + buf[i]);
-
-                    if (ck == buf[size])
-                    {
-                        OSDSetting setting = new OSDSetting();
-                        setting.enable = BitConverter.ToUInt32(buf, 0);
-                        Buffer.BlockCopy(buf, 4, setting.coord, 0, size - 4);
-
-                        osd.Setting = setting;
-
-                        //reload 
-                        LIST_items.Items.Clear();
-                        for (int i = 0; i < OSDItemName.Name.Length; i++)
-                            if (OSDItemName.Name[i] != null)
-                                LIST_items.Items.Add(OSDItemName.Name[i], osd.Setting.IsEnabled((OSDItem)i));
-                        fail = false;
-                        osd.Draw();
-                    }
-                }
-                comPort.Close();
-            }
-            catch { }
-
-            if (fail)
-            {
-                toolStripStatusLabel1.Text = "Read OSD Failed";
-                toolStripProgressBar1.Value = 0;
+                //reload 
+                LIST_items.Items.Clear();
+                for (int i = 0; i < OSDItemName.Name.Length; i++)
+                    if (OSDItemName.Name[i] != null)
+                        LIST_items.Items.Add(OSDItemName.Name[i], osd.Setting.IsEnabled((OSDItem)i));
+                osd.Draw();
+                toolStripProgressBar1.Value = 100;
+                toolStripStatusLabel1.Text = "Read OSD Done";
             }
             else
             {
-                toolStripProgressBar1.Value = 100;
-                toolStripStatusLabel1.Text = "Read OSD Done";
+                toolStripStatusLabel1.Text = "Read OSD Failed";
+                toolStripProgressBar1.Value = 0;
             }
         }
 
@@ -399,18 +352,13 @@ namespace OSDConfig
                 sp.Connected += (s, ce) => { toolStripStatusLabel1.Text = "Programming"; };
                 try
                 {
-                    EnterCLI();
-                    comPort.Write(Encoding.ASCII.GetBytes("R"), 0, 1);
-                    comPort.ReadExisting();
-                    comPort.Close();
+                    osdPort.PortName = CMB_ComPort.Text;
+                    osdPort.Reboot();
 
-                    //sp = new MegaLoad();
                     sp.PortName = CMB_ComPort.Text;
-                    //sp.BaudRate = 9600;
                     sp.BaudRate = bootRate;
                     sp.WriteBufferSize = 32;
                     sp.ReadTimeout = 3000;
-                    //sp.DtrEnable = true;
 
                     sp.Open();
                 }
@@ -495,14 +443,14 @@ namespace OSDConfig
 
             if (ofd.FileName != "")
             {
-                if (comPort.IsOpen)
-                    comPort.Close();
+                if (osdPort.IsOpen)
+                    osdPort.Close();
 
                 try
                 {
-                    comPort.PortName = CMB_ComPort.Text;
-                    comPort.BaudRate = osdRate;
-                    comPort.Open();
+                    osdPort.PortName = CMB_ComPort.Text;
+                    osdPort.BaudRate = osdRate;
+                    osdPort.Open();
 
                 }
                 catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
@@ -549,7 +497,7 @@ namespace OSDConfig
                     toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
                     toolStripStatusLabel1.Text = "";
 
-                    comPort.Close();
+                    osdPort.Close();
                 }
                 catch { }
             }
@@ -660,91 +608,21 @@ namespace OSDConfig
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "mcm|*.mcm";
 
-            bool fail = true;
+            bool ok = true;
 
             if (ofd.ShowDialog() != DialogResult.OK)
                 return;
 
-            byte[][] fonts = mcm.readNVM(ofd.FileName);
+            osdPort.PortName = CMB_ComPort.Text;
 
-            try
-            {
-                EnterCLI();
-
-                comPort.Write("F");
-
-                int timeout = 0;
-
-                while (comPort.BytesToRead == 0)
-                {
-                    System.Threading.Thread.Sleep(500);
-                    Console.WriteLine("Waiting...");
-                    timeout++;
-
-                    if (timeout > 6)
-                    {
-                        MessageBox.Show("Error entering font mode - No Data");
-                        comPort.Close();
-                        return;
-                    }
-                }
-
-                int ack = comPort.ReadByte();
-                if (ack != 'F')
-                {
-                    MessageBox.Show("Error entering CharSet upload mode - invalid data");
-                    comPort.Close();
-                    return;
-                }
-                else
-                {
-                    Console.WriteLine("connected");
-                }
-
-                byte[] ck = new byte[1];
-                toolStripProgressBar1.Value = 0;
-
-                int i = 0;
-                for (; i < fonts.Length; i++)
-                {
-                    //Console.Write("font {0} ", i);
+            ok = osdPort.UploadFont(ofd.FileName);
 
 
-                    byte checksum = 0;
-                    comPort.Write(fonts[i], 0, 54);
-
-                    for (int j = 0; j < 54; j++)
-                    {
-                        checksum += fonts[i][j];
-                    }
-                    ck[0] = checksum;
-                    comPort.Write(ck, 0, 1);
-
-                    ack = comPort.ReadByte();
-                    if (ack != '!')
-                    {
-                        Console.WriteLine("write error");
-                        break;
-                    }
-                    else
-                    {
-                        toolStripProgressBar1.Value = i + 1;
-                    }
-                }
-                fail = i != 256;
-            }
-            catch (TimeoutException te)
-            {
-                Console.WriteLine("read timeout");
-            }
-
-
-            comPort.Close();
-
-            if (fail)
-                toolStripStatusLabel1.Text = "Update CharSet Failed";
-            else
+            if (ok)
                 toolStripStatusLabel1.Text = "CharSet Done";
+            else
+                toolStripStatusLabel1.Text = "Update CharSet Failed";
+
             //}
             //}
         }
@@ -756,25 +634,6 @@ namespace OSDConfig
                 System.Diagnostics.Process.Start("https://code.google.com/p/arducam-osd/wiki/arducam_osd?tm=6");
             }
             catch { MessageBox.Show("Webpage open failed... do you have a virus?"); }
-        }
-
-
-        private void EnterCLI()
-        {
-            if (comPort.IsOpen)
-                comPort.Close();
-
-
-            comPort.PortName = CMB_ComPort.Text;
-            comPort.BaudRate = osdRate;
-            comPort.ReadTimeout = 3000;
-            comPort.Open();
-
-            System.Threading.Thread.Sleep(200);
-
-            comPort.ReadExisting();
-            for (int i = 0; i < 4; i++)
-                comPort.Write("\r\n");
         }
 
 
@@ -799,6 +658,28 @@ namespace OSDConfig
         {
             osd.ShowGrid = showGrid.Checked;
             osd.Draw();
+        }
+
+        private void configADCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            osdPort.PortName = CMB_ComPort.Text;
+            ADConfig dlg = new ADConfig();
+            dlg.Port = osdPort;
+            dlg.ChannelConfigs[0].Value1 = osd.Setting.volt_value / 100.0;
+            dlg.ChannelConfigs[0].Read1 = osd.Setting.volt_read;
+            dlg.ChannelConfigs[1].Value1 = 100;
+            dlg.ChannelConfigs[1].Read1 =
+                osd.Setting.rssi_min + osd.Setting.rssi_range;
+            dlg.ChannelConfigs[1].Value2 = 0;
+            dlg.ChannelConfigs[1].Read2 = osd.Setting.rssi_min;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                osd.Setting.volt_value = (short)(dlg.ChannelConfigs[0].Value1 * 100);
+                osd.Setting.volt_read = (short)dlg.ChannelConfigs[0].Read1;
+                osd.Setting.rssi_min = (short)dlg.ChannelConfigs[1].Read2;
+                osd.Setting.rssi_min = (short)(dlg.ChannelConfigs[1].Read1 - dlg.ChannelConfigs[1].Read2);
+            }
         }
     }
 }

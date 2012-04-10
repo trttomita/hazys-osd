@@ -12,10 +12,11 @@ namespace OSDConfig
         //Will come from APM telem port
 
 
-        static float osd_vbat = 11.61f;                   // voltage in milivolt
+        static float osd_vbat_A = 11.61f;                   // voltage in milivolt
         //static UInt16 osd_battery_remaining = 50;      // 0 to 100 <=> 0 to 1000
-        static UInt16 osd_vbat_A = 50;
+        //static UInt16 osd_vbat_A = 50;
         static byte osd_battery_pic = 0xb4;         // picture to show battery remaining
+        static float osd_vbat_B = 10.05f;
 
         static UInt16 osd_mode = 3;                   // Navigation mode from RC AC2 = CH5, APM = CH8
         static byte osd_nav_mode = 4;               // Navigation mode from RC AC2 = CH5, APM = CH8
@@ -39,6 +40,7 @@ namespace OSDConfig
         static float osd_alt = 200;                    // altitude
         static float osd_groundspeed = 12;            // ground speed
         static UInt16 osd_throttle = 52;               // throtle
+        static byte osd_rssi = 100;
 
         //MAVLink session control
         static bool mavbeat = true;
@@ -88,6 +90,9 @@ namespace OSDConfig
                         case OSDItem.BatA:
                             panBatt_A();
                             break;
+                        case OSDItem.BatB:
+                            panBatt_B();
+                            break;
                         case OSDItem.GPSats:
                             panGPSats();
                             break;
@@ -117,7 +122,9 @@ namespace OSDConfig
                             if (osd_got_home == 1) panHomeDir(); //13x3
                             break;
 
-
+                        case OSDItem.RSSI:
+                            panRSSI();
+                            break;
                         //if(osd_got_home == 1){
                         case OSDItem.Alt:
                             panAlt(); //
@@ -305,6 +312,31 @@ namespace OSDConfig
             */
             printf(" %c%5.2f%c", 0xE2, (double)osd_vbat_A, 0x8E);
             //closePanel();
+        }
+
+        void panBatt_B(/*int first_col, int first_line*/)
+        {
+            //setPanel(first_col, first_line);
+            //openPanel();
+            /*************** This commented code is for the next ArduPlane Version
+            #ifdef MAVLINK10
+              if(osd_battery_remaining_A > 100){
+                printf(" %c%5.2f%c", 0xE2, (double)osd_vbat_A, 0x8E);
+              }
+            #else
+              if(osd_battery_remaining_A > 1000){
+                printf(" %c%5.2f%c", 0xE2, (double)osd_vbat_A, 0x8E);
+              }
+            #endif //MAVLINK10
+              else printf("%c%5.2f%c%c", 0xE2, (double)osd_vbat_A, 0x8E, osd_battery_pic_A);
+            */
+            printf(" %c%5.2f%c", 0xE3, (double)osd_vbat_A, 0x8E);
+            //closePanel();
+        }
+
+        void panRSSI()
+        {
+            printf("\xE1%3i%%", osd_rssi);
         }
 
         //------------------ Panel: Startup ArduCam OSD LOGO -------------------------------
