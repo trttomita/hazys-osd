@@ -15,14 +15,19 @@ enum OSD_ITEM
     
 };
 
+struct ad_setting_t
+{
+		uint8_t channel;
+		float	k;
+		float b;
+};
+
 struct osd_setting_t 
 {
-    volatile uint32_t enable;
-    volatile uint8_t coord[24][2];
-    volatile int16_t volt_value;
-    volatile int16_t volt_read;
-    volatile int16_t rssi_min;
-    volatile int16_t rssi_range;
+    uint32_t enable;
+    uint8_t coord[24][2];
+    ad_setting_t vbat_b;
+    ad_setting_t rssi;
 };
 
 class ArduOSD : public OSD
@@ -51,7 +56,7 @@ private:
 		static void DrawLogo();
     static void DrawArrow();
     static inline void DrawHorizon(uint8_t start_col, uint8_t start_row);
-    
+    static float analog_read(ad_setting_t& ad_setting);
 private:
     static volatile float    	osd_vbat_A;                 // Battery A voltage in milivolt
 //  static volatile float    	osd_curr_A;                 // Battery A current

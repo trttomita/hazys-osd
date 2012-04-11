@@ -15,20 +15,20 @@ namespace OSDConfig
         public ADConfig()
         {
             InitializeComponent();
-            ChannelConfigs = new List<ADChannelConfig>();
-            for (int i = 0; i < cbxChannel.Items.Count; i++)
-                ChannelConfigs.Add(new ADChannelConfig());
+            ChannelConfigs = new List<ADChannelSetting>();
+            for (int i = 0; i < cbFunction.Items.Count; i++)
+                ChannelConfigs.Add(new ADChannelSetting());
         }
 
-        public class ADChannelConfig
+        public class ADChannelSetting : ADSetting
         {
-            public double Value1;
-            public int Read1;
-            public double Value2;
-            public int Read2;
+            public decimal value1;
+            public ushort read1;
+            public decimal value2;
+            public ushort read2;
         }
 
-        public List<ADChannelConfig> ChannelConfigs { get; private set; }
+        public List<ADChannelSetting> ChannelConfigs { get; private set; }
 
         public ArduOSDPort Port { get; set; }
 
@@ -46,35 +46,53 @@ namespace OSDConfig
 
         private void btnPull_Click(object sender, EventArgs e)
         {
-            int reading = 0;
-            int channel = cbxChannel.SelectedIndex;
-            if (activeBox != null && Port.GetAnalog(channel + 1, out reading))
+            ushort reading = 0;
+            int channel = cbChannel.SelectedIndex;
+
+            if (activeBox != null && Port.GetAnalog(channel, out reading))
             {
                 activeBox.Text = reading.ToString();
                 if (activeBox == tbxMax)
-                    (ChannelConfigs[channel]).Read1 = reading;
+                    (ChannelConfigs[cbFunction.SelectedIndex]).read1 = reading;
                 else if (activeBox == tbxMin)
-                    ChannelConfigs[channel].Read2 = reading;
+                    ChannelConfigs[cbFunction.SelectedIndex].read2 = reading;
             }
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < ChannelConfigs.Count; i++)
+            {
+                var config = ChannelConfigs[i];
+
+                if (config.read1 != config.read2)
+                {
+                    config.k = (float)(config.value1 - config.value2) / (config.read1 - config.read2);
+                    config.b = (float)config.value1 - config.k * config.read1;
+                }
+                else
+                {
+                    config.k = 0;
+                    config.b = config.read1;
+                }
+            }
             DialogResult = DialogResult.OK;
         }
 
         private void ADConfig_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void cbxChannel_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int idx = cbxChannel.SelectedIndex;
-            numMax.Value = (decimal)ChannelConfigs[idx].Value1;
-            tbxMax.Text = ChannelConfigs[idx].Read1.ToString();
-            numMin.Value = (decimal)ChannelConfigs[idx].Value2;
-            tbxMin.Text = ChannelConfigs[idx].Read2.ToString();
+            int idx = cbFunction.SelectedIndex;
+            var config = ChannelConfigs[idx];
+            numMax.Value = (decimal)config.value1;
+            tbxMax.Text = config.read1.ToString();
+            numMin.Value = (decimal)config.value2;
+            tbxMin.Text = config.read2.ToString();
+            cbChannel.SelectedIndex = config.channel;
         }
     }
 }

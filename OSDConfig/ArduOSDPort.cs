@@ -135,8 +135,7 @@ namespace OSDConfig
                     if (ck == buf[size])
                     {
                         setting = new OSDSetting();
-                        setting.enable = BitConverter.ToUInt32(buf, 0);
-                        Buffer.BlockCopy(buf, 4, setting.coord, 0, size - 4);
+                        setting.FromBytes(buf, 0);
                         ok = true;
                     }
                 }
@@ -151,20 +150,15 @@ namespace OSDConfig
 
         public bool UploadSetting(OSDSetting setting)
         {
-            int size = 4 + setting.coord.Length + 2 * 4;
-            byte[] buf = new byte[1 + size + 1];
-            buf[0] = (byte)size;
-            Array.Copy(BitConverter.GetBytes(setting.enable), 0, buf, 1, 4);
-            Buffer.BlockCopy(setting.coord, 0, buf, 5, setting.coord.Length);
-            Array.Copy(BitConverter.GetBytes(setting.volt_value), 0, buf, 5 + setting.coord.Length, 2);
-            Array.Copy(BitConverter.GetBytes(setting.volt_read), 0, buf, 5 + setting.coord.Length + 2, 2);
-            Array.Copy(BitConverter.GetBytes(setting.rssi_min), 0, buf, 5 + setting.coord.Length + 4, 2);
-            Array.Copy(BitConverter.GetBytes(setting.rssi_range), 0, buf, 5 + setting.coord.Length + 6, 2);
+            byte[] data = setting.ToBytes();
+            byte[] buf = new byte[data.Length + 2];
+            buf[0] = (byte)data.Length;
+            Array.Copy(data, 0, buf, 1, data.Length);
 
             int ck = 0;
-            for (int i = 1; i < size + 1; i++)
-                ck += buf[i];
-            buf[size + 1] = (byte)ck;
+            for (int i = 0; i < data.Length; i++)
+                ck += data[i];
+            buf[buf.Length - 1] = (byte)ck;
 
             bool ok = true;
             try
@@ -189,7 +183,7 @@ namespace OSDConfig
             return ok;
         }
 
-        public bool GetAnalog(int channel, out int reading)
+        public bool GetAnalog(int channel, out ushort reading)
         {
             bool ok = false;
             reading = 0;
@@ -202,7 +196,7 @@ namespace OSDConfig
                 if (ReadByte() == 'a')
                 {
                     Write(new byte[] { (byte)channel }, 0, 1);
-                    reading = ReadByte() | (ReadByte() << 8);
+                    reading = (ushort)(ReadByte() | (ReadByte() << 8));
                 }
 
                 Close();

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Config>
-  <ComPort>COM13</ComPort>
+  <ComPort>COM1</ComPort>
   <BootBuadRate>9600</BootBuadRate>
   <OsdBuadRate>57600</OsdBuadRate>
   <Pal>True</Pal>
+  <BackgroudImage>vlcsnap-2012-01-28-07h46m04s95.png</BackgroudImage>
 </Config>

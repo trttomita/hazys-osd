@@ -250,7 +250,7 @@ void ArduOSD::GetAnalog()
 		uart_putc('a');
 		uint8_t channel = uart_wait_getc();
 		wdt_reset();
-		int16_t read = analog_read(channel);
+		int16_t read = ::analog_read(channel);
 		uint8_t checksum = (read >> 8) + (read & 0xff);
 		uart_putc(read >> 8);
 		uart_putc(read);
@@ -1034,14 +1034,19 @@ void ArduOSD::Run()
         //ArduOSD::refresh();
         SetHomeVars();
         if (setting.enable & _bv(OSD_ITEM_BatB))
-        		osd_vbat_B = analog_read(ADC_VOLTAGE_B) * setting.volt_value / setting.volt_read;
+        		osd_vbat_B = analog_read(setting.vbat_b);
         if (setting.enable & _bv(OSD_ITEM_RSSI))
-        		osd_rssi = (analog_read(ADC_RSSI) - setting.rssi_min) / setting.rssi_range;
+        		osd_rssi = (uint8_t)analog_read(setting.rssi);
 
         Draw();
         lasttime = now;
     }
 }	
+
+float ArduOSD::analog_read(ad_setting_t& ad_setting)
+{
+		return ::analog_read(ad_setting.channel) * ad_setting.k + ad_setting.b;
+}
 
 int main()
 {

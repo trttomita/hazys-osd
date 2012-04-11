@@ -110,11 +110,36 @@ namespace OSDConfig
             "系统状态"};
     }
 
+    public class ADSetting
+    {
+        public byte channel;
+        public float k;
+        public float b;
+
+        public byte[] ToBytes()
+        {
+            byte[] buf = new byte[sizeof(byte) + sizeof(float) * 2];
+            buf[0] = channel;
+            Array.Copy(BitConverter.GetBytes(k), 0, buf, 1, sizeof(float));
+            Array.Copy(BitConverter.GetBytes(k), 0, buf, 1 + sizeof(float), sizeof(float));
+            return buf;
+        }
+
+        public void FromBytes(byte[] data, int offset)
+        {
+            channel = data[offset];
+            k = BitConverter.ToSingle(data, offset + 1);
+            b = BitConverter.ToSingle(data, offset + 1 + sizeof(float));
+        }
+
+        public const int Size = sizeof(byte) + sizeof(float) * 2;
+    }
+
     public class OSDSetting
     {
         public UInt32 enable = _BV(OSDItem.Pit) | _BV(OSDItem.Rol) | _BV(OSDItem.BatA) | _BV(OSDItem.GPSats) | _BV(OSDItem.GPL) | _BV(OSDItem.GPS)
         | _BV(OSDItem.Rose) | _BV(OSDItem.Head) | _BV(OSDItem.MavB) | _BV(OSDItem.HDir) | _BV(OSDItem.HDis)
-        | _BV(OSDItem.Alt) | _BV(OSDItem.Vel) | _BV(OSDItem.Thr) | _BV(OSDItem.FMod) | _BV(OSDItem.Hor) |_BV(OSDItem.SYS);
+        | _BV(OSDItem.Alt) | _BV(OSDItem.Vel) | _BV(OSDItem.Thr) | _BV(OSDItem.FMod) | _BV(OSDItem.Hor) | _BV(OSDItem.SYS);
 
         public byte[,] coord = new byte[24, 2]
         {
@@ -143,12 +168,8 @@ namespace OSDConfig
             {8, 7}, //  panHorizon_y_ADDR
             {11,4}
         };
-
-        public short volt_value;
-        public short volt_read;
-        public short rssi_min;
-        public short rssi_range;
-
+        public ADSetting vbat_b;
+        public ADSetting rssi;
 
         static UInt32 _BV(OSDItem bi)
         {
@@ -159,6 +180,28 @@ namespace OSDConfig
         public bool IsEnabled(OSDItem info)
         {
             return (enable & (1U << (int)info)) != 0;
+        }
+
+        public byte[] ToBytes()
+        {
+            byte[] v = vbat_b.ToBytes();
+            byte[] r = rssi.ToBytes();
+            int size = sizeof(uint) + coord.Length + v.Length + r.Length;
+            byte[] buf = new byte[size];
+            Array.Copy(BitConverter.GetBytes(enable), 0, buf, 0, sizeof(uint));
+            Buffer.BlockCopy(coord, 0, buf, sizeof(uint), coord.Length);
+
+            Buffer.BlockCopy(v, 0, buf, sizeof(uint) + coord.Length, v.Length);
+            Buffer.BlockCopy(r, 0, buf, sizeof(uint) + coord.Length + v.Length, r.Length);
+            return buf;
+        }
+
+        public void FromBytes(byte[] data, int offset)
+        {
+            enable = BitConverter.ToUInt32(data, offset);
+            Buffer.BlockCopy(data, offset + sizeof(uint), coord, 0, coord.Length);
+            vbat_b.FromBytes(data, offset + sizeof(uint) + coord.Length);
+            rssi.FromBytes(data, offset + sizeof(uint) + coord.Length + ADSetting.Size);
         }
     }
 }
