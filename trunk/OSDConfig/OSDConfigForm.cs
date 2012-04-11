@@ -665,6 +665,7 @@ namespace OSDConfig
             osdPort.PortName = CMB_ComPort.Text;
             ADConfig dlg = new ADConfig();
             dlg.Port = osdPort;
+            /*
             dlg.ChannelConfigs[0].Value1 = osd.Setting.volt_value / 100.0;
             dlg.ChannelConfigs[0].Read1 = osd.Setting.volt_read;
             dlg.ChannelConfigs[1].Value1 = 100;
@@ -672,13 +673,12 @@ namespace OSDConfig
                 osd.Setting.rssi_min + osd.Setting.rssi_range;
             dlg.ChannelConfigs[1].Value2 = 0;
             dlg.ChannelConfigs[1].Read2 = osd.Setting.rssi_min;
+            */
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                osd.Setting.volt_value = (short)(dlg.ChannelConfigs[0].Value1 * 100);
-                osd.Setting.volt_read = (short)dlg.ChannelConfigs[0].Read1;
-                osd.Setting.rssi_min = (short)dlg.ChannelConfigs[1].Read2;
-                osd.Setting.rssi_min = (short)(dlg.ChannelConfigs[1].Read1 - dlg.ChannelConfigs[1].Read2);
+                osd.Setting.vbat_b = dlg.ChannelConfigs[0];
+                osd.Setting.rssi = dlg.ChannelConfigs[1];
             }
         }
     }
