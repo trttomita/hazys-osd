@@ -49,8 +49,15 @@ void Keyboard::update()
 					if (last_key == cur_key)
 					{
 							key = cur_key;
+							state++;
 					}
 					else
+					{
+							state = 0;
+					}
+					break;
+				case 2: //
+					if (cur_key != _key)
 					{
 							state = 0;
 					}
@@ -60,8 +67,12 @@ void Keyboard::update()
 
 uint8_t Keyboard::get_key()
 {
-		uint8_t k = key;
-		key = 0;
+		uint8_t k = 0;
+		if (state == 2)
+		{
+				key;
+				key = 0;
+		}
 		return k;
 }
 
