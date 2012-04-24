@@ -24,8 +24,8 @@ private:
 
 void Keyboard::init()
 {
-		DDRC&= 0XF8;
-    PORTC|= 0X07;     //设置按键端口输入上拉  
+		DDRC &= 0XF8;
+    PORTC |= 0X07;     //设置按键端口输入上拉  
 }
 
 void Keyboard::update()
@@ -76,7 +76,7 @@ uint8_t Keyboard::get_key()
 		return k;
 }
 
-
+/*
 
 
 
@@ -348,3 +348,4 @@ void Key_init()
     DDRC&= 0XF8;
     PORTC|= 0X07;     //设置按键端口输入上拉    
 }
+*/

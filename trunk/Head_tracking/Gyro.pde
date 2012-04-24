@@ -11,6 +11,7 @@ public:
 private:
 	int16_t zero[3];
 	int8_t calibrating;	
+	int32_t sum[3];
 };
 
 void Gyro::init()
@@ -27,31 +28,32 @@ void Gyro::init()
 void Gyro::calibrate()
 {
 		calibrating = 400;
+		for (uint8_t axis = 0; axis < 3; axis++)
+		{
+				sum[axis] = 0;
+				zero[axis] = 0;
+		}
 }
 
 void Gyro::update()
 {
-		TWBR = ((16000000L / 400000L) - 16) / 2; // change the I2C clock rate to 400kHz
+		//TWBR = ((16000000L / 400000L) - 16) / 2; // change the I2C clock rate to 400kHz
     i2c_getSixRawADC(ITG3200_ADDRESS,0X1D);
     GYRO_ORIENTATION(  + ( ((rawADC[2]<<8) | rawADC[3])/4) , // range: +/- 8192; +/- 2000 deg/sec
                        - ( ((rawADC[0]<<8) | rawADC[1])/4 ) ,
                        - ( ((rawADC[4]<<8) | rawADC[5])/4 ) );
    	
    	static int16_t previousdata[3] = {0,0,0};
-    static int32_t g[3];
     uint8_t axis;
 
     if (calibrating>0)
     {
         for (axis = 0; axis < 3; axis++)
         {
-            // Reset g[axis] at start of calibration
-            if (calibrating == 400) g[axis]=0;
             // Sum up 400 readings
-            g[axis] += data[axis];
+            sum[axis] += data[axis];
             // Clear global variables for next reading
             data[axis]=0;
-            zero[axis]=0;
             if (calibrating == 1)
             {
                 zero[axis]=g[axis]/400;
@@ -63,7 +65,7 @@ void Gyro::update()
     {
         data[axis]  -= zero[axis];
         //anti gyro glitch, limit the variation between two consecutive readings
-        data[axis] = constrain(data[axis],previousdata[axis]-800,previousdata[axis]+800);
+        data[axis] = constrain(data[axis], previousdata[axis]-800, previousdata[axis]+800);
         previousdata[axis] = data[axis];
     }
 }

@@ -6,36 +6,53 @@
        E_H,E_L      使能端
        Data(data_a) 并行数据端
 ************************************************************************/
-#define RS_H PORTC|=(1<<3)
-#define RS_L PORTC&=~(1<<3)
+#define RS_H PORTC	|= (1<<3)
+#define RS_L PORTC 	&= ~(1<<3)
 
-#define RW_H PORTD|=(1<<4)
-#define RW_L PORTD&=~(1<<4)
+#define RW_H PORTD 	|= (1<<4)
+#define RW_L PORTD 	&= ~(1<<4)
 
-#define E_H PORTD|=(1<<5)
-#define E_L PORTD&=~(1<<5)
+#define E_H PORTD 	|= (1<<5)
+#define E_L PORTD		&= ~(1<<5)
 
 #define Data(data_a) {PORTB = data_a; PORTD|=0XC0; PORTD&= data_a | 0X3F;}
 
-class LCD
+class LCD: public BetterStream
 {
 public:
-		void print(const uint8_t* str);
-		void print(const uint8_t c);
+		void init();
+		void write(const char c);
 		void set_pos(uint8_t x, uint8_t y);
+		void blink(bool enable = true);
+		void blink(uint8_t x, uint8_t y, bool enable = true);
+		void clear();
 private:
-		void write(const uint8_t c);
-		void write_ins(const uint8_t ins);
-
+		void write(const char c, bool ins);
 private:
 		uint8_t pos;
 };
 
+void LCD::init()
+{
+		//确定数据端口方向
+    DDRB = 0XFF;
+    DDRD|= 0XF0;
+    DDRC|= 0X08;
+    RW_L;                       //整个液晶操作只写
+    write(0x38, true);	//显示模式
+    write(0x0c, true);	//设置光标
+    write(0x06, true);	//屏幕移动
+    write(0x01, true);	//指针清零
+    delay(2);
+}
 
-void LCD::write(const uint8_t c)
+void LCD::write(const char c, bool ins)
 {
 		E_L;
-    RS_H;
+		if (ins)
+    	RS_L;
+    else
+    	RS_H;
     Data(Byte);
     E_H;
     delayMicroseconds(50);
@@ -43,43 +60,46 @@ void LCD::write(const uint8_t c)
     RS_L;
 }
 
-void LCD::write_ins(const uint8_t ins)
-{
-    E_L;
-    RS_L;
-    Data(Instruction);
-    E_H;
-    delayMicroseconds(50);
-    E_L;
-    RS_H;
-}
-
-void LCD::print(const uint8_t c)
+void LCD::write(const uint8_t c)
 {
 		if (c == '|')
-				write_ins(pos|0x40);
-		write(c);
-}
-
-void LCD::print(const uint8_t* str)
-{
-		while (*str)
-				print(*(str++));
+				write(pos|0x40, true);
+		else
+				write(c, false);
 }
 
 void LCD::set_pos(uint8_t x, uint8_t y)
 {
-		pos = x;
+		pos = x | 0x80;
 		if (y)
-				p
+				p |= 0x40;
+		write(pos, true); 
+}
+
+void LCD::blink(bool enable = true)
+{
+		if (enable)
+				write(0x0D, true);
+		else
+				write(0x0C, true);
+}
+
+void LCD::blink(uint8_t x, uint8_t y, bool enable = true)
+{
+		set_pos(x, y);
+		blink(enable);
+}
+
+void LCD::clear()
+{
+		write(0x01, true);
+		set_pos(0,0);
 }
 
 
 
 
-
-
-
+/*
 
 
 
@@ -366,3 +386,4 @@ void lcd_init()
     led_read_Instruction(0x01);	//指针清零
     delay(2);
 }
+*/
