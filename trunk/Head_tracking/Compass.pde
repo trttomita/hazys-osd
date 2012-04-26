@@ -50,13 +50,13 @@ inline void Compass::save()
 
 void Compass::update()
 {
-		static uint32_t last = 0;
+		//static uint32_t last = 0;
 		
-    if ( current_ms < t ) 
-    	return; //每次读取间隔100毫秒
+    //if ( current_ms < t ) 
+    //	return; //每次读取间隔100毫秒
     	
     	
-    last = current_ms + 100;
+    //last = current_ms + 100;
     
     //TWBR = ((16000000L / 400000L) - 16) / 2; // I2C时钟速度改变至400kHz
     

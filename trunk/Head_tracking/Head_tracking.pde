@@ -82,11 +82,13 @@ void lcdBrush()
 void setup()
 {
 		menu.init();
-		ahrs.init();
 		ppm.init();
-
-    Serial.begin(115200);             //设置COM波特率
-		gyro.calibrate();
+		Serial.begin(115200);             //设置COM波特率
+		
+		ahrs.init();
+		
+		menu.printf("Booting....");
+		while (!gyro.ready());
 }
 
 void loop ()
