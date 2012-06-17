@@ -29,7 +29,7 @@ namespace OSDConfig
 
         // panC_REG Byte has:
         CurA, //(!Not implemented)
-        CurB, //(!Not implemented)
+        Alt_R, //(!Not implemented)
         Alt,
         Vel,
         Thr,
@@ -73,8 +73,8 @@ namespace OSDConfig
             "RSSI (ADC)",
 
             null,
-            null,
-            "Altitude", 
+            "Altitude (Relative)",
+            "Altitude (Absolute)", 
             "Velocity", 
             "Throttle", 
             "Flight Mode", 
@@ -101,8 +101,8 @@ namespace OSDConfig
             "RSSI (ADC)",
 
             null,
-            null,
-            "高度", 
+            "相对高度",
+            "海拔高度", 
             "速度", 
             "油门", 
             "飞行模式", 
@@ -160,7 +160,7 @@ namespace OSDConfig
             {0, 0}, //  panWPDis_y_ADDR
             {22, 5}, ////  panRSSI_y_ADDR
             {21, 2}, //  panCur_A_y_ADDR
-            {21, 4}, //  panCur_B_y_ADDR
+            {2, 2}, //  panCur_B_y_ADDR
             {2, 2}, //  panAlt_y_ADDR
             {2, 3}, //  panVel_y_ADDR
             {2, 4}, //  panThr_y_ADDR

@@ -126,6 +126,9 @@ namespace OSDConfig
                             panRSSI();
                             break;
                         //if(osd_got_home == 1){
+                        case OSDItem.Alt_R:
+                            panAlt_R();
+                            break;
                         case OSDItem.Alt:
                             panAlt(); //
                             break;
@@ -172,6 +175,15 @@ namespace OSDConfig
             //openPanel();
             //printf("%c%5.0f%c",0x85, (double)(osd_alt - osd_home_alt), 0x8D);
             printf("%c%5.0f%c", 0x85, (double)(osd_alt), 0x8D);
+            //closePanel();
+        }
+
+        void panAlt_R(/*int first_col, int first_line*/)
+        {
+            ////setPanel(first_col, first_line);
+            //openPanel();
+            //printf("%c%5.0f%c",0x85, (double)(osd_alt - osd_home_alt), 0x8D);
+            printf("%c%5.0f%c", 0x85, (double)(osd_alt - 50), 0x8D);
             //closePanel();
         }
 

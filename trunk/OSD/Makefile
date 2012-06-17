@@ -61,8 +61,8 @@ DEBUG = stabs
 OPT = s
 
 # Place -D or -U options here
-CDEFS = -DF_CPU=$(F_CPU)UL -D_AVR_ $(EXTRA_DEFS) #-DMAVLINK10
-CXXDEFS = -DF_CPU=$(F_CPU)UL -D_AVR_ $(EXTRA_DEFS) #-DMAVLINK10
+CDEFS = -DF_CPU=$(F_CPU)UL -D_AVR_ $(EXTRA_DEFS) -DMAVLINK10
+CXXDEFS = -DF_CPU=$(F_CPU)UL -D_AVR_ $(EXTRA_DEFS) -DMAVLINK10
 
 
 # Compiler flag to set the C Standard level.
