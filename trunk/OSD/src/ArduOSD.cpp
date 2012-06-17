@@ -6,12 +6,13 @@
 #ifndef MAVLINK_CRC_EXTRA
 #define MAVLINK_CRC_EXTRA 1
 #endif
-#include "../GCS_MAVLink/include_v1.0/mavlink_types.h"
-#include "../GCS_MAVLink/include_v1.0/ardupilotmega/mavlink.h"
+#include "../GCS_MAVLink/include/mavlink/v1.0/mavlink_types.h"
+#include "../GCS_MAVLink/include/mavlink/v1.0/ardupilotmega/mavlink.h"
 #else
-#include "../GCS_MAVLink/include/mavlink_types.h"
-#include "../GCS_MAVLink/include/ardupilotmega/mavlink.h"
+#include "../GCS_MAVLink/include/mavlink/v0.9/mavlink_types.h"
+#include "../GCS_MAVLink/include/mavlink/v0.9/ardupilotmega/mavlink.h"
 #endif
+
 
 #include <avr/wdt.h>
 #include <avr/eeprom.h>
@@ -382,7 +383,7 @@ void ArduOSD::ReadMavlink()
         }
 
         //trying to grab msg
-        if(mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status))
+        if(_mavlink_parse_char(MAVLINK_COMM_0, c, &msg, &status))
         {
             mavlink_active = 1;
             //handle msg
@@ -430,6 +431,9 @@ void ArduOSD::ReadMavlink()
                 osd_fix_type = mavlink_msg_gps_raw_get_fix_type(msg);
             }
             break;
+            case MAVLINK_MSG_ID_GPS_STATUS:
+            	osd_satellites_visible = mavlink_msg_gps_status_get_satellites_visible(msg);
+            	break;
 #else
             case MAVLINK_MSG_ID_GPS_RAW_INT:
             {
@@ -440,11 +444,6 @@ void ArduOSD::ReadMavlink()
             }
             break;
 #endif
-            case MAVLINK_MSG_ID_GPS_STATUS:
-            {
-                //	uart_putc('8');
-                osd_satellites_visible = mavlink_msg_gps_status_get_satellites_visible(msg);
-            }
             break;
             case MAVLINK_MSG_ID_VFR_HUD:
             {
