@@ -162,6 +162,18 @@ namespace OSDConfig
                     LIST_items.SetItemChecked(index, false);
                     osd.SetItemEnabled(OSDItem.Hor, false);
                 }
+                else if (item == OSDItem.Alt && e.NewValue == CheckState.Checked)
+                {
+                    int index = LIST_items.Items.IndexOf(OSDItemName.Name[(int)OSDItem.Alt_R]);
+                    LIST_items.SetItemChecked(index, false);
+                    osd.SetItemEnabled(OSDItem.Alt_R, false);
+                }
+                else if (item == OSDItem.Alt_R && e.NewValue == CheckState.Checked)
+                {
+                    int index = LIST_items.Items.IndexOf(OSDItemName.Name[(int)OSDItem.Alt]);
+                    LIST_items.SetItemChecked(index, false);
+                    osd.SetItemEnabled(OSDItem.Alt, false);
+                }
                 osd.SetItemEnabled(item, e.NewValue == CheckState.Checked);
             }
 
