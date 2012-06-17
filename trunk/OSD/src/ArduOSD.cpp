@@ -107,7 +107,7 @@ osd_setting_t ArduOSD::setting =
         {22, 5},	// panRSSI_y_ADDR
 
         {21, 2},  // panCur_A_y_ADDR
-        {21, 4},  // panCur_B_y_ADDR
+        {2, 2},   // panAlt_R
         {2, 2},   // panAlt_y_ADDR
         {2, 3},   // panVel_y_ADDR
         {2, 4},   // panThr_y_ADDR
@@ -838,7 +838,10 @@ void ArduOSD::Draw()
                     break;
                 case OSD_ITEM_RSSI:
                 		printf_P(PSTR("\xE1%3i\%"), osd_rssi);
-                		break;    
+                		break;
+                case OSD_ITEM_Alt_R:
+                	  printf_P(PSTR("\85%5.0f\x8D"), (double)(osd_alt - osd_home_lat));
+                	  break;    
                 case OSD_ITEM_Alt:
                     //panAlt(); //
                     printf_P(PSTR("\x85%5.0f\x8D"),(double)(osd_alt));
