@@ -840,7 +840,7 @@ void ArduOSD::Draw()
                 		printf_P(PSTR("\xE1%3i\%"), osd_rssi);
                 		break;
                 case OSD_ITEM_Alt_R:
-                	  printf_P(PSTR("\85%5.0f\x8D"), (double)(osd_alt - osd_home_lat));
+                	  printf_P(PSTR("\x85%5.0f\x8D"), (double)(osd_alt - osd_home_lat));
                 	  break;    
                 case OSD_ITEM_Alt:
                     //panAlt(); //
