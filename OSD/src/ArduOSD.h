@@ -11,7 +11,7 @@ enum OSD_ITEM
     // panB_REG Byte has:
     OSD_ITEM_Rose, OSD_ITEM_Head, OSD_ITEM_MavB, OSD_ITEM_HDir, OSD_ITEM_HDis, OSD_ITEM_WDir /*(!Not implemented)*/, OSD_ITEM_WDis /*(!Not implemented)*/, OSD_ITEM_RSSI /*(!Not implemented)*/,
     // panC_REG Byte has:
-    OSD_ITEM_CurA /*(!Not implemented)*/, OSD_ITEM_CurB /*(!Not implemented)*/, OSD_ITEM_Alt, OSD_ITEM_Vel, OSD_ITEM_Thr, OSD_ITEM_FMod, OSD_ITEM_Hor, OSD_ITEM_SYS,
+    OSD_ITEM_CurA /*(!Not implemented)*/, OSD_ITEM_Alt_R /*(!Not implemented)*/, OSD_ITEM_Alt, OSD_ITEM_Vel, OSD_ITEM_Thr, OSD_ITEM_FMod, OSD_ITEM_Hor, OSD_ITEM_SYS,
     
 };
 
