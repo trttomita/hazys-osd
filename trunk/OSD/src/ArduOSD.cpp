@@ -28,6 +28,7 @@
 #include "uart.h"
 #include "spi.h"
 #include "analog.h"
+#include "MemoryFree.h"
 
 #define ToDeg(x) 	(x*57.2957795131)  // *180/pi
 #define _bv(x) 		(1UL << (x))
@@ -146,7 +147,7 @@ void ArduOSD::Init()
     delay(500);
     clear();
 
-    wdt_enable(WDTO_500MS);
+    wdt_enable(WDTO_2S);
 }
 
 void ArduOSD::LoadSetting()
@@ -351,9 +352,10 @@ void ArduOSD::ReadMavlink()
             switch (c)
             {
             case '\r':
-                crlf_count++;
+                //crlf_count++;
                 break;
             case '\n':
+            	  crlf_count++;
                 break;
             default:
                 if (crlf_count >= 3)
@@ -512,7 +514,8 @@ void ArduOSD::DrawLogo(/*int first_col, int first_line*/)
 {
     setPanel(10, 5);
     openPanel();
-    print_P(PSTR("\x20\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\x20\xca\xcb\xcc\xcd\xce|ArduCam OSD"));
+    //print_P(PSTR("\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\xca\xcb\xcc\xcd\xce|Hazys OSD"));
+    print_P(PSTR("Hazys OSD"));
     closePanel();
 }
 
@@ -1004,6 +1007,8 @@ void ArduOSD::Run()
 {
 		static unsigned long lasttime  = 0;
 
+    while (1)
+    {
     wdt_reset();
     
     if(enable_mav_request == 1) //Request rate control
@@ -1035,14 +1040,19 @@ void ArduOSD::Run()
     {
         //ArduOSD::refresh();
         SetHomeVars();
+        
         if (setting.enable & _bv(OSD_ITEM_BatB))
         		osd_vbat_B = analog_read(setting.vbat_b);
         if (setting.enable & _bv(OSD_ITEM_RSSI))
         		osd_rssi = (uint8_t)analog_read(setting.rssi);
-
+				
         Draw();
         lasttime = now;
+        
+        //uart_puts("draw\n");
     }
+  }
+    //uart_puts("
 }	
 
 float ArduOSD::analog_read(ad_setting_t& ad_setting)
