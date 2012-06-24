@@ -11,7 +11,8 @@ namespace OSDConfig
     {
         public void EnterCLI()
         {
-            Open();
+            if (!IsOpen)
+                Open();
 
             System.Threading.Thread.Sleep(200);
 
@@ -98,7 +99,7 @@ namespace OSDConfig
             }
 
 
-            Close();
+            //Close();
 
             return !fail;
             //if (fail)
@@ -140,7 +141,7 @@ namespace OSDConfig
                     }
                 }
 
-                Close();
+                // Close();
             }
             catch (Exception)
             {
@@ -175,7 +176,7 @@ namespace OSDConfig
                     else
                         ok = false;
                 }
-                Close();
+                //    Close();
             }
             catch (Exception)
             {
@@ -199,7 +200,7 @@ namespace OSDConfig
                     reading = (ushort)(ReadByte() | (ReadByte() << 8));
                 }
 
-                Close();
+                //    Close();
             }
             catch (Exception)
             {
@@ -214,12 +215,12 @@ namespace OSDConfig
             {
                 EnterCLI();
                 Write("R");
-
+                
 
                 if (ReadByte() == 'R')
                     ok = true;
 
-                Close();
+                //     Close();
             }
             catch (Exception)
             {

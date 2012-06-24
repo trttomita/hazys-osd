@@ -191,6 +191,7 @@ namespace OSDConfig
             this.toolStripStatusLabel1.Text = "";
 
             osdPort.PortName = CMB_ComPort.Text;
+            osdPort.Open();
             if (osdPort.UploadSetting(osd.Setting))
             {
                 toolStripProgressBar1.Value = 100;
@@ -201,6 +202,7 @@ namespace OSDConfig
                 toolStripStatusLabel1.Text = "Write OSD Failed";
                 toolStripProgressBar1.Value = 0;
             }
+            osdPort.Close();
         }
 
 
@@ -222,6 +224,7 @@ namespace OSDConfig
             //ArduinoSTK sp;
             OSDSetting setting;
             osdPort.PortName = CMB_ComPort.Text;
+            osdPort.Open();
             if (osdPort.GetSetting(out setting))
             {
                 osd.Setting = setting;
@@ -240,6 +243,7 @@ namespace OSDConfig
                 toolStripStatusLabel1.Text = "Read OSD Failed";
                 toolStripProgressBar1.Value = 0;
             }
+            osdPort.Close();
         }
 
         void sp_Progress(int progress)
@@ -355,6 +359,8 @@ namespace OSDConfig
                 bool fail = false;
                 //ArduinoSTK sp;
 
+                toolStripStatusLabel1.Text = "Rebooting";
+
                 MegaLoad sp = new MegaLoad();
                 toolStripProgressBar1.Maximum = 100;
                 toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
@@ -364,21 +370,25 @@ namespace OSDConfig
                 sp.Connected += (s, ce) => { toolStripStatusLabel1.Text = "Programming"; };
                 try
                 {
+
                     osdPort.PortName = CMB_ComPort.Text;
+                    osdPort.Open();
                     osdPort.Reboot();
+                    osdPort.Close();
+
 
                     sp.PortName = CMB_ComPort.Text;
                     sp.BaudRate = bootRate;
                     sp.WriteBufferSize = 32;
-                    sp.ReadTimeout = 3000;
+                    sp.ReadTimeout = 5000;
 
                     sp.Open();
                 }
                 catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
-                toolStripStatusLabel1.Text = "Connecting to Board";
+                toolStripStatusLabel1.Text = "Connecting";
 
-                sp.ReadExisting();
+                //sp.ReadExisting();
                 fail = !sp.Upload(FLASH, null);
                 sp.Close();
 
@@ -626,9 +636,9 @@ namespace OSDConfig
                 return;
 
             osdPort.PortName = CMB_ComPort.Text;
-
+            osdPort.Open();
             ok = osdPort.UploadFont(ofd.FileName);
-
+            osdPort.Close();
 
             if (ok)
                 toolStripStatusLabel1.Text = "CharSet Done";

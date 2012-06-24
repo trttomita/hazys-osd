@@ -10,3 +10,5 @@
 #define ADC_RSSI					2
 
 #define MinimOSD
+
+#define membug
