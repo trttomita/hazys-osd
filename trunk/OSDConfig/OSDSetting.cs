@@ -112,9 +112,9 @@ namespace OSDConfig
 
     public class ADSetting
     {
-        public byte channel;
-        public float k;
-        public float b;
+        public byte channel = 0;
+        public float k = 1;
+        public float b = 0;
 
         public byte[] ToBytes()
         {
@@ -168,8 +168,8 @@ namespace OSDConfig
             {8, 7}, //  panHorizon_y_ADDR
             {11,4}
         };
-        public ADSetting vbat_b;
-        public ADSetting rssi;
+        public ADSetting vbat_b = new ADSetting();
+        public ADSetting rssi = new ADSetting();
 
         static UInt32 _BV(OSDItem bi)
         {

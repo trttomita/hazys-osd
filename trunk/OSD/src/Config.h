@@ -11,4 +11,4 @@
 
 #define MinimOSD
 
-#define membug
+//#define membug

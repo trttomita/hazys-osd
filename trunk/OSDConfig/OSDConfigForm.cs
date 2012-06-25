@@ -280,12 +280,9 @@ namespace OSDConfig
                 {
                     using (Stream s = sfd.OpenFile())
                     {
-                        byte[] buf = BitConverter.GetBytes(osd.Setting.enable);
-                        s.Write(buf, 0, buf.Length);
-                        buf = new byte[osd.Setting.coord.Length];
-                        Buffer.BlockCopy(osd.Setting.coord, 0, buf, 0, buf.Length);
-                        //Array.Copy(osd.Setting.coord, buf, buf.Length);
-                        s.Write(buf, 0, osd.Setting.coord.Length);
+                        byte[] bytes = osd.Setting.ToBytes();
+                        s.Write(BitConverter.GetBytes(bytes.Length), 0, sizeof(int));
+                        s.Write(bytes, 0, bytes.Length);
                     }
                 }
                 catch
@@ -306,10 +303,10 @@ namespace OSDConfig
                     using (Stream f = ofd.OpenFile())
                     {
                         OSDSetting setting = new OSDSetting();
-                        byte[] buf = new byte[sizeof(UInt32) + setting.coord.Length];
-                        f.Read(buf, 0, buf.Length);
-                        setting.enable = BitConverter.ToUInt32(buf, 0);
-                        Buffer.BlockCopy(buf, sizeof(UInt32), setting.coord, 0, setting.coord.Length);
+                        byte[] buf = new byte[64];
+                        f.Read(buf, 0, 4);
+                        f.Read(buf, 0, BitConverter.ToInt32(buf, 0));
+                        setting.FromBytes(buf, 0);
                         osd.Setting = setting;
                     }
                 }
@@ -653,7 +650,7 @@ namespace OSDConfig
         {
             try
             {
-                System.Diagnostics.Process.Start("https://code.google.com/p/arducam-osd/wiki/arducam_osd?tm=6");
+                System.Diagnostics.Process.Start("http://code.google.com/p/hazys-osd/wiki/Introduction?tm=6");
             }
             catch { MessageBox.Show("Webpage open failed... do you have a virus?"); }
         }
@@ -697,11 +694,12 @@ namespace OSDConfig
             dlg.ChannelConfigs[1].Read2 = osd.Setting.rssi_min;
             */
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (dlg.ShowDialog(this) == DialogResult.OK)
             {
                 osd.Setting.vbat_b = dlg.ChannelConfigs[0];
                 osd.Setting.rssi = dlg.ChannelConfigs[1];
             }
+            osdPort.Close();
         }
     }
 }

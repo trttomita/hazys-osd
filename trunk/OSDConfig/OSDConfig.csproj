@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{5F3B7573-C04B-4615-9328-0CB6FC16AEB8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OSDConfig</RootNamespace>
     <AssemblyName>OSDConfig</AssemblyName>
@@ -92,6 +92,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ADConfig.resx">
+      <DependentUpon>ADConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ADConfig.zh-Hans.resx">
       <DependentUpon>ADConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OSD.resx">
