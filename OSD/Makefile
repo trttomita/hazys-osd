@@ -6,7 +6,8 @@ PRJ_NAME := $(notdir $(CURDIR))
 
 # TODO: set the output binary name here
 # default name is your folder's tilte
-BINARY_NAME := $(notdir $(CURDIR))
+BINARY_NAME := hazys_osd
+#$(notdir $(CURDIR))
 
 # enable the following marco in case you want these features
 #EXTRA_DEFS = -D_ENABLE_SERIAL_CALLBACK

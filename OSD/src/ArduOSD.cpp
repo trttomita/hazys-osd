@@ -400,7 +400,10 @@ void ArduOSD::ReadMavlink()
 #ifdef MAVLINK10
                 osd_mode = mavlink_msg_heartbeat_get_custom_mode(msg);
                 osd_nav_mode = 0;
-                osd_sys_status = mavlink_msg_heartbeat_get_system_status(msg);
+                //osd_sys_status = mavlink_msg_heartbeat_get_system_status(msg);
+                osd_sys_status = 
+                    (mavlink_msg_heartbeat_get_base_mode(msg) & (uint8_t)MAV_MODE_FLAG_SAFETY_ARMED) 
+                        == (uint8_t)MAV_MODE_FLAG_SAFETY_ARMED? MAV_STATE_ACTIVE: MAV_STATE_STANDBY;
 #endif
                 lastMAVBeat = millis();
                 if(waitingMAVBeats == 1)
@@ -512,10 +515,10 @@ const char buf_Rule[36] = {0xc2,0xc0,0xc0,0xc1,0xc0,0xc0,0xc1,0xc0,0xc0,
 
 void ArduOSD::DrawLogo(/*int first_col, int first_line*/)
 {
-    setPanel(10, 5);
+    setPanel(7, 5);
     openPanel();
     //print_P(PSTR("\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\xca\xcb\xcc\xcd\xce|Hazys OSD"));
-    print_P(PSTR("Hazys OSD"));
+    print_P(PSTR("Hazys OSD v1.0| for MAVLink 1.0"));
     closePanel();
 }
 

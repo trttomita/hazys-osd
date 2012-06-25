@@ -52,9 +52,9 @@ namespace OSDConfig
             if (activeBox != null && Port.GetAnalog(channel, out reading))
             {
                 activeBox.Text = reading.ToString();
-                if (activeBox == tbxMax)
+                if (activeBox == tbxReading1)
                     (ChannelConfigs[cbFunction.SelectedIndex]).read1 = reading;
-                else if (activeBox == tbxMin)
+                else if (activeBox == tbxReading2)
                     ChannelConfigs[cbFunction.SelectedIndex].read2 = reading;
             }
         }
@@ -79,20 +79,67 @@ namespace OSDConfig
             DialogResult = DialogResult.OK;
         }
 
-        private void ADConfig_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void cbxChannel_SelectedIndexChanged(object sender, EventArgs e)
         {
             int idx = cbFunction.SelectedIndex;
             var config = ChannelConfigs[idx];
-            numMax.Value = (decimal)config.value1;
-            tbxMax.Text = config.read1.ToString();
-            numMin.Value = (decimal)config.value2;
-            tbxMin.Text = config.read2.ToString();
+            num1.Value = (decimal)config.value1;
+            tbxReading1.Text = config.read1.ToString();
+
+            num2.Value = (decimal)config.value2;
+            tbxReading2.Text = config.read2.ToString();
             cbChannel.SelectedIndex = config.channel;
+        }
+
+        private void lReading1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ushort reading = 0;
+            int channel = cbChannel.SelectedIndex;
+            int func = cbFunction.SelectedIndex;
+
+            if (Port.GetAnalog(channel, out reading))
+            {
+                tbxReading1.Text = reading.ToString();
+                ChannelConfigs[func].read1 = reading;
+            }
+        }
+
+        private void lReading2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ushort reading = 0;
+            int channel = cbChannel.SelectedIndex;
+            int func = cbFunction.SelectedIndex;
+
+            if (Port.GetAnalog(channel, out reading))
+            {
+                tbxReading2.Text = reading.ToString();
+                ChannelConfigs[channel].read2 = reading;
+            }
+        }
+
+        private void num1_ValueChanged(object sender, EventArgs e)
+        {
+            if (cbFunction.SelectedIndex >= 0)
+            {
+                ChannelConfigs[cbFunction.SelectedIndex].value1 = num1.Value;
+            }
+        }
+
+        private void num2_ValueChanged(object sender, EventArgs e)
+        {
+            if (cbFunction.SelectedIndex >= 0)
+                ChannelConfigs[cbFunction.SelectedIndex].value2 = num2.Value;
+        }
+
+        private void cbChannel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbFunction.SelectedIndex >= 0)
+                ChannelConfigs[cbFunction.SelectedIndex].channel = (byte)cbFunction.SelectedIndex;
+        }
+
+        private void ADConfig_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

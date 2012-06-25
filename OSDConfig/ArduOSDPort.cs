@@ -172,9 +172,10 @@ namespace OSDConfig
 
                     int ack = ReadByte();
                     if (ack != '!')
+                    {
                         MessageBox.Show("write setting error");
-                    else
                         ok = false;
+                    }
                 }
                 //    Close();
             }
@@ -197,7 +198,12 @@ namespace OSDConfig
                 if (ReadByte() == 'a')
                 {
                     Write(new byte[] { (byte)channel }, 0, 1);
-                    reading = (ushort)(ReadByte() | (ReadByte() << 8));
+                    int high = ReadByte();
+                    int low = ReadByte();
+                    int ck = ReadByte();
+                    if (((high + low) & 0xff) == ck)
+                        reading = (ushort)((high << 8) | low);
+                    ok = true;
                 }
 
                 //    Close();
@@ -215,7 +221,7 @@ namespace OSDConfig
             {
                 EnterCLI();
                 Write("R");
-                
+
 
                 if (ReadByte() == 'R')
                     ok = true;
