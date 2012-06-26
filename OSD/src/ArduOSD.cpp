@@ -23,7 +23,7 @@
 
 #include "Mavlink_compat.h"
 #include "ArduOSD.h"
-#include "config.h"
+#include "Config.h"
 #include "time.h"
 #include "uart.h"
 #include "spi.h"

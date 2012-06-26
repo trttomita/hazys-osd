@@ -1,6 +1,6 @@
 #include "Max7456.h"
 //#include "WProgram.h"
-#include "Spi.h"
+#include "spi.h"
 #include "time.h"
 
 //volatile int x;
