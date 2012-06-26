@@ -81,8 +81,14 @@ class OSD
 public:
     static void init(void);
     static void clear(void);
-    inline static void select(void) { PORTB &= ~_BV(PB3); }
-    inline static void deSelect(void)  { PORTB |= _BV(PB3); }
+    inline static void select(void)
+    {
+        PORTB &= ~_BV(PB3);
+    }
+    inline static void deSelect(void)
+    {
+        PORTB |= _BV(PB3);
+    }
     static void setPanel(uint8_t start_col, uint8_t start_row);
     static void openPanel(void);
     static void closePanel(void);
@@ -90,8 +96,14 @@ public:
     static void detectMode(void);
     static void setMode(int mode);
     static void openSingle(uint8_t x, uint8_t y);
-    inline static int getMode(void) {return video_mode;}
-    inline static int getCenter(void) {return video_center;}
+    inline static int getMode(void)
+    {
+        return video_mode;
+    }
+    inline static int getCenter(void)
+    {
+        return video_center;
+    }
     //virtual int     available(void);
     //virtual int     read(void);
     //virtual int     peek(void);
@@ -99,24 +111,24 @@ public:
     static void write(uint8_t c);
     static void write_NVM(int font_count, uint8_t *character_bitmap);
     //using BetterStream::write;
-    	
-    	
-    	
+
+
+
     static void print_P(const prog_char *);
     //void println_P(const prog_char *);
     static void printf(const char *, ...)
     __attribute__ ((format(__printf__, 1, 2)));
     static void printf_P(const prog_char *, ...)
     __attribute__ ((format(__printf__, 1, 2)));
-    
+
 private:
     static uint8_t /*start_col, start_row,*/ col, row, video_mode, video_center;
-    
+
 private:
     static void  _vprintf(unsigned char, const char *, va_list)
     __attribute__ ((format(__printf__, 2, 0)));
-    
-    
+
+
 };
 
 //extern OSD osd;

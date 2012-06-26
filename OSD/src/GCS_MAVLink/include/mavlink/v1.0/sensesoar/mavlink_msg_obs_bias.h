@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_obs_bias_t
 {
- float accBias[3]; ///< accelerometer bias
- float gyroBias[3]; ///< gyroscope bias
+    float accBias[3]; ///< accelerometer bias
+    float gyroBias[3]; ///< gyroscope bias
 } mavlink_obs_bias_t;
 
 #define MAVLINK_MSG_ID_OBS_BIAS_LEN 24
@@ -34,24 +34,24 @@ typedef struct __mavlink_obs_bias_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_obs_bias_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       const float *accBias, const float *gyroBias)
+        const float *accBias, const float *gyroBias)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[24];
+    char buf[24];
 
-	_mav_put_float_array(buf, 0, accBias, 3);
-	_mav_put_float_array(buf, 12, gyroBias, 3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 24);
+    _mav_put_float_array(buf, 0, accBias, 3);
+    _mav_put_float_array(buf, 12, gyroBias, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 24);
 #else
-	mavlink_obs_bias_t packet;
+    mavlink_obs_bias_t packet;
 
-	mav_array_memcpy(packet.accBias, accBias, sizeof(float)*3);
-	mav_array_memcpy(packet.gyroBias, gyroBias, sizeof(float)*3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 24);
+    mav_array_memcpy(packet.accBias, accBias, sizeof(float)*3);
+    mav_array_memcpy(packet.gyroBias, gyroBias, sizeof(float)*3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 24);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_OBS_BIAS;
-	return mavlink_finalize_message(msg, system_id, component_id, 24, 159);
+    msg->msgid = MAVLINK_MSG_ID_OBS_BIAS;
+    return mavlink_finalize_message(msg, system_id, component_id, 24, 159);
 }
 
 /**
@@ -65,25 +65,25 @@ static inline uint16_t mavlink_msg_obs_bias_pack(uint8_t system_id, uint8_t comp
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_obs_bias_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           const float *accBias,const float *gyroBias)
+        mavlink_message_t* msg,
+        const float *accBias,const float *gyroBias)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[24];
+    char buf[24];
 
-	_mav_put_float_array(buf, 0, accBias, 3);
-	_mav_put_float_array(buf, 12, gyroBias, 3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 24);
+    _mav_put_float_array(buf, 0, accBias, 3);
+    _mav_put_float_array(buf, 12, gyroBias, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 24);
 #else
-	mavlink_obs_bias_t packet;
+    mavlink_obs_bias_t packet;
 
-	mav_array_memcpy(packet.accBias, accBias, sizeof(float)*3);
-	mav_array_memcpy(packet.gyroBias, gyroBias, sizeof(float)*3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 24);
+    mav_array_memcpy(packet.accBias, accBias, sizeof(float)*3);
+    mav_array_memcpy(packet.gyroBias, gyroBias, sizeof(float)*3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 24);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_OBS_BIAS;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 24, 159);
+    msg->msgid = MAVLINK_MSG_ID_OBS_BIAS;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 24, 159);
 }
 
 /**
@@ -96,7 +96,7 @@ static inline uint16_t mavlink_msg_obs_bias_pack_chan(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_obs_bias_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_obs_bias_t* obs_bias)
 {
-	return mavlink_msg_obs_bias_pack(system_id, component_id, msg, obs_bias->accBias, obs_bias->gyroBias);
+    return mavlink_msg_obs_bias_pack(system_id, component_id, msg, obs_bias->accBias, obs_bias->gyroBias);
 }
 
 /**
@@ -111,17 +111,17 @@ static inline uint16_t mavlink_msg_obs_bias_encode(uint8_t system_id, uint8_t co
 static inline void mavlink_msg_obs_bias_send(mavlink_channel_t chan, const float *accBias, const float *gyroBias)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[24];
+    char buf[24];
 
-	_mav_put_float_array(buf, 0, accBias, 3);
-	_mav_put_float_array(buf, 12, gyroBias, 3);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_BIAS, buf, 24, 159);
+    _mav_put_float_array(buf, 0, accBias, 3);
+    _mav_put_float_array(buf, 12, gyroBias, 3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_BIAS, buf, 24, 159);
 #else
-	mavlink_obs_bias_t packet;
+    mavlink_obs_bias_t packet;
 
-	mav_array_memcpy(packet.accBias, accBias, sizeof(float)*3);
-	mav_array_memcpy(packet.gyroBias, gyroBias, sizeof(float)*3);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_BIAS, (const char *)&packet, 24, 159);
+    mav_array_memcpy(packet.accBias, accBias, sizeof(float)*3);
+    mav_array_memcpy(packet.gyroBias, gyroBias, sizeof(float)*3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_BIAS, (const char *)&packet, 24, 159);
 #endif
 }
 
@@ -137,7 +137,7 @@ static inline void mavlink_msg_obs_bias_send(mavlink_channel_t chan, const float
  */
 static inline uint16_t mavlink_msg_obs_bias_get_accBias(const mavlink_message_t* msg, float *accBias)
 {
-	return _MAV_RETURN_float_array(msg, accBias, 3,  0);
+    return _MAV_RETURN_float_array(msg, accBias, 3,  0);
 }
 
 /**
@@ -147,7 +147,7 @@ static inline uint16_t mavlink_msg_obs_bias_get_accBias(const mavlink_message_t*
  */
 static inline uint16_t mavlink_msg_obs_bias_get_gyroBias(const mavlink_message_t* msg, float *gyroBias)
 {
-	return _MAV_RETURN_float_array(msg, gyroBias, 3,  12);
+    return _MAV_RETURN_float_array(msg, gyroBias, 3,  12);
 }
 
 /**
@@ -159,9 +159,9 @@ static inline uint16_t mavlink_msg_obs_bias_get_gyroBias(const mavlink_message_t
 static inline void mavlink_msg_obs_bias_decode(const mavlink_message_t* msg, mavlink_obs_bias_t* obs_bias)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	mavlink_msg_obs_bias_get_accBias(msg, obs_bias->accBias);
-	mavlink_msg_obs_bias_get_gyroBias(msg, obs_bias->gyroBias);
+    mavlink_msg_obs_bias_get_accBias(msg, obs_bias->accBias);
+    mavlink_msg_obs_bias_get_gyroBias(msg, obs_bias->gyroBias);
 #else
-	memcpy(obs_bias, _MAV_PAYLOAD(msg), 24);
+    memcpy(obs_bias, _MAV_PAYLOAD(msg), 24);
 #endif
 }

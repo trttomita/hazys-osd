@@ -43,16 +43,16 @@ extern "C" {
 // ENUM DEFINITIONS
 
 
-/** @brief  Different flight modes  */
+    /** @brief  Different flight modes  */
 #ifndef HAVE_ENUM_SENSESOAR_MODE
 #define HAVE_ENUM_SENSESOAR_MODE
-enum SENSESOAR_MODE
-{
-	SENSESOAR_MODE_GLIDING=1, /*  | */
-	SENSESOAR_MODE_AUTONOMOUS=2, /*  | */
-	SENSESOAR_MODE_MANUAL=3, /*  | */
-	SENSESOAR_MODE_ENUM_END=4, /*  | */
-};
+    enum SENSESOAR_MODE
+    {
+        SENSESOAR_MODE_GLIDING=1, /*  | */
+        SENSESOAR_MODE_AUTONOMOUS=2, /*  | */
+        SENSESOAR_MODE_MANUAL=3, /*  | */
+        SENSESOAR_MODE_ENUM_END=4, /*  | */
+    };
 #endif
 
 // MESSAGE DEFINITIONS

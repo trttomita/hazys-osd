@@ -43,8 +43,18 @@
             this.cbChannel = new System.Windows.Forms.ComboBox();
             this.lReading1 = new System.Windows.Forms.LinkLabel();
             this.lReading2 = new System.Windows.Forms.LinkLabel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.numVat0 = new System.Windows.Forms.NumericUpDown();
+            this.numVperB = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.num1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num2)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numVat0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numVperB)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOK
@@ -56,21 +66,22 @@
             // 
             // btnCancel
             // 
-            resources.ApplyResources(this.btnCancel, "btnCancel");
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            resources.ApplyResources(this.btnCancel, "btnCancel");
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // cbFunction
             // 
-            resources.ApplyResources(this.cbFunction, "cbFunction");
             this.cbFunction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFunction.FormattingEnabled = true;
             this.cbFunction.Items.AddRange(new object[] {
             resources.GetString("cbFunction.Items"),
-            resources.GetString("cbFunction.Items1")});
+            resources.GetString("cbFunction.Items1"),
+            resources.GetString("cbFunction.Items2")});
+            resources.ApplyResources(this.cbFunction, "cbFunction");
             this.cbFunction.Name = "cbFunction";
-            this.cbFunction.SelectedIndexChanged += new System.EventHandler(this.cbxChannel_SelectedIndexChanged);
+            this.cbFunction.SelectedIndexChanged += new System.EventHandler(this.cbxFunction_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -86,8 +97,6 @@
             // 
             resources.ApplyResources(this.tbxReading1, "tbxReading1");
             this.tbxReading1.Name = "tbxReading1";
-            this.tbxReading1.Enter += new System.EventHandler(this.tbxReading_Enter);
-            this.tbxReading1.Leave += new System.EventHandler(this.tbxReading_Enter);
             // 
             // label4
             // 
@@ -98,17 +107,17 @@
             // 
             resources.ApplyResources(this.tbxReading2, "tbxReading2");
             this.tbxReading2.Name = "tbxReading2";
-            this.tbxReading2.Enter += new System.EventHandler(this.tbxReading_Enter);
-            this.tbxReading2.Leave += new System.EventHandler(this.tbxReading_Leave);
             // 
             // num1
             // 
+            this.num1.DecimalPlaces = 1;
             resources.ApplyResources(this.num1, "num1");
             this.num1.Name = "num1";
             this.num1.ValueChanged += new System.EventHandler(this.num1_ValueChanged);
             // 
             // num2
             // 
+            this.num2.DecimalPlaces = 1;
             resources.ApplyResources(this.num2, "num2");
             this.num2.Name = "num2";
             this.num2.ValueChanged += new System.EventHandler(this.num2_ValueChanged);
@@ -120,7 +129,6 @@
             // 
             // cbChannel
             // 
-            resources.ApplyResources(this.cbChannel, "cbChannel");
             this.cbChannel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbChannel.FormattingEnabled = true;
             this.cbChannel.Items.AddRange(new object[] {
@@ -132,6 +140,7 @@
             resources.GetString("cbChannel.Items5"),
             resources.GetString("cbChannel.Items6"),
             resources.GetString("cbChannel.Items7")});
+            resources.ApplyResources(this.cbChannel, "cbChannel");
             this.cbChannel.Name = "cbChannel";
             this.cbChannel.SelectedIndexChanged += new System.EventHandler(this.cbChannel_SelectedIndexChanged);
             // 
@@ -149,20 +158,82 @@
             this.lReading2.TabStop = true;
             this.lReading2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lReading2_LinkClicked);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.num1);
+            this.groupBox1.Controls.Add(this.lReading2);
+            this.groupBox1.Controls.Add(this.tbxReading1);
+            this.groupBox1.Controls.Add(this.tbxReading2);
+            this.groupBox1.Controls.Add(this.num2);
+            this.groupBox1.Controls.Add(this.lReading1);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label4);
+            resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.TabStop = false;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.numVat0);
+            this.groupBox2.Controls.Add(this.numVperB);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.label3);
+            resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.TabStop = false;
+            // 
+            // numVat0
+            // 
+            this.numVat0.DecimalPlaces = 2;
+            resources.ApplyResources(this.numVat0, "numVat0");
+            this.numVat0.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numVat0.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
+            this.numVat0.Name = "numVat0";
+            this.numVat0.ValueChanged += new System.EventHandler(this.numVat0_ValueChanged);
+            // 
+            // numVperB
+            // 
+            this.numVperB.DecimalPlaces = 2;
+            resources.ApplyResources(this.numVperB, "numVperB");
+            this.numVperB.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numVperB.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
+            this.numVperB.Name = "numVperB";
+            this.numVperB.ValueChanged += new System.EventHandler(this.numVperB_ValueChanged);
+            // 
+            // label5
+            // 
+            resources.ApplyResources(this.label5, "label5");
+            this.label5.Name = "label5";
+            // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
             // ADConfig
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.lReading2);
-            this.Controls.Add(this.lReading1);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.cbChannel);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.num2);
-            this.Controls.Add(this.num1);
-            this.Controls.Add(this.tbxReading2);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.tbxReading1);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbFunction);
             this.Controls.Add(this.btnCancel);
@@ -170,8 +241,15 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ADConfig";
             this.Load += new System.EventHandler(this.ADConfig_Load);
+            this.Shown += new System.EventHandler(this.ADConfig_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.num1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.num2)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numVat0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numVperB)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -193,5 +271,11 @@
         private System.Windows.Forms.ComboBox cbChannel;
         private System.Windows.Forms.LinkLabel lReading1;
         private System.Windows.Forms.LinkLabel lReading2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown numVat0;
+        private System.Windows.Forms.NumericUpDown numVperB;
     }
 }

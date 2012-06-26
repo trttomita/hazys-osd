@@ -29,7 +29,7 @@ namespace OSDConfig
 
         // panC_REG Byte has:
         CurA, //(!Not implemented)
-        Alt_R, //(!Not implemented)
+        CurB, //(!Not implemented)
         Alt,
         Vel,
         Thr,
@@ -37,12 +37,18 @@ namespace OSDConfig
         Hor,
         //XXC, //Free
         SYS,
+        BatA_ADC,
+        BatB_ADC,
+        CurA_ADC,
+        CurB_ADC,
+        RSSI_ADC,
+        Alt_R,
         NULL
     }
 
-    public class OSDItemName
+    public class OSDItemList
     {
-        public static string[] Name
+        public static string[] Names
         {
             get
             {
@@ -53,12 +59,54 @@ namespace OSDConfig
             }
         }
 
+        public static readonly KeyValuePair<OSDItem, OSDItem>[] Conflits = 
+        {
+            new KeyValuePair<OSDItem, OSDItem>(OSDItem.Cen, OSDItem.Hor)
+        };
+
+        public static readonly KeyValuePair<OSDItem, OSDItem>[] Alternates = 
+        {
+            new KeyValuePair<OSDItem, OSDItem>(OSDItem.BatA, OSDItem.BatA_ADC),
+            new KeyValuePair<OSDItem, OSDItem>(OSDItem.BatB, OSDItem.BatB_ADC),
+            new KeyValuePair<OSDItem, OSDItem>(OSDItem.RSSI, OSDItem.RSSI_ADC),
+            new KeyValuePair<OSDItem, OSDItem>(OSDItem.Alt, OSDItem.Alt_R)
+        };
+
+        public static readonly OSDItem[] Avaliable = { 
+        OSDItem.Cen,
+        OSDItem.Pit,
+        OSDItem.Rol,
+        OSDItem.BatA,
+        OSDItem.BatA_ADC,
+        OSDItem.BatB_ADC,
+        OSDItem.GPSats,
+        OSDItem.GPL,
+        OSDItem.GPS,
+
+        // panB_REG Byte has:
+        OSDItem.Rose,
+        OSDItem.Head,
+        OSDItem.MavB,
+        OSDItem.HDir,
+        OSDItem.HDis,
+        OSDItem.RSSI_ADC,
+
+        OSDItem.Alt,
+        OSDItem.Alt_R,
+        OSDItem.Vel,
+        OSDItem.Thr,
+        OSDItem.FMod,
+        OSDItem.Hor,
+
+        OSDItem.SYS};
+
+
         static readonly string[] name_en = {
             "Center", 
             "Pitch", 
             "Roll", 
-            "Battery A", 
-            "Battery B (ADC)",
+            "Battery A",
+             null,
             "Visible Sats", 
             "GPS Lock", 
             "GPS Coord", 
@@ -70,23 +118,30 @@ namespace OSDConfig
             "Home Distance", 
             null,
             null,
-            "RSSI (ADC)",
 
             null,
-            "Altitude (Relative)",
+            null,
             "Altitude (Absolute)", 
             "Velocity", 
             "Throttle", 
             "Flight Mode", 
             "Horizon",
-            "System Status"};
+            "System Status",
+            "Battery A (ADC)",
+            "Battery B (ADC)",
+            null,
+            null,
+            "RSSI (ADC)",
+            "Altitude (Relative)"
+                                           };
 
         static readonly string[] name_zh = {
             "中心", 
             "俯仰", 
             "侧倾", 
-            "电池A", 
-            "电池B (ADC)", 
+            "电池A",
+            
+            null,
             "卫星数量", 
             "GPS锁定", 
             "GPS坐标", 
@@ -98,16 +153,24 @@ namespace OSDConfig
             "回家距离", 
             null,
             null,
-            "RSSI (ADC)",
+            null,
 
             null,
-            "相对高度",
+            null,
+            
             "海拔高度", 
             "速度", 
             "油门", 
             "飞行模式", 
             "水平",
-            "系统状态"};
+            "系统状态",
+            "电池A (ADC)",
+            "电池B (ADC)",
+            null,
+            null,
+            "RSSI (ADC)",
+            "相对高度",
+            };
     }
 
     public class ADSetting
@@ -121,7 +184,7 @@ namespace OSDConfig
             byte[] buf = new byte[sizeof(byte) + sizeof(float) * 2];
             buf[0] = channel;
             Array.Copy(BitConverter.GetBytes(k), 0, buf, 1, sizeof(float));
-            Array.Copy(BitConverter.GetBytes(k), 0, buf, 1 + sizeof(float), sizeof(float));
+            Array.Copy(BitConverter.GetBytes(b), 0, buf, 1 + sizeof(float), sizeof(float));
             return buf;
         }
 
@@ -168,6 +231,7 @@ namespace OSDConfig
             {8, 7}, //  panHorizon_y_ADDR
             {11,4}
         };
+        public ADSetting vbat_a = new ADSetting();
         public ADSetting vbat_b = new ADSetting();
         public ADSetting rssi = new ADSetting();
 
@@ -184,15 +248,18 @@ namespace OSDConfig
 
         public byte[] ToBytes()
         {
-            byte[] v = vbat_b.ToBytes();
+            byte[] va = vbat_a.ToBytes();
+            byte[] vb = vbat_b.ToBytes();
             byte[] r = rssi.ToBytes();
-            int size = sizeof(uint) + coord.Length + v.Length + r.Length;
+            int size = sizeof(uint) + coord.Length + va.Length + vb.Length + r.Length;
             byte[] buf = new byte[size];
             Array.Copy(BitConverter.GetBytes(enable), 0, buf, 0, sizeof(uint));
             Buffer.BlockCopy(coord, 0, buf, sizeof(uint), coord.Length);
 
-            Buffer.BlockCopy(v, 0, buf, sizeof(uint) + coord.Length, v.Length);
-            Buffer.BlockCopy(r, 0, buf, sizeof(uint) + coord.Length + v.Length, r.Length);
+            Buffer.BlockCopy(va, 0, buf, sizeof(uint) + coord.Length, va.Length);
+            Buffer.BlockCopy(vb, 0, buf, sizeof(uint) + coord.Length + va.Length, vb.Length);
+            Buffer.BlockCopy(r, 0, buf, sizeof(uint) + coord.Length + va.Length + vb.Length, r.Length);
+
             return buf;
         }
 
@@ -200,8 +267,9 @@ namespace OSDConfig
         {
             enable = BitConverter.ToUInt32(data, offset);
             Buffer.BlockCopy(data, offset + sizeof(uint), coord, 0, coord.Length);
-            vbat_b.FromBytes(data, offset + sizeof(uint) + coord.Length);
-            rssi.FromBytes(data, offset + sizeof(uint) + coord.Length + ADSetting.Size);
+            vbat_a.FromBytes(data, offset + sizeof(uint) + coord.Length);
+            vbat_b.FromBytes(data, offset + sizeof(uint) + coord.Length + ADSetting.Size);
+            rssi.FromBytes(data, offset + sizeof(uint) + coord.Length + 2 * ADSetting.Size);
         }
     }
 }

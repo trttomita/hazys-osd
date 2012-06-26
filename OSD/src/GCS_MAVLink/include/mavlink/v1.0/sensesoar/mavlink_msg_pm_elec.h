@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_pm_elec_t
 {
- float PwCons; ///< current power consumption
- float BatStat; ///< battery status
- float PwGen[3]; ///< Power generation from each module
+    float PwCons; ///< current power consumption
+    float BatStat; ///< battery status
+    float PwGen[3]; ///< Power generation from each module
 } mavlink_pm_elec_t;
 
 #define MAVLINK_MSG_ID_PM_ELEC_LEN 20
@@ -36,24 +36,24 @@ typedef struct __mavlink_pm_elec_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_pm_elec_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       float PwCons, float BatStat, const float *PwGen)
+        float PwCons, float BatStat, const float *PwGen)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[20];
-	_mav_put_float(buf, 0, PwCons);
-	_mav_put_float(buf, 4, BatStat);
-	_mav_put_float_array(buf, 8, PwGen, 3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 20);
+    char buf[20];
+    _mav_put_float(buf, 0, PwCons);
+    _mav_put_float(buf, 4, BatStat);
+    _mav_put_float_array(buf, 8, PwGen, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 20);
 #else
-	mavlink_pm_elec_t packet;
-	packet.PwCons = PwCons;
-	packet.BatStat = BatStat;
-	mav_array_memcpy(packet.PwGen, PwGen, sizeof(float)*3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 20);
+    mavlink_pm_elec_t packet;
+    packet.PwCons = PwCons;
+    packet.BatStat = BatStat;
+    mav_array_memcpy(packet.PwGen, PwGen, sizeof(float)*3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 20);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_PM_ELEC;
-	return mavlink_finalize_message(msg, system_id, component_id, 20, 170);
+    msg->msgid = MAVLINK_MSG_ID_PM_ELEC;
+    return mavlink_finalize_message(msg, system_id, component_id, 20, 170);
 }
 
 /**
@@ -68,25 +68,25 @@ static inline uint16_t mavlink_msg_pm_elec_pack(uint8_t system_id, uint8_t compo
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_pm_elec_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           float PwCons,float BatStat,const float *PwGen)
+        mavlink_message_t* msg,
+        float PwCons,float BatStat,const float *PwGen)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[20];
-	_mav_put_float(buf, 0, PwCons);
-	_mav_put_float(buf, 4, BatStat);
-	_mav_put_float_array(buf, 8, PwGen, 3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 20);
+    char buf[20];
+    _mav_put_float(buf, 0, PwCons);
+    _mav_put_float(buf, 4, BatStat);
+    _mav_put_float_array(buf, 8, PwGen, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 20);
 #else
-	mavlink_pm_elec_t packet;
-	packet.PwCons = PwCons;
-	packet.BatStat = BatStat;
-	mav_array_memcpy(packet.PwGen, PwGen, sizeof(float)*3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 20);
+    mavlink_pm_elec_t packet;
+    packet.PwCons = PwCons;
+    packet.BatStat = BatStat;
+    mav_array_memcpy(packet.PwGen, PwGen, sizeof(float)*3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 20);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_PM_ELEC;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 20, 170);
+    msg->msgid = MAVLINK_MSG_ID_PM_ELEC;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 20, 170);
 }
 
 /**
@@ -99,7 +99,7 @@ static inline uint16_t mavlink_msg_pm_elec_pack_chan(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_pm_elec_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_pm_elec_t* pm_elec)
 {
-	return mavlink_msg_pm_elec_pack(system_id, component_id, msg, pm_elec->PwCons, pm_elec->BatStat, pm_elec->PwGen);
+    return mavlink_msg_pm_elec_pack(system_id, component_id, msg, pm_elec->PwCons, pm_elec->BatStat, pm_elec->PwGen);
 }
 
 /**
@@ -115,17 +115,17 @@ static inline uint16_t mavlink_msg_pm_elec_encode(uint8_t system_id, uint8_t com
 static inline void mavlink_msg_pm_elec_send(mavlink_channel_t chan, float PwCons, float BatStat, const float *PwGen)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[20];
-	_mav_put_float(buf, 0, PwCons);
-	_mav_put_float(buf, 4, BatStat);
-	_mav_put_float_array(buf, 8, PwGen, 3);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PM_ELEC, buf, 20, 170);
+    char buf[20];
+    _mav_put_float(buf, 0, PwCons);
+    _mav_put_float(buf, 4, BatStat);
+    _mav_put_float_array(buf, 8, PwGen, 3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PM_ELEC, buf, 20, 170);
 #else
-	mavlink_pm_elec_t packet;
-	packet.PwCons = PwCons;
-	packet.BatStat = BatStat;
-	mav_array_memcpy(packet.PwGen, PwGen, sizeof(float)*3);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PM_ELEC, (const char *)&packet, 20, 170);
+    mavlink_pm_elec_t packet;
+    packet.PwCons = PwCons;
+    packet.BatStat = BatStat;
+    mav_array_memcpy(packet.PwGen, PwGen, sizeof(float)*3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_PM_ELEC, (const char *)&packet, 20, 170);
 #endif
 }
 
@@ -141,7 +141,7 @@ static inline void mavlink_msg_pm_elec_send(mavlink_channel_t chan, float PwCons
  */
 static inline float mavlink_msg_pm_elec_get_PwCons(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+    return _MAV_RETURN_float(msg,  0);
 }
 
 /**
@@ -151,7 +151,7 @@ static inline float mavlink_msg_pm_elec_get_PwCons(const mavlink_message_t* msg)
  */
 static inline float mavlink_msg_pm_elec_get_BatStat(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+    return _MAV_RETURN_float(msg,  4);
 }
 
 /**
@@ -161,7 +161,7 @@ static inline float mavlink_msg_pm_elec_get_BatStat(const mavlink_message_t* msg
  */
 static inline uint16_t mavlink_msg_pm_elec_get_PwGen(const mavlink_message_t* msg, float *PwGen)
 {
-	return _MAV_RETURN_float_array(msg, PwGen, 3,  8);
+    return _MAV_RETURN_float_array(msg, PwGen, 3,  8);
 }
 
 /**
@@ -173,10 +173,10 @@ static inline uint16_t mavlink_msg_pm_elec_get_PwGen(const mavlink_message_t* ms
 static inline void mavlink_msg_pm_elec_decode(const mavlink_message_t* msg, mavlink_pm_elec_t* pm_elec)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	pm_elec->PwCons = mavlink_msg_pm_elec_get_PwCons(msg);
-	pm_elec->BatStat = mavlink_msg_pm_elec_get_BatStat(msg);
-	mavlink_msg_pm_elec_get_PwGen(msg, pm_elec->PwGen);
+    pm_elec->PwCons = mavlink_msg_pm_elec_get_PwCons(msg);
+    pm_elec->BatStat = mavlink_msg_pm_elec_get_BatStat(msg);
+    mavlink_msg_pm_elec_get_PwGen(msg, pm_elec->PwGen);
 #else
-	memcpy(pm_elec, _MAV_PAYLOAD(msg), 20);
+    memcpy(pm_elec, _MAV_PAYLOAD(msg), 20);
 #endif
 }

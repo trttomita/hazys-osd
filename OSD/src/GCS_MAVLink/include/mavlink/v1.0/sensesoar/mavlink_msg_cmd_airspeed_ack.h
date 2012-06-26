@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_cmd_airspeed_ack_t
 {
- float spCmd; ///< commanded airspeed
- uint8_t ack; ///< 0:ack, 1:nack
+    float spCmd; ///< commanded airspeed
+    uint8_t ack; ///< 0:ack, 1:nack
 } mavlink_cmd_airspeed_ack_t;
 
 #define MAVLINK_MSG_ID_CMD_AIRSPEED_ACK_LEN 5
@@ -33,24 +33,24 @@ typedef struct __mavlink_cmd_airspeed_ack_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_cmd_airspeed_ack_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       float spCmd, uint8_t ack)
+        float spCmd, uint8_t ack)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[5];
-	_mav_put_float(buf, 0, spCmd);
-	_mav_put_uint8_t(buf, 4, ack);
+    char buf[5];
+    _mav_put_float(buf, 0, spCmd);
+    _mav_put_uint8_t(buf, 4, ack);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 5);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 5);
 #else
-	mavlink_cmd_airspeed_ack_t packet;
-	packet.spCmd = spCmd;
-	packet.ack = ack;
+    mavlink_cmd_airspeed_ack_t packet;
+    packet.spCmd = spCmd;
+    packet.ack = ack;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 5);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 5);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_CMD_AIRSPEED_ACK;
-	return mavlink_finalize_message(msg, system_id, component_id, 5, 243);
+    msg->msgid = MAVLINK_MSG_ID_CMD_AIRSPEED_ACK;
+    return mavlink_finalize_message(msg, system_id, component_id, 5, 243);
 }
 
 /**
@@ -64,25 +64,25 @@ static inline uint16_t mavlink_msg_cmd_airspeed_ack_pack(uint8_t system_id, uint
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_cmd_airspeed_ack_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           float spCmd,uint8_t ack)
+        mavlink_message_t* msg,
+        float spCmd,uint8_t ack)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[5];
-	_mav_put_float(buf, 0, spCmd);
-	_mav_put_uint8_t(buf, 4, ack);
+    char buf[5];
+    _mav_put_float(buf, 0, spCmd);
+    _mav_put_uint8_t(buf, 4, ack);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 5);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 5);
 #else
-	mavlink_cmd_airspeed_ack_t packet;
-	packet.spCmd = spCmd;
-	packet.ack = ack;
+    mavlink_cmd_airspeed_ack_t packet;
+    packet.spCmd = spCmd;
+    packet.ack = ack;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 5);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 5);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_CMD_AIRSPEED_ACK;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 5, 243);
+    msg->msgid = MAVLINK_MSG_ID_CMD_AIRSPEED_ACK;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 5, 243);
 }
 
 /**
@@ -95,7 +95,7 @@ static inline uint16_t mavlink_msg_cmd_airspeed_ack_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_cmd_airspeed_ack_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_cmd_airspeed_ack_t* cmd_airspeed_ack)
 {
-	return mavlink_msg_cmd_airspeed_ack_pack(system_id, component_id, msg, cmd_airspeed_ack->spCmd, cmd_airspeed_ack->ack);
+    return mavlink_msg_cmd_airspeed_ack_pack(system_id, component_id, msg, cmd_airspeed_ack->spCmd, cmd_airspeed_ack->ack);
 }
 
 /**
@@ -110,17 +110,17 @@ static inline uint16_t mavlink_msg_cmd_airspeed_ack_encode(uint8_t system_id, ui
 static inline void mavlink_msg_cmd_airspeed_ack_send(mavlink_channel_t chan, float spCmd, uint8_t ack)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[5];
-	_mav_put_float(buf, 0, spCmd);
-	_mav_put_uint8_t(buf, 4, ack);
+    char buf[5];
+    _mav_put_float(buf, 0, spCmd);
+    _mav_put_uint8_t(buf, 4, ack);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CMD_AIRSPEED_ACK, buf, 5, 243);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CMD_AIRSPEED_ACK, buf, 5, 243);
 #else
-	mavlink_cmd_airspeed_ack_t packet;
-	packet.spCmd = spCmd;
-	packet.ack = ack;
+    mavlink_cmd_airspeed_ack_t packet;
+    packet.spCmd = spCmd;
+    packet.ack = ack;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CMD_AIRSPEED_ACK, (const char *)&packet, 5, 243);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_CMD_AIRSPEED_ACK, (const char *)&packet, 5, 243);
 #endif
 }
 
@@ -136,7 +136,7 @@ static inline void mavlink_msg_cmd_airspeed_ack_send(mavlink_channel_t chan, flo
  */
 static inline float mavlink_msg_cmd_airspeed_ack_get_spCmd(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  0);
+    return _MAV_RETURN_float(msg,  0);
 }
 
 /**
@@ -146,7 +146,7 @@ static inline float mavlink_msg_cmd_airspeed_ack_get_spCmd(const mavlink_message
  */
 static inline uint8_t mavlink_msg_cmd_airspeed_ack_get_ack(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  4);
+    return _MAV_RETURN_uint8_t(msg,  4);
 }
 
 /**
@@ -158,9 +158,9 @@ static inline uint8_t mavlink_msg_cmd_airspeed_ack_get_ack(const mavlink_message
 static inline void mavlink_msg_cmd_airspeed_ack_decode(const mavlink_message_t* msg, mavlink_cmd_airspeed_ack_t* cmd_airspeed_ack)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	cmd_airspeed_ack->spCmd = mavlink_msg_cmd_airspeed_ack_get_spCmd(msg);
-	cmd_airspeed_ack->ack = mavlink_msg_cmd_airspeed_ack_get_ack(msg);
+    cmd_airspeed_ack->spCmd = mavlink_msg_cmd_airspeed_ack_get_spCmd(msg);
+    cmd_airspeed_ack->ack = mavlink_msg_cmd_airspeed_ack_get_ack(msg);
 #else
-	memcpy(cmd_airspeed_ack, _MAV_PAYLOAD(msg), 5);
+    memcpy(cmd_airspeed_ack, _MAV_PAYLOAD(msg), 5);
 #endif
 }

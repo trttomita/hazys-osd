@@ -4,16 +4,16 @@
 
 typedef struct __mavlink_digicam_control_t
 {
- uint8_t target_system; ///< System ID
- uint8_t target_component; ///< Component ID
- uint8_t session; ///< 0: stop, 1: start or keep it up //Session control e.g. show/hide lens
- uint8_t zoom_pos; ///< 1 to N //Zoom's absolute position (0 means ignore)
- int8_t zoom_step; ///< -100 to 100 //Zooming step value to offset zoom from the current position
- uint8_t focus_lock; ///< 0: unlock focus or keep unlocked, 1: lock focus or keep locked, 3: re-lock focus
- uint8_t shot; ///< 0: ignore, 1: shot or start filming
- uint8_t command_id; ///< Command Identity (incremental loop: 0 to 255)//A command sent multiple times will be executed or pooled just once
- uint8_t extra_param; ///< Extra parameters enumeration (0 means ignore)
- float extra_value; ///< Correspondent value to given extra_param
+    uint8_t target_system; ///< System ID
+    uint8_t target_component; ///< Component ID
+    uint8_t session; ///< 0: stop, 1: start or keep it up //Session control e.g. show/hide lens
+    uint8_t zoom_pos; ///< 1 to N //Zoom's absolute position (0 means ignore)
+    int8_t zoom_step; ///< -100 to 100 //Zooming step value to offset zoom from the current position
+    uint8_t focus_lock; ///< 0: unlock focus or keep unlocked, 1: lock focus or keep locked, 3: re-lock focus
+    uint8_t shot; ///< 0: ignore, 1: shot or start filming
+    uint8_t command_id; ///< Command Identity (incremental loop: 0 to 255)//A command sent multiple times will be executed or pooled just once
+    uint8_t extra_param; ///< Extra parameters enumeration (0 means ignore)
+    float extra_value; ///< Correspondent value to given extra_param
 } mavlink_digicam_control_t;
 
 #define MAVLINK_MSG_ID_DIGICAM_CONTROL_LEN 13
@@ -57,40 +57,40 @@ typedef struct __mavlink_digicam_control_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_digicam_control_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target_system, uint8_t target_component, uint8_t session, uint8_t zoom_pos, int8_t zoom_step, uint8_t focus_lock, uint8_t shot, uint8_t command_id, uint8_t extra_param, float extra_value)
+        uint8_t target_system, uint8_t target_component, uint8_t session, uint8_t zoom_pos, int8_t zoom_step, uint8_t focus_lock, uint8_t shot, uint8_t command_id, uint8_t extra_param, float extra_value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[13];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, session);
-	_mav_put_uint8_t(buf, 3, zoom_pos);
-	_mav_put_int8_t(buf, 4, zoom_step);
-	_mav_put_uint8_t(buf, 5, focus_lock);
-	_mav_put_uint8_t(buf, 6, shot);
-	_mav_put_uint8_t(buf, 7, command_id);
-	_mav_put_uint8_t(buf, 8, extra_param);
-	_mav_put_float(buf, 9, extra_value);
+    char buf[13];
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+    _mav_put_uint8_t(buf, 2, session);
+    _mav_put_uint8_t(buf, 3, zoom_pos);
+    _mav_put_int8_t(buf, 4, zoom_step);
+    _mav_put_uint8_t(buf, 5, focus_lock);
+    _mav_put_uint8_t(buf, 6, shot);
+    _mav_put_uint8_t(buf, 7, command_id);
+    _mav_put_uint8_t(buf, 8, extra_param);
+    _mav_put_float(buf, 9, extra_value);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 13);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 13);
 #else
-	mavlink_digicam_control_t packet;
-	packet.target_system = target_system;
-	packet.target_component = target_component;
-	packet.session = session;
-	packet.zoom_pos = zoom_pos;
-	packet.zoom_step = zoom_step;
-	packet.focus_lock = focus_lock;
-	packet.shot = shot;
-	packet.command_id = command_id;
-	packet.extra_param = extra_param;
-	packet.extra_value = extra_value;
+    mavlink_digicam_control_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.session = session;
+    packet.zoom_pos = zoom_pos;
+    packet.zoom_step = zoom_step;
+    packet.focus_lock = focus_lock;
+    packet.shot = shot;
+    packet.command_id = command_id;
+    packet.extra_param = extra_param;
+    packet.extra_value = extra_value;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 13);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 13);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_DIGICAM_CONTROL;
-	return mavlink_finalize_message(msg, system_id, component_id, 13);
+    msg->msgid = MAVLINK_MSG_ID_DIGICAM_CONTROL;
+    return mavlink_finalize_message(msg, system_id, component_id, 13);
 }
 
 /**
@@ -112,41 +112,41 @@ static inline uint16_t mavlink_msg_digicam_control_pack(uint8_t system_id, uint8
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_digicam_control_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           uint8_t target_system,uint8_t target_component,uint8_t session,uint8_t zoom_pos,int8_t zoom_step,uint8_t focus_lock,uint8_t shot,uint8_t command_id,uint8_t extra_param,float extra_value)
+        mavlink_message_t* msg,
+        uint8_t target_system,uint8_t target_component,uint8_t session,uint8_t zoom_pos,int8_t zoom_step,uint8_t focus_lock,uint8_t shot,uint8_t command_id,uint8_t extra_param,float extra_value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[13];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, session);
-	_mav_put_uint8_t(buf, 3, zoom_pos);
-	_mav_put_int8_t(buf, 4, zoom_step);
-	_mav_put_uint8_t(buf, 5, focus_lock);
-	_mav_put_uint8_t(buf, 6, shot);
-	_mav_put_uint8_t(buf, 7, command_id);
-	_mav_put_uint8_t(buf, 8, extra_param);
-	_mav_put_float(buf, 9, extra_value);
+    char buf[13];
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+    _mav_put_uint8_t(buf, 2, session);
+    _mav_put_uint8_t(buf, 3, zoom_pos);
+    _mav_put_int8_t(buf, 4, zoom_step);
+    _mav_put_uint8_t(buf, 5, focus_lock);
+    _mav_put_uint8_t(buf, 6, shot);
+    _mav_put_uint8_t(buf, 7, command_id);
+    _mav_put_uint8_t(buf, 8, extra_param);
+    _mav_put_float(buf, 9, extra_value);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 13);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 13);
 #else
-	mavlink_digicam_control_t packet;
-	packet.target_system = target_system;
-	packet.target_component = target_component;
-	packet.session = session;
-	packet.zoom_pos = zoom_pos;
-	packet.zoom_step = zoom_step;
-	packet.focus_lock = focus_lock;
-	packet.shot = shot;
-	packet.command_id = command_id;
-	packet.extra_param = extra_param;
-	packet.extra_value = extra_value;
+    mavlink_digicam_control_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.session = session;
+    packet.zoom_pos = zoom_pos;
+    packet.zoom_step = zoom_step;
+    packet.focus_lock = focus_lock;
+    packet.shot = shot;
+    packet.command_id = command_id;
+    packet.extra_param = extra_param;
+    packet.extra_value = extra_value;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 13);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 13);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_DIGICAM_CONTROL;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 13);
+    msg->msgid = MAVLINK_MSG_ID_DIGICAM_CONTROL;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 13);
 }
 
 /**
@@ -159,7 +159,7 @@ static inline uint16_t mavlink_msg_digicam_control_pack_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_digicam_control_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_digicam_control_t* digicam_control)
 {
-	return mavlink_msg_digicam_control_pack(system_id, component_id, msg, digicam_control->target_system, digicam_control->target_component, digicam_control->session, digicam_control->zoom_pos, digicam_control->zoom_step, digicam_control->focus_lock, digicam_control->shot, digicam_control->command_id, digicam_control->extra_param, digicam_control->extra_value);
+    return mavlink_msg_digicam_control_pack(system_id, component_id, msg, digicam_control->target_system, digicam_control->target_component, digicam_control->session, digicam_control->zoom_pos, digicam_control->zoom_step, digicam_control->focus_lock, digicam_control->shot, digicam_control->command_id, digicam_control->extra_param, digicam_control->extra_value);
 }
 
 /**
@@ -182,33 +182,33 @@ static inline uint16_t mavlink_msg_digicam_control_encode(uint8_t system_id, uin
 static inline void mavlink_msg_digicam_control_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint8_t session, uint8_t zoom_pos, int8_t zoom_step, uint8_t focus_lock, uint8_t shot, uint8_t command_id, uint8_t extra_param, float extra_value)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[13];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, session);
-	_mav_put_uint8_t(buf, 3, zoom_pos);
-	_mav_put_int8_t(buf, 4, zoom_step);
-	_mav_put_uint8_t(buf, 5, focus_lock);
-	_mav_put_uint8_t(buf, 6, shot);
-	_mav_put_uint8_t(buf, 7, command_id);
-	_mav_put_uint8_t(buf, 8, extra_param);
-	_mav_put_float(buf, 9, extra_value);
+    char buf[13];
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+    _mav_put_uint8_t(buf, 2, session);
+    _mav_put_uint8_t(buf, 3, zoom_pos);
+    _mav_put_int8_t(buf, 4, zoom_step);
+    _mav_put_uint8_t(buf, 5, focus_lock);
+    _mav_put_uint8_t(buf, 6, shot);
+    _mav_put_uint8_t(buf, 7, command_id);
+    _mav_put_uint8_t(buf, 8, extra_param);
+    _mav_put_float(buf, 9, extra_value);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DIGICAM_CONTROL, buf, 13);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DIGICAM_CONTROL, buf, 13);
 #else
-	mavlink_digicam_control_t packet;
-	packet.target_system = target_system;
-	packet.target_component = target_component;
-	packet.session = session;
-	packet.zoom_pos = zoom_pos;
-	packet.zoom_step = zoom_step;
-	packet.focus_lock = focus_lock;
-	packet.shot = shot;
-	packet.command_id = command_id;
-	packet.extra_param = extra_param;
-	packet.extra_value = extra_value;
+    mavlink_digicam_control_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.session = session;
+    packet.zoom_pos = zoom_pos;
+    packet.zoom_step = zoom_step;
+    packet.focus_lock = focus_lock;
+    packet.shot = shot;
+    packet.command_id = command_id;
+    packet.extra_param = extra_param;
+    packet.extra_value = extra_value;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DIGICAM_CONTROL, (const char *)&packet, 13);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_DIGICAM_CONTROL, (const char *)&packet, 13);
 #endif
 }
 
@@ -224,7 +224,7 @@ static inline void mavlink_msg_digicam_control_send(mavlink_channel_t chan, uint
  */
 static inline uint8_t mavlink_msg_digicam_control_get_target_system(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+    return _MAV_RETURN_uint8_t(msg,  0);
 }
 
 /**
@@ -234,7 +234,7 @@ static inline uint8_t mavlink_msg_digicam_control_get_target_system(const mavlin
  */
 static inline uint8_t mavlink_msg_digicam_control_get_target_component(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  1);
+    return _MAV_RETURN_uint8_t(msg,  1);
 }
 
 /**
@@ -244,7 +244,7 @@ static inline uint8_t mavlink_msg_digicam_control_get_target_component(const mav
  */
 static inline uint8_t mavlink_msg_digicam_control_get_session(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  2);
+    return _MAV_RETURN_uint8_t(msg,  2);
 }
 
 /**
@@ -254,7 +254,7 @@ static inline uint8_t mavlink_msg_digicam_control_get_session(const mavlink_mess
  */
 static inline uint8_t mavlink_msg_digicam_control_get_zoom_pos(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  3);
+    return _MAV_RETURN_uint8_t(msg,  3);
 }
 
 /**
@@ -264,7 +264,7 @@ static inline uint8_t mavlink_msg_digicam_control_get_zoom_pos(const mavlink_mes
  */
 static inline int8_t mavlink_msg_digicam_control_get_zoom_step(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int8_t(msg,  4);
+    return _MAV_RETURN_int8_t(msg,  4);
 }
 
 /**
@@ -274,7 +274,7 @@ static inline int8_t mavlink_msg_digicam_control_get_zoom_step(const mavlink_mes
  */
 static inline uint8_t mavlink_msg_digicam_control_get_focus_lock(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  5);
+    return _MAV_RETURN_uint8_t(msg,  5);
 }
 
 /**
@@ -284,7 +284,7 @@ static inline uint8_t mavlink_msg_digicam_control_get_focus_lock(const mavlink_m
  */
 static inline uint8_t mavlink_msg_digicam_control_get_shot(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  6);
+    return _MAV_RETURN_uint8_t(msg,  6);
 }
 
 /**
@@ -294,7 +294,7 @@ static inline uint8_t mavlink_msg_digicam_control_get_shot(const mavlink_message
  */
 static inline uint8_t mavlink_msg_digicam_control_get_command_id(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  7);
+    return _MAV_RETURN_uint8_t(msg,  7);
 }
 
 /**
@@ -304,7 +304,7 @@ static inline uint8_t mavlink_msg_digicam_control_get_command_id(const mavlink_m
  */
 static inline uint8_t mavlink_msg_digicam_control_get_extra_param(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  8);
+    return _MAV_RETURN_uint8_t(msg,  8);
 }
 
 /**
@@ -314,7 +314,7 @@ static inline uint8_t mavlink_msg_digicam_control_get_extra_param(const mavlink_
  */
 static inline float mavlink_msg_digicam_control_get_extra_value(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  9);
+    return _MAV_RETURN_float(msg,  9);
 }
 
 /**
@@ -326,17 +326,17 @@ static inline float mavlink_msg_digicam_control_get_extra_value(const mavlink_me
 static inline void mavlink_msg_digicam_control_decode(const mavlink_message_t* msg, mavlink_digicam_control_t* digicam_control)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	digicam_control->target_system = mavlink_msg_digicam_control_get_target_system(msg);
-	digicam_control->target_component = mavlink_msg_digicam_control_get_target_component(msg);
-	digicam_control->session = mavlink_msg_digicam_control_get_session(msg);
-	digicam_control->zoom_pos = mavlink_msg_digicam_control_get_zoom_pos(msg);
-	digicam_control->zoom_step = mavlink_msg_digicam_control_get_zoom_step(msg);
-	digicam_control->focus_lock = mavlink_msg_digicam_control_get_focus_lock(msg);
-	digicam_control->shot = mavlink_msg_digicam_control_get_shot(msg);
-	digicam_control->command_id = mavlink_msg_digicam_control_get_command_id(msg);
-	digicam_control->extra_param = mavlink_msg_digicam_control_get_extra_param(msg);
-	digicam_control->extra_value = mavlink_msg_digicam_control_get_extra_value(msg);
+    digicam_control->target_system = mavlink_msg_digicam_control_get_target_system(msg);
+    digicam_control->target_component = mavlink_msg_digicam_control_get_target_component(msg);
+    digicam_control->session = mavlink_msg_digicam_control_get_session(msg);
+    digicam_control->zoom_pos = mavlink_msg_digicam_control_get_zoom_pos(msg);
+    digicam_control->zoom_step = mavlink_msg_digicam_control_get_zoom_step(msg);
+    digicam_control->focus_lock = mavlink_msg_digicam_control_get_focus_lock(msg);
+    digicam_control->shot = mavlink_msg_digicam_control_get_shot(msg);
+    digicam_control->command_id = mavlink_msg_digicam_control_get_command_id(msg);
+    digicam_control->extra_param = mavlink_msg_digicam_control_get_extra_param(msg);
+    digicam_control->extra_value = mavlink_msg_digicam_control_get_extra_value(msg);
 #else
-	memcpy(digicam_control, _MAV_PAYLOAD(msg), 13);
+    memcpy(digicam_control, _MAV_PAYLOAD(msg), 13);
 #endif
 }

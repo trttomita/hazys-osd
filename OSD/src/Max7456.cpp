@@ -65,8 +65,8 @@ void OSD::detectMode()
 
 void OSD::setMode(int themode)
 {
-		video_mode = themode;
-		video_center = themode == MAX7456_MODE_NTCS? MAX7456_CENTER_NTSC: MAX7456_CENTER_PAL;
+    video_mode = themode;
+    video_center = themode == MAX7456_MODE_NTCS? MAX7456_CENTER_NTSC: MAX7456_CENTER_PAL;
 }
 
 

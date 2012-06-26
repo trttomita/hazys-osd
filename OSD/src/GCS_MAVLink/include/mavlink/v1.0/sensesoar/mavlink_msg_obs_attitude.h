@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_obs_attitude_t
 {
- double quat[4]; ///< Quaternion re;im
+    double quat[4]; ///< Quaternion re;im
 } mavlink_obs_attitude_t;
 
 #define MAVLINK_MSG_ID_OBS_ATTITUDE_LEN 32
@@ -30,22 +30,22 @@ typedef struct __mavlink_obs_attitude_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_obs_attitude_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       const double *quat)
+        const double *quat)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[32];
+    char buf[32];
 
-	_mav_put_double_array(buf, 0, quat, 4);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 32);
+    _mav_put_double_array(buf, 0, quat, 4);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 32);
 #else
-	mavlink_obs_attitude_t packet;
+    mavlink_obs_attitude_t packet;
 
-	mav_array_memcpy(packet.quat, quat, sizeof(double)*4);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 32);
+    mav_array_memcpy(packet.quat, quat, sizeof(double)*4);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 32);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_OBS_ATTITUDE;
-	return mavlink_finalize_message(msg, system_id, component_id, 32, 146);
+    msg->msgid = MAVLINK_MSG_ID_OBS_ATTITUDE;
+    return mavlink_finalize_message(msg, system_id, component_id, 32, 146);
 }
 
 /**
@@ -58,23 +58,23 @@ static inline uint16_t mavlink_msg_obs_attitude_pack(uint8_t system_id, uint8_t 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_obs_attitude_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           const double *quat)
+        mavlink_message_t* msg,
+        const double *quat)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[32];
+    char buf[32];
 
-	_mav_put_double_array(buf, 0, quat, 4);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 32);
+    _mav_put_double_array(buf, 0, quat, 4);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 32);
 #else
-	mavlink_obs_attitude_t packet;
+    mavlink_obs_attitude_t packet;
 
-	mav_array_memcpy(packet.quat, quat, sizeof(double)*4);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 32);
+    mav_array_memcpy(packet.quat, quat, sizeof(double)*4);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 32);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_OBS_ATTITUDE;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 32, 146);
+    msg->msgid = MAVLINK_MSG_ID_OBS_ATTITUDE;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 32, 146);
 }
 
 /**
@@ -87,7 +87,7 @@ static inline uint16_t mavlink_msg_obs_attitude_pack_chan(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_obs_attitude_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_obs_attitude_t* obs_attitude)
 {
-	return mavlink_msg_obs_attitude_pack(system_id, component_id, msg, obs_attitude->quat);
+    return mavlink_msg_obs_attitude_pack(system_id, component_id, msg, obs_attitude->quat);
 }
 
 /**
@@ -101,15 +101,15 @@ static inline uint16_t mavlink_msg_obs_attitude_encode(uint8_t system_id, uint8_
 static inline void mavlink_msg_obs_attitude_send(mavlink_channel_t chan, const double *quat)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[32];
+    char buf[32];
 
-	_mav_put_double_array(buf, 0, quat, 4);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_ATTITUDE, buf, 32, 146);
+    _mav_put_double_array(buf, 0, quat, 4);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_ATTITUDE, buf, 32, 146);
 #else
-	mavlink_obs_attitude_t packet;
+    mavlink_obs_attitude_t packet;
 
-	mav_array_memcpy(packet.quat, quat, sizeof(double)*4);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_ATTITUDE, (const char *)&packet, 32, 146);
+    mav_array_memcpy(packet.quat, quat, sizeof(double)*4);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_ATTITUDE, (const char *)&packet, 32, 146);
 #endif
 }
 
@@ -125,7 +125,7 @@ static inline void mavlink_msg_obs_attitude_send(mavlink_channel_t chan, const d
  */
 static inline uint16_t mavlink_msg_obs_attitude_get_quat(const mavlink_message_t* msg, double *quat)
 {
-	return _MAV_RETURN_double_array(msg, quat, 4,  0);
+    return _MAV_RETURN_double_array(msg, quat, 4,  0);
 }
 
 /**
@@ -137,8 +137,8 @@ static inline uint16_t mavlink_msg_obs_attitude_get_quat(const mavlink_message_t
 static inline void mavlink_msg_obs_attitude_decode(const mavlink_message_t* msg, mavlink_obs_attitude_t* obs_attitude)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	mavlink_msg_obs_attitude_get_quat(msg, obs_attitude->quat);
+    mavlink_msg_obs_attitude_get_quat(msg, obs_attitude->quat);
 #else
-	memcpy(obs_attitude, _MAV_PAYLOAD(msg), 32);
+    memcpy(obs_attitude, _MAV_PAYLOAD(msg), 32);
 #endif
 }

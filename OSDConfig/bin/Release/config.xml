@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="us-ascii"?>
 <Config>
-  <ComPort>COM1</ComPort>
+  <ComPort>COM3</ComPort>
   <BootBuadRate>9600</BootBuadRate>
   <OsdBuadRate>57600</OsdBuadRate>
   <Pal>True</Pal>

@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_system_time_utc_t
 {
- uint32_t utc_date; ///< GPS UTC date ddmmyy
- uint32_t utc_time; ///< GPS UTC time hhmmss
+    uint32_t utc_date; ///< GPS UTC date ddmmyy
+    uint32_t utc_time; ///< GPS UTC time hhmmss
 } mavlink_system_time_utc_t;
 
 #define MAVLINK_MSG_ID_SYSTEM_TIME_UTC_LEN 8
@@ -33,24 +33,24 @@ typedef struct __mavlink_system_time_utc_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_time_utc_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint32_t utc_date, uint32_t utc_time)
+        uint32_t utc_date, uint32_t utc_time)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[8];
-	_mav_put_uint32_t(buf, 0, utc_date);
-	_mav_put_uint32_t(buf, 4, utc_time);
+    char buf[8];
+    _mav_put_uint32_t(buf, 0, utc_date);
+    _mav_put_uint32_t(buf, 4, utc_time);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 8);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 8);
 #else
-	mavlink_system_time_utc_t packet;
-	packet.utc_date = utc_date;
-	packet.utc_time = utc_time;
+    mavlink_system_time_utc_t packet;
+    packet.utc_date = utc_date;
+    packet.utc_time = utc_time;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 8);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 8);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_SYSTEM_TIME_UTC;
-	return mavlink_finalize_message(msg, system_id, component_id, 8);
+    msg->msgid = MAVLINK_MSG_ID_SYSTEM_TIME_UTC;
+    return mavlink_finalize_message(msg, system_id, component_id, 8);
 }
 
 /**
@@ -64,25 +64,25 @@ static inline uint16_t mavlink_msg_system_time_utc_pack(uint8_t system_id, uint8
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_time_utc_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           uint32_t utc_date,uint32_t utc_time)
+        mavlink_message_t* msg,
+        uint32_t utc_date,uint32_t utc_time)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[8];
-	_mav_put_uint32_t(buf, 0, utc_date);
-	_mav_put_uint32_t(buf, 4, utc_time);
+    char buf[8];
+    _mav_put_uint32_t(buf, 0, utc_date);
+    _mav_put_uint32_t(buf, 4, utc_time);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 8);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 8);
 #else
-	mavlink_system_time_utc_t packet;
-	packet.utc_date = utc_date;
-	packet.utc_time = utc_time;
+    mavlink_system_time_utc_t packet;
+    packet.utc_date = utc_date;
+    packet.utc_time = utc_time;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 8);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 8);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_SYSTEM_TIME_UTC;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 8);
+    msg->msgid = MAVLINK_MSG_ID_SYSTEM_TIME_UTC;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 8);
 }
 
 /**
@@ -95,7 +95,7 @@ static inline uint16_t mavlink_msg_system_time_utc_pack_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_system_time_utc_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_system_time_utc_t* system_time_utc)
 {
-	return mavlink_msg_system_time_utc_pack(system_id, component_id, msg, system_time_utc->utc_date, system_time_utc->utc_time);
+    return mavlink_msg_system_time_utc_pack(system_id, component_id, msg, system_time_utc->utc_date, system_time_utc->utc_time);
 }
 
 /**
@@ -110,17 +110,17 @@ static inline uint16_t mavlink_msg_system_time_utc_encode(uint8_t system_id, uin
 static inline void mavlink_msg_system_time_utc_send(mavlink_channel_t chan, uint32_t utc_date, uint32_t utc_time)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[8];
-	_mav_put_uint32_t(buf, 0, utc_date);
-	_mav_put_uint32_t(buf, 4, utc_time);
+    char buf[8];
+    _mav_put_uint32_t(buf, 0, utc_date);
+    _mav_put_uint32_t(buf, 4, utc_time);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME_UTC, buf, 8);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME_UTC, buf, 8);
 #else
-	mavlink_system_time_utc_t packet;
-	packet.utc_date = utc_date;
-	packet.utc_time = utc_time;
+    mavlink_system_time_utc_t packet;
+    packet.utc_date = utc_date;
+    packet.utc_time = utc_time;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME_UTC, (const char *)&packet, 8);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_TIME_UTC, (const char *)&packet, 8);
 #endif
 }
 
@@ -136,7 +136,7 @@ static inline void mavlink_msg_system_time_utc_send(mavlink_channel_t chan, uint
  */
 static inline uint32_t mavlink_msg_system_time_utc_get_utc_date(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint32_t(msg,  0);
+    return _MAV_RETURN_uint32_t(msg,  0);
 }
 
 /**
@@ -146,7 +146,7 @@ static inline uint32_t mavlink_msg_system_time_utc_get_utc_date(const mavlink_me
  */
 static inline uint32_t mavlink_msg_system_time_utc_get_utc_time(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint32_t(msg,  4);
+    return _MAV_RETURN_uint32_t(msg,  4);
 }
 
 /**
@@ -158,9 +158,9 @@ static inline uint32_t mavlink_msg_system_time_utc_get_utc_time(const mavlink_me
 static inline void mavlink_msg_system_time_utc_decode(const mavlink_message_t* msg, mavlink_system_time_utc_t* system_time_utc)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	system_time_utc->utc_date = mavlink_msg_system_time_utc_get_utc_date(msg);
-	system_time_utc->utc_time = mavlink_msg_system_time_utc_get_utc_time(msg);
+    system_time_utc->utc_date = mavlink_msg_system_time_utc_get_utc_date(msg);
+    system_time_utc->utc_time = mavlink_msg_system_time_utc_get_utc_time(msg);
 #else
-	memcpy(system_time_utc, _MAV_PAYLOAD(msg), 8);
+    memcpy(system_time_utc, _MAV_PAYLOAD(msg), 8);
 #endif
 }
