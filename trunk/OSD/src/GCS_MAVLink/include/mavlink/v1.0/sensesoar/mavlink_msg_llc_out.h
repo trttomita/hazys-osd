@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_llc_out_t
 {
- int16_t servoOut[4]; ///< Servo signal
- int16_t MotorOut[2]; ///< motor signal
+    int16_t servoOut[4]; ///< Servo signal
+    int16_t MotorOut[2]; ///< motor signal
 } mavlink_llc_out_t;
 
 #define MAVLINK_MSG_ID_LLC_OUT_LEN 12
@@ -34,24 +34,24 @@ typedef struct __mavlink_llc_out_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_llc_out_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       const int16_t *servoOut, const int16_t *MotorOut)
+        const int16_t *servoOut, const int16_t *MotorOut)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
+    char buf[12];
 
-	_mav_put_int16_t_array(buf, 0, servoOut, 4);
-	_mav_put_int16_t_array(buf, 8, MotorOut, 2);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
+    _mav_put_int16_t_array(buf, 0, servoOut, 4);
+    _mav_put_int16_t_array(buf, 8, MotorOut, 2);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
 #else
-	mavlink_llc_out_t packet;
+    mavlink_llc_out_t packet;
 
-	mav_array_memcpy(packet.servoOut, servoOut, sizeof(int16_t)*4);
-	mav_array_memcpy(packet.MotorOut, MotorOut, sizeof(int16_t)*2);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
+    mav_array_memcpy(packet.servoOut, servoOut, sizeof(int16_t)*4);
+    mav_array_memcpy(packet.MotorOut, MotorOut, sizeof(int16_t)*2);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_LLC_OUT;
-	return mavlink_finalize_message(msg, system_id, component_id, 12, 5);
+    msg->msgid = MAVLINK_MSG_ID_LLC_OUT;
+    return mavlink_finalize_message(msg, system_id, component_id, 12, 5);
 }
 
 /**
@@ -65,25 +65,25 @@ static inline uint16_t mavlink_msg_llc_out_pack(uint8_t system_id, uint8_t compo
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_llc_out_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           const int16_t *servoOut,const int16_t *MotorOut)
+        mavlink_message_t* msg,
+        const int16_t *servoOut,const int16_t *MotorOut)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
+    char buf[12];
 
-	_mav_put_int16_t_array(buf, 0, servoOut, 4);
-	_mav_put_int16_t_array(buf, 8, MotorOut, 2);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
+    _mav_put_int16_t_array(buf, 0, servoOut, 4);
+    _mav_put_int16_t_array(buf, 8, MotorOut, 2);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
 #else
-	mavlink_llc_out_t packet;
+    mavlink_llc_out_t packet;
 
-	mav_array_memcpy(packet.servoOut, servoOut, sizeof(int16_t)*4);
-	mav_array_memcpy(packet.MotorOut, MotorOut, sizeof(int16_t)*2);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
+    mav_array_memcpy(packet.servoOut, servoOut, sizeof(int16_t)*4);
+    mav_array_memcpy(packet.MotorOut, MotorOut, sizeof(int16_t)*2);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_LLC_OUT;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 12, 5);
+    msg->msgid = MAVLINK_MSG_ID_LLC_OUT;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 12, 5);
 }
 
 /**
@@ -96,7 +96,7 @@ static inline uint16_t mavlink_msg_llc_out_pack_chan(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_llc_out_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_llc_out_t* llc_out)
 {
-	return mavlink_msg_llc_out_pack(system_id, component_id, msg, llc_out->servoOut, llc_out->MotorOut);
+    return mavlink_msg_llc_out_pack(system_id, component_id, msg, llc_out->servoOut, llc_out->MotorOut);
 }
 
 /**
@@ -111,17 +111,17 @@ static inline uint16_t mavlink_msg_llc_out_encode(uint8_t system_id, uint8_t com
 static inline void mavlink_msg_llc_out_send(mavlink_channel_t chan, const int16_t *servoOut, const int16_t *MotorOut)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
+    char buf[12];
 
-	_mav_put_int16_t_array(buf, 0, servoOut, 4);
-	_mav_put_int16_t_array(buf, 8, MotorOut, 2);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LLC_OUT, buf, 12, 5);
+    _mav_put_int16_t_array(buf, 0, servoOut, 4);
+    _mav_put_int16_t_array(buf, 8, MotorOut, 2);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LLC_OUT, buf, 12, 5);
 #else
-	mavlink_llc_out_t packet;
+    mavlink_llc_out_t packet;
 
-	mav_array_memcpy(packet.servoOut, servoOut, sizeof(int16_t)*4);
-	mav_array_memcpy(packet.MotorOut, MotorOut, sizeof(int16_t)*2);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LLC_OUT, (const char *)&packet, 12, 5);
+    mav_array_memcpy(packet.servoOut, servoOut, sizeof(int16_t)*4);
+    mav_array_memcpy(packet.MotorOut, MotorOut, sizeof(int16_t)*2);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LLC_OUT, (const char *)&packet, 12, 5);
 #endif
 }
 
@@ -137,7 +137,7 @@ static inline void mavlink_msg_llc_out_send(mavlink_channel_t chan, const int16_
  */
 static inline uint16_t mavlink_msg_llc_out_get_servoOut(const mavlink_message_t* msg, int16_t *servoOut)
 {
-	return _MAV_RETURN_int16_t_array(msg, servoOut, 4,  0);
+    return _MAV_RETURN_int16_t_array(msg, servoOut, 4,  0);
 }
 
 /**
@@ -147,7 +147,7 @@ static inline uint16_t mavlink_msg_llc_out_get_servoOut(const mavlink_message_t*
  */
 static inline uint16_t mavlink_msg_llc_out_get_MotorOut(const mavlink_message_t* msg, int16_t *MotorOut)
 {
-	return _MAV_RETURN_int16_t_array(msg, MotorOut, 2,  8);
+    return _MAV_RETURN_int16_t_array(msg, MotorOut, 2,  8);
 }
 
 /**
@@ -159,9 +159,9 @@ static inline uint16_t mavlink_msg_llc_out_get_MotorOut(const mavlink_message_t*
 static inline void mavlink_msg_llc_out_decode(const mavlink_message_t* msg, mavlink_llc_out_t* llc_out)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	mavlink_msg_llc_out_get_servoOut(msg, llc_out->servoOut);
-	mavlink_msg_llc_out_get_MotorOut(msg, llc_out->MotorOut);
+    mavlink_msg_llc_out_get_servoOut(msg, llc_out->servoOut);
+    mavlink_msg_llc_out_get_MotorOut(msg, llc_out->MotorOut);
 #else
-	memcpy(llc_out, _MAV_PAYLOAD(msg), 12);
+    memcpy(llc_out, _MAV_PAYLOAD(msg), 12);
 #endif
 }

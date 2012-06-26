@@ -4,13 +4,13 @@
 
 typedef struct __mavlink_local_position_ned_t
 {
- uint32_t time_boot_ms; ///< Timestamp (milliseconds since system boot)
- float x; ///< X Position
- float y; ///< Y Position
- float z; ///< Z Position
- float vx; ///< X Speed
- float vy; ///< Y Speed
- float vz; ///< Z Speed
+    uint32_t time_boot_ms; ///< Timestamp (milliseconds since system boot)
+    float x; ///< X Position
+    float y; ///< Y Position
+    float z; ///< Z Position
+    float vx; ///< X Speed
+    float vy; ///< Y Speed
+    float vz; ///< Z Speed
 } mavlink_local_position_ned_t;
 
 #define MAVLINK_MSG_ID_LOCAL_POSITION_NED_LEN 28
@@ -48,34 +48,34 @@ typedef struct __mavlink_local_position_ned_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_local_position_ned_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint32_t time_boot_ms, float x, float y, float z, float vx, float vy, float vz)
+        uint32_t time_boot_ms, float x, float y, float z, float vx, float vy, float vz)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[28];
-	_mav_put_uint32_t(buf, 0, time_boot_ms);
-	_mav_put_float(buf, 4, x);
-	_mav_put_float(buf, 8, y);
-	_mav_put_float(buf, 12, z);
-	_mav_put_float(buf, 16, vx);
-	_mav_put_float(buf, 20, vy);
-	_mav_put_float(buf, 24, vz);
+    char buf[28];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_float(buf, 4, x);
+    _mav_put_float(buf, 8, y);
+    _mav_put_float(buf, 12, z);
+    _mav_put_float(buf, 16, vx);
+    _mav_put_float(buf, 20, vy);
+    _mav_put_float(buf, 24, vz);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 28);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 28);
 #else
-	mavlink_local_position_ned_t packet;
-	packet.time_boot_ms = time_boot_ms;
-	packet.x = x;
-	packet.y = y;
-	packet.z = z;
-	packet.vx = vx;
-	packet.vy = vy;
-	packet.vz = vz;
+    mavlink_local_position_ned_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 28);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 28);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_LOCAL_POSITION_NED;
-	return mavlink_finalize_message(msg, system_id, component_id, 28, 185);
+    msg->msgid = MAVLINK_MSG_ID_LOCAL_POSITION_NED;
+    return mavlink_finalize_message(msg, system_id, component_id, 28, 185);
 }
 
 /**
@@ -94,35 +94,35 @@ static inline uint16_t mavlink_msg_local_position_ned_pack(uint8_t system_id, ui
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_local_position_ned_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           uint32_t time_boot_ms,float x,float y,float z,float vx,float vy,float vz)
+        mavlink_message_t* msg,
+        uint32_t time_boot_ms,float x,float y,float z,float vx,float vy,float vz)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[28];
-	_mav_put_uint32_t(buf, 0, time_boot_ms);
-	_mav_put_float(buf, 4, x);
-	_mav_put_float(buf, 8, y);
-	_mav_put_float(buf, 12, z);
-	_mav_put_float(buf, 16, vx);
-	_mav_put_float(buf, 20, vy);
-	_mav_put_float(buf, 24, vz);
+    char buf[28];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_float(buf, 4, x);
+    _mav_put_float(buf, 8, y);
+    _mav_put_float(buf, 12, z);
+    _mav_put_float(buf, 16, vx);
+    _mav_put_float(buf, 20, vy);
+    _mav_put_float(buf, 24, vz);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 28);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 28);
 #else
-	mavlink_local_position_ned_t packet;
-	packet.time_boot_ms = time_boot_ms;
-	packet.x = x;
-	packet.y = y;
-	packet.z = z;
-	packet.vx = vx;
-	packet.vy = vy;
-	packet.vz = vz;
+    mavlink_local_position_ned_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 28);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 28);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_LOCAL_POSITION_NED;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 28, 185);
+    msg->msgid = MAVLINK_MSG_ID_LOCAL_POSITION_NED;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 28, 185);
 }
 
 /**
@@ -135,7 +135,7 @@ static inline uint16_t mavlink_msg_local_position_ned_pack_chan(uint8_t system_i
  */
 static inline uint16_t mavlink_msg_local_position_ned_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_local_position_ned_t* local_position_ned)
 {
-	return mavlink_msg_local_position_ned_pack(system_id, component_id, msg, local_position_ned->time_boot_ms, local_position_ned->x, local_position_ned->y, local_position_ned->z, local_position_ned->vx, local_position_ned->vy, local_position_ned->vz);
+    return mavlink_msg_local_position_ned_pack(system_id, component_id, msg, local_position_ned->time_boot_ms, local_position_ned->x, local_position_ned->y, local_position_ned->z, local_position_ned->vx, local_position_ned->vy, local_position_ned->vz);
 }
 
 /**
@@ -155,27 +155,27 @@ static inline uint16_t mavlink_msg_local_position_ned_encode(uint8_t system_id, 
 static inline void mavlink_msg_local_position_ned_send(mavlink_channel_t chan, uint32_t time_boot_ms, float x, float y, float z, float vx, float vy, float vz)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[28];
-	_mav_put_uint32_t(buf, 0, time_boot_ms);
-	_mav_put_float(buf, 4, x);
-	_mav_put_float(buf, 8, y);
-	_mav_put_float(buf, 12, z);
-	_mav_put_float(buf, 16, vx);
-	_mav_put_float(buf, 20, vy);
-	_mav_put_float(buf, 24, vz);
+    char buf[28];
+    _mav_put_uint32_t(buf, 0, time_boot_ms);
+    _mav_put_float(buf, 4, x);
+    _mav_put_float(buf, 8, y);
+    _mav_put_float(buf, 12, z);
+    _mav_put_float(buf, 16, vx);
+    _mav_put_float(buf, 20, vy);
+    _mav_put_float(buf, 24, vz);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_NED, buf, 28, 185);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_NED, buf, 28, 185);
 #else
-	mavlink_local_position_ned_t packet;
-	packet.time_boot_ms = time_boot_ms;
-	packet.x = x;
-	packet.y = y;
-	packet.z = z;
-	packet.vx = vx;
-	packet.vy = vy;
-	packet.vz = vz;
+    mavlink_local_position_ned_t packet;
+    packet.time_boot_ms = time_boot_ms;
+    packet.x = x;
+    packet.y = y;
+    packet.z = z;
+    packet.vx = vx;
+    packet.vy = vy;
+    packet.vz = vz;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_NED, (const char *)&packet, 28, 185);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LOCAL_POSITION_NED, (const char *)&packet, 28, 185);
 #endif
 }
 
@@ -191,7 +191,7 @@ static inline void mavlink_msg_local_position_ned_send(mavlink_channel_t chan, u
  */
 static inline uint32_t mavlink_msg_local_position_ned_get_time_boot_ms(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint32_t(msg,  0);
+    return _MAV_RETURN_uint32_t(msg,  0);
 }
 
 /**
@@ -201,7 +201,7 @@ static inline uint32_t mavlink_msg_local_position_ned_get_time_boot_ms(const mav
  */
 static inline float mavlink_msg_local_position_ned_get_x(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  4);
+    return _MAV_RETURN_float(msg,  4);
 }
 
 /**
@@ -211,7 +211,7 @@ static inline float mavlink_msg_local_position_ned_get_x(const mavlink_message_t
  */
 static inline float mavlink_msg_local_position_ned_get_y(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  8);
+    return _MAV_RETURN_float(msg,  8);
 }
 
 /**
@@ -221,7 +221,7 @@ static inline float mavlink_msg_local_position_ned_get_y(const mavlink_message_t
  */
 static inline float mavlink_msg_local_position_ned_get_z(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  12);
+    return _MAV_RETURN_float(msg,  12);
 }
 
 /**
@@ -231,7 +231,7 @@ static inline float mavlink_msg_local_position_ned_get_z(const mavlink_message_t
  */
 static inline float mavlink_msg_local_position_ned_get_vx(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  16);
+    return _MAV_RETURN_float(msg,  16);
 }
 
 /**
@@ -241,7 +241,7 @@ static inline float mavlink_msg_local_position_ned_get_vx(const mavlink_message_
  */
 static inline float mavlink_msg_local_position_ned_get_vy(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  20);
+    return _MAV_RETURN_float(msg,  20);
 }
 
 /**
@@ -251,7 +251,7 @@ static inline float mavlink_msg_local_position_ned_get_vy(const mavlink_message_
  */
 static inline float mavlink_msg_local_position_ned_get_vz(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_float(msg,  24);
+    return _MAV_RETURN_float(msg,  24);
 }
 
 /**
@@ -263,14 +263,14 @@ static inline float mavlink_msg_local_position_ned_get_vz(const mavlink_message_
 static inline void mavlink_msg_local_position_ned_decode(const mavlink_message_t* msg, mavlink_local_position_ned_t* local_position_ned)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	local_position_ned->time_boot_ms = mavlink_msg_local_position_ned_get_time_boot_ms(msg);
-	local_position_ned->x = mavlink_msg_local_position_ned_get_x(msg);
-	local_position_ned->y = mavlink_msg_local_position_ned_get_y(msg);
-	local_position_ned->z = mavlink_msg_local_position_ned_get_z(msg);
-	local_position_ned->vx = mavlink_msg_local_position_ned_get_vx(msg);
-	local_position_ned->vy = mavlink_msg_local_position_ned_get_vy(msg);
-	local_position_ned->vz = mavlink_msg_local_position_ned_get_vz(msg);
+    local_position_ned->time_boot_ms = mavlink_msg_local_position_ned_get_time_boot_ms(msg);
+    local_position_ned->x = mavlink_msg_local_position_ned_get_x(msg);
+    local_position_ned->y = mavlink_msg_local_position_ned_get_y(msg);
+    local_position_ned->z = mavlink_msg_local_position_ned_get_z(msg);
+    local_position_ned->vx = mavlink_msg_local_position_ned_get_vx(msg);
+    local_position_ned->vy = mavlink_msg_local_position_ned_get_vy(msg);
+    local_position_ned->vz = mavlink_msg_local_position_ned_get_vz(msg);
 #else
-	memcpy(local_position_ned, _MAV_PAYLOAD(msg), 28);
+    memcpy(local_position_ned, _MAV_PAYLOAD(msg), 28);
 #endif
 }

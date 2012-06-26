@@ -4,9 +4,9 @@
 
 typedef struct __mavlink_waypoint_ack_t
 {
- uint8_t target_system; ///< System ID
- uint8_t target_component; ///< Component ID
- uint8_t type; ///< 0: OK, 1: Error
+    uint8_t target_system; ///< System ID
+    uint8_t target_component; ///< Component ID
+    uint8_t type; ///< 0: OK, 1: Error
 } mavlink_waypoint_ack_t;
 
 #define MAVLINK_MSG_ID_WAYPOINT_ACK_LEN 3
@@ -36,26 +36,26 @@ typedef struct __mavlink_waypoint_ack_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_waypoint_ack_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target_system, uint8_t target_component, uint8_t type)
+        uint8_t target_system, uint8_t target_component, uint8_t type)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[3];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, type);
+    char buf[3];
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+    _mav_put_uint8_t(buf, 2, type);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 3);
 #else
-	mavlink_waypoint_ack_t packet;
-	packet.target_system = target_system;
-	packet.target_component = target_component;
-	packet.type = type;
+    mavlink_waypoint_ack_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.type = type;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 3);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_WAYPOINT_ACK;
-	return mavlink_finalize_message(msg, system_id, component_id, 3);
+    msg->msgid = MAVLINK_MSG_ID_WAYPOINT_ACK;
+    return mavlink_finalize_message(msg, system_id, component_id, 3);
 }
 
 /**
@@ -70,27 +70,27 @@ static inline uint16_t mavlink_msg_waypoint_ack_pack(uint8_t system_id, uint8_t 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_waypoint_ack_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           uint8_t target_system,uint8_t target_component,uint8_t type)
+        mavlink_message_t* msg,
+        uint8_t target_system,uint8_t target_component,uint8_t type)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[3];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, type);
+    char buf[3];
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+    _mav_put_uint8_t(buf, 2, type);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 3);
 #else
-	mavlink_waypoint_ack_t packet;
-	packet.target_system = target_system;
-	packet.target_component = target_component;
-	packet.type = type;
+    mavlink_waypoint_ack_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.type = type;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 3);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_WAYPOINT_ACK;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 3);
+    msg->msgid = MAVLINK_MSG_ID_WAYPOINT_ACK;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 3);
 }
 
 /**
@@ -103,7 +103,7 @@ static inline uint16_t mavlink_msg_waypoint_ack_pack_chan(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_waypoint_ack_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_waypoint_ack_t* waypoint_ack)
 {
-	return mavlink_msg_waypoint_ack_pack(system_id, component_id, msg, waypoint_ack->target_system, waypoint_ack->target_component, waypoint_ack->type);
+    return mavlink_msg_waypoint_ack_pack(system_id, component_id, msg, waypoint_ack->target_system, waypoint_ack->target_component, waypoint_ack->type);
 }
 
 /**
@@ -119,19 +119,19 @@ static inline uint16_t mavlink_msg_waypoint_ack_encode(uint8_t system_id, uint8_
 static inline void mavlink_msg_waypoint_ack_send(mavlink_channel_t chan, uint8_t target_system, uint8_t target_component, uint8_t type)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[3];
-	_mav_put_uint8_t(buf, 0, target_system);
-	_mav_put_uint8_t(buf, 1, target_component);
-	_mav_put_uint8_t(buf, 2, type);
+    char buf[3];
+    _mav_put_uint8_t(buf, 0, target_system);
+    _mav_put_uint8_t(buf, 1, target_component);
+    _mav_put_uint8_t(buf, 2, type);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WAYPOINT_ACK, buf, 3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WAYPOINT_ACK, buf, 3);
 #else
-	mavlink_waypoint_ack_t packet;
-	packet.target_system = target_system;
-	packet.target_component = target_component;
-	packet.type = type;
+    mavlink_waypoint_ack_t packet;
+    packet.target_system = target_system;
+    packet.target_component = target_component;
+    packet.type = type;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WAYPOINT_ACK, (const char *)&packet, 3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WAYPOINT_ACK, (const char *)&packet, 3);
 #endif
 }
 
@@ -147,7 +147,7 @@ static inline void mavlink_msg_waypoint_ack_send(mavlink_channel_t chan, uint8_t
  */
 static inline uint8_t mavlink_msg_waypoint_ack_get_target_system(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+    return _MAV_RETURN_uint8_t(msg,  0);
 }
 
 /**
@@ -157,7 +157,7 @@ static inline uint8_t mavlink_msg_waypoint_ack_get_target_system(const mavlink_m
  */
 static inline uint8_t mavlink_msg_waypoint_ack_get_target_component(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  1);
+    return _MAV_RETURN_uint8_t(msg,  1);
 }
 
 /**
@@ -167,7 +167,7 @@ static inline uint8_t mavlink_msg_waypoint_ack_get_target_component(const mavlin
  */
 static inline uint8_t mavlink_msg_waypoint_ack_get_type(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  2);
+    return _MAV_RETURN_uint8_t(msg,  2);
 }
 
 /**
@@ -179,10 +179,10 @@ static inline uint8_t mavlink_msg_waypoint_ack_get_type(const mavlink_message_t*
 static inline void mavlink_msg_waypoint_ack_decode(const mavlink_message_t* msg, mavlink_waypoint_ack_t* waypoint_ack)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	waypoint_ack->target_system = mavlink_msg_waypoint_ack_get_target_system(msg);
-	waypoint_ack->target_component = mavlink_msg_waypoint_ack_get_target_component(msg);
-	waypoint_ack->type = mavlink_msg_waypoint_ack_get_type(msg);
+    waypoint_ack->target_system = mavlink_msg_waypoint_ack_get_target_system(msg);
+    waypoint_ack->target_component = mavlink_msg_waypoint_ack_get_target_component(msg);
+    waypoint_ack->type = mavlink_msg_waypoint_ack_get_type(msg);
 #else
-	memcpy(waypoint_ack, _MAV_PAYLOAD(msg), 3);
+    memcpy(waypoint_ack, _MAV_PAYLOAD(msg), 3);
 #endif
 }

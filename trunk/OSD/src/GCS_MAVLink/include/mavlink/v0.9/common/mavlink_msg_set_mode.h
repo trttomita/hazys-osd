@@ -4,8 +4,8 @@
 
 typedef struct __mavlink_set_mode_t
 {
- uint8_t target; ///< The system setting the mode
- uint8_t mode; ///< The new mode
+    uint8_t target; ///< The system setting the mode
+    uint8_t mode; ///< The new mode
 } mavlink_set_mode_t;
 
 #define MAVLINK_MSG_ID_SET_MODE_LEN 2
@@ -33,24 +33,24 @@ typedef struct __mavlink_set_mode_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_set_mode_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint8_t target, uint8_t mode)
+        uint8_t target, uint8_t mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[2];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, mode);
+    char buf[2];
+    _mav_put_uint8_t(buf, 0, target);
+    _mav_put_uint8_t(buf, 1, mode);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 2);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 2);
 #else
-	mavlink_set_mode_t packet;
-	packet.target = target;
-	packet.mode = mode;
+    mavlink_set_mode_t packet;
+    packet.target = target;
+    packet.mode = mode;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 2);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 2);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_SET_MODE;
-	return mavlink_finalize_message(msg, system_id, component_id, 2);
+    msg->msgid = MAVLINK_MSG_ID_SET_MODE;
+    return mavlink_finalize_message(msg, system_id, component_id, 2);
 }
 
 /**
@@ -64,25 +64,25 @@ static inline uint16_t mavlink_msg_set_mode_pack(uint8_t system_id, uint8_t comp
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_set_mode_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           uint8_t target,uint8_t mode)
+        mavlink_message_t* msg,
+        uint8_t target,uint8_t mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[2];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, mode);
+    char buf[2];
+    _mav_put_uint8_t(buf, 0, target);
+    _mav_put_uint8_t(buf, 1, mode);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 2);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 2);
 #else
-	mavlink_set_mode_t packet;
-	packet.target = target;
-	packet.mode = mode;
+    mavlink_set_mode_t packet;
+    packet.target = target;
+    packet.mode = mode;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 2);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 2);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_SET_MODE;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 2);
+    msg->msgid = MAVLINK_MSG_ID_SET_MODE;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 2);
 }
 
 /**
@@ -95,7 +95,7 @@ static inline uint16_t mavlink_msg_set_mode_pack_chan(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_set_mode_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_set_mode_t* set_mode)
 {
-	return mavlink_msg_set_mode_pack(system_id, component_id, msg, set_mode->target, set_mode->mode);
+    return mavlink_msg_set_mode_pack(system_id, component_id, msg, set_mode->target, set_mode->mode);
 }
 
 /**
@@ -110,17 +110,17 @@ static inline uint16_t mavlink_msg_set_mode_encode(uint8_t system_id, uint8_t co
 static inline void mavlink_msg_set_mode_send(mavlink_channel_t chan, uint8_t target, uint8_t mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[2];
-	_mav_put_uint8_t(buf, 0, target);
-	_mav_put_uint8_t(buf, 1, mode);
+    char buf[2];
+    _mav_put_uint8_t(buf, 0, target);
+    _mav_put_uint8_t(buf, 1, mode);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, buf, 2);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, buf, 2);
 #else
-	mavlink_set_mode_t packet;
-	packet.target = target;
-	packet.mode = mode;
+    mavlink_set_mode_t packet;
+    packet.target = target;
+    packet.mode = mode;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, (const char *)&packet, 2);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SET_MODE, (const char *)&packet, 2);
 #endif
 }
 
@@ -136,7 +136,7 @@ static inline void mavlink_msg_set_mode_send(mavlink_channel_t chan, uint8_t tar
  */
 static inline uint8_t mavlink_msg_set_mode_get_target(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  0);
+    return _MAV_RETURN_uint8_t(msg,  0);
 }
 
 /**
@@ -146,7 +146,7 @@ static inline uint8_t mavlink_msg_set_mode_get_target(const mavlink_message_t* m
  */
 static inline uint8_t mavlink_msg_set_mode_get_mode(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint8_t(msg,  1);
+    return _MAV_RETURN_uint8_t(msg,  1);
 }
 
 /**
@@ -158,9 +158,9 @@ static inline uint8_t mavlink_msg_set_mode_get_mode(const mavlink_message_t* msg
 static inline void mavlink_msg_set_mode_decode(const mavlink_message_t* msg, mavlink_set_mode_t* set_mode)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	set_mode->target = mavlink_msg_set_mode_get_target(msg);
-	set_mode->mode = mavlink_msg_set_mode_get_mode(msg);
+    set_mode->target = mavlink_msg_set_mode_get_target(msg);
+    set_mode->mode = mavlink_msg_set_mode_get_mode(msg);
 #else
-	memcpy(set_mode, _MAV_PAYLOAD(msg), 2);
+    memcpy(set_mode, _MAV_PAYLOAD(msg), 2);
 #endif
 }

@@ -9,7 +9,7 @@ extern "C" {
 
     void delay(unsigned long ms);
 
-		void delayMicroseconds(unsigned int us);
+    void delayMicroseconds(unsigned int us);
 
     unsigned long millis();
 

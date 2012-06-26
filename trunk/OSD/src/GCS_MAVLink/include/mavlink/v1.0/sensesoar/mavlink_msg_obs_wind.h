@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_obs_wind_t
 {
- float wind[3]; ///< Wind
+    float wind[3]; ///< Wind
 } mavlink_obs_wind_t;
 
 #define MAVLINK_MSG_ID_OBS_WIND_LEN 12
@@ -30,22 +30,22 @@ typedef struct __mavlink_obs_wind_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_obs_wind_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       const float *wind)
+        const float *wind)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
+    char buf[12];
 
-	_mav_put_float_array(buf, 0, wind, 3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
+    _mav_put_float_array(buf, 0, wind, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
 #else
-	mavlink_obs_wind_t packet;
+    mavlink_obs_wind_t packet;
 
-	mav_array_memcpy(packet.wind, wind, sizeof(float)*3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
+    mav_array_memcpy(packet.wind, wind, sizeof(float)*3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_OBS_WIND;
-	return mavlink_finalize_message(msg, system_id, component_id, 12, 16);
+    msg->msgid = MAVLINK_MSG_ID_OBS_WIND;
+    return mavlink_finalize_message(msg, system_id, component_id, 12, 16);
 }
 
 /**
@@ -58,23 +58,23 @@ static inline uint16_t mavlink_msg_obs_wind_pack(uint8_t system_id, uint8_t comp
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_obs_wind_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
-							   mavlink_message_t* msg,
-						           const float *wind)
+        mavlink_message_t* msg,
+        const float *wind)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
+    char buf[12];
 
-	_mav_put_float_array(buf, 0, wind, 3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
+    _mav_put_float_array(buf, 0, wind, 3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
 #else
-	mavlink_obs_wind_t packet;
+    mavlink_obs_wind_t packet;
 
-	mav_array_memcpy(packet.wind, wind, sizeof(float)*3);
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
+    mav_array_memcpy(packet.wind, wind, sizeof(float)*3);
+    memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
 #endif
 
-	msg->msgid = MAVLINK_MSG_ID_OBS_WIND;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 12, 16);
+    msg->msgid = MAVLINK_MSG_ID_OBS_WIND;
+    return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 12, 16);
 }
 
 /**
@@ -87,7 +87,7 @@ static inline uint16_t mavlink_msg_obs_wind_pack_chan(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_obs_wind_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_obs_wind_t* obs_wind)
 {
-	return mavlink_msg_obs_wind_pack(system_id, component_id, msg, obs_wind->wind);
+    return mavlink_msg_obs_wind_pack(system_id, component_id, msg, obs_wind->wind);
 }
 
 /**
@@ -101,15 +101,15 @@ static inline uint16_t mavlink_msg_obs_wind_encode(uint8_t system_id, uint8_t co
 static inline void mavlink_msg_obs_wind_send(mavlink_channel_t chan, const float *wind)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
+    char buf[12];
 
-	_mav_put_float_array(buf, 0, wind, 3);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_WIND, buf, 12, 16);
+    _mav_put_float_array(buf, 0, wind, 3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_WIND, buf, 12, 16);
 #else
-	mavlink_obs_wind_t packet;
+    mavlink_obs_wind_t packet;
 
-	mav_array_memcpy(packet.wind, wind, sizeof(float)*3);
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_WIND, (const char *)&packet, 12, 16);
+    mav_array_memcpy(packet.wind, wind, sizeof(float)*3);
+    _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OBS_WIND, (const char *)&packet, 12, 16);
 #endif
 }
 
@@ -125,7 +125,7 @@ static inline void mavlink_msg_obs_wind_send(mavlink_channel_t chan, const float
  */
 static inline uint16_t mavlink_msg_obs_wind_get_wind(const mavlink_message_t* msg, float *wind)
 {
-	return _MAV_RETURN_float_array(msg, wind, 3,  0);
+    return _MAV_RETURN_float_array(msg, wind, 3,  0);
 }
 
 /**
@@ -137,8 +137,8 @@ static inline uint16_t mavlink_msg_obs_wind_get_wind(const mavlink_message_t* ms
 static inline void mavlink_msg_obs_wind_decode(const mavlink_message_t* msg, mavlink_obs_wind_t* obs_wind)
 {
 #if MAVLINK_NEED_BYTE_SWAP
-	mavlink_msg_obs_wind_get_wind(msg, obs_wind->wind);
+    mavlink_msg_obs_wind_get_wind(msg, obs_wind->wind);
 #else
-	memcpy(obs_wind, _MAV_PAYLOAD(msg), 12);
+    memcpy(obs_wind, _MAV_PAYLOAD(msg), 12);
 #endif
 }

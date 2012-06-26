@@ -29,22 +29,26 @@ namespace OSDConfig
 
         //SerialPort comPort = new SerialPort();
         ArduOSDPort osdPort = new ArduOSDPort();
+        ADConfig adconfig = new ADConfig();
 
         int bootRate = 9600;
         int osdRate = 57600;
         string bgImage = "vlcsnap-2012-01-28-07h46m04s95.png";
 
+        bool fromOSD = true;
 
         public OSDConfigForm()
         {
             InitializeComponent();
 
             // load default font
+            osdPort.ReadTimeout = 2000;
+            adconfig.Port = osdPort;
 
+            for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
+                LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
+                    osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
 
-            for (int i = 0; i < OSDItemName.Name.Length; i++)
-                if (OSDItemName.Name[i] != null)
-                    LIST_items.Items.Add(OSDItemName.Name[i], osd.Setting.IsEnabled((OSDItem)i));
 
             osd.SelectedItemChanged += new EventHandler(osd_SelectedItemChanged);
             osd.ItemPositionChanged += new EventHandler(osd_ItemPositionChanged);
@@ -63,10 +67,24 @@ namespace OSDConfig
 
         void osd_SelectedItemChanged(object sender, EventArgs e)
         {
-            if (osd.SelectedItem == OSDItem.NULL)
-                LIST_items.SelectedItem = null;
-            else
-                LIST_items.SelectedItem = OSDItemName.Name[(int)osd.SelectedItem];
+            if (fromOSD)
+            {
+                if (osd.SelectedItem == OSDItem.NULL)
+                    LIST_items.SelectedItem = null;
+                else
+                {
+                    bool isalt = false;
+                    foreach (var alt in OSDItemList.Alternates)
+                        if (osd.SelectedItem == alt.Key && osd.Setting.IsEnabled(alt.Value))
+                        {
+                            LIST_items.SelectedItem = OSDItemList.Names[(int)alt.Value];
+                            isalt = true;
+                            break;
+                        }
+                    if (!isalt)
+                        LIST_items.SelectedItem = OSDItemList.Names[(int)osd.SelectedItem];
+                }
+            }
         }
 
 
@@ -133,9 +151,19 @@ namespace OSDConfig
             else
             {
                 string item = ((CheckedListBox)sender).SelectedItem.ToString();
-                OSDItem sel = (OSDItem)Array.IndexOf(OSDItemName.Name, item);
-                //currentlyselected = item;
+                OSDItem sel = (OSDItem)Array.IndexOf(OSDItemList.Names, item);
+
+
+                foreach (var alt in OSDItemList.Alternates)
+                    if (sel == alt.Value)
+                    {
+                        sel = alt.Key;
+                        break;
+                    }
+
+                fromOSD = false;
                 osd.SelectedItem = sel;
+                fromOSD = true;
 
                 Point p = osd.GetItemPosition(sel);
                 NUM_X.Value = p.X;
@@ -149,31 +177,46 @@ namespace OSDConfig
             // if (((CheckedListBox)sender).SelectedItem != null && ((CheckedListBox)sender).SelectedItem.ToString() == "Horizon")
             if (((CheckedListBox)sender).SelectedItem != null)
             {
-                OSDItem item = (OSDItem)Array.IndexOf(OSDItemName.Name, ((CheckedListBox)sender).SelectedItem);
-                if (item == OSDItem.Hor && e.NewValue == CheckState.Checked)
+                OSDItem item = (OSDItem)Array.IndexOf(OSDItemList.Names, ((CheckedListBox)sender).SelectedItem);
+
+                if (e.NewValue == CheckState.Checked)
                 {
-                    int index = LIST_items.Items.IndexOf(OSDItemName.Name[(int)OSDItem.Cen]);
-                    LIST_items.SetItemChecked(index, false);
-                    osd.SetItemEnabled(OSDItem.Cen, false);
+                    foreach (var conflict in OSDItemList.Conflits)
+                    {
+                        if (item == conflict.Key)
+                        {
+                            LIST_items.SetItemChecked(
+                                LIST_items.Items.IndexOf(OSDItemList.Names[(int)conflict.Value]), false);
+                            osd.SetItemEnabled(conflict.Value, false);
+                        }
+                        else if (item == conflict.Value)
+                        {
+                            LIST_items.SetItemChecked(
+                                LIST_items.Items.IndexOf(OSDItemList.Names[(int)conflict.Key]), false);
+                            osd.SetItemEnabled(conflict.Key, false);
+                        }
+                    }
                 }
-                else if (item == OSDItem.Cen && e.NewValue == CheckState.Checked)
+
+                foreach (var alt in OSDItemList.Alternates)
                 {
-                    int index = LIST_items.Items.IndexOf(OSDItemName.Name[(int)OSDItem.Hor]);
-                    LIST_items.SetItemChecked(index, false);
-                    osd.SetItemEnabled(OSDItem.Hor, false);
+                    if (item == alt.Key && e.NewValue == CheckState.Checked)
+                    {
+                        LIST_items.SetItemChecked(
+                               LIST_items.Items.IndexOf(OSDItemList.Names[(int)alt.Value]), false);
+                        osd.SetItemEnabled(alt.Value, false);
+                        break;
+                    }
+                    else if (item == alt.Value)
+                    {
+                        if (OSDItemList.Names[(int)alt.Key] != null && e.NewValue == CheckState.Checked)
+                            LIST_items.SetItemChecked(
+                                    LIST_items.Items.IndexOf(OSDItemList.Names[(int)alt.Key]), false);
+                        osd.SetItemEnabled(alt.Key, e.NewValue == CheckState.Checked);
+                        break;
+                    }
                 }
-                else if (item == OSDItem.Alt && e.NewValue == CheckState.Checked)
-                {
-                    int index = LIST_items.Items.IndexOf(OSDItemName.Name[(int)OSDItem.Alt_R]);
-                    LIST_items.SetItemChecked(index, false);
-                    osd.SetItemEnabled(OSDItem.Alt_R, false);
-                }
-                else if (item == OSDItem.Alt_R && e.NewValue == CheckState.Checked)
-                {
-                    int index = LIST_items.Items.IndexOf(OSDItemName.Name[(int)OSDItem.Alt]);
-                    LIST_items.SetItemChecked(index, false);
-                    osd.SetItemEnabled(OSDItem.Alt, false);
-                }
+
                 osd.SetItemEnabled(item, e.NewValue == CheckState.Checked);
             }
 
@@ -192,17 +235,20 @@ namespace OSDConfig
 
             osdPort.PortName = CMB_ComPort.Text;
             osdPort.Open();
-            if (osdPort.UploadSetting(osd.Setting))
+            bool ok = osdPort.UploadSetting(osd.Setting);
+            osdPort.Close();
+            if (ok)
             {
-                toolStripProgressBar1.Value = 100;
-                toolStripStatusLabel1.Text = "Write OSD Done";
+                MessageBox.Show(this, "Write OSD Done", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //toolStripProgressBar1.Value = 100;
+                //toolStripStatusLabel1.Text = "Write OSD Done";
             }
             else
             {
-                toolStripStatusLabel1.Text = "Write OSD Failed";
-                toolStripProgressBar1.Value = 0;
+                MessageBox.Show(this, "Write OSD Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //toolStripStatusLabel1.Text = "Write OSD Failed";
+                //toolStripProgressBar1.Value = 0;
             }
-            osdPort.Close();
         }
 
 
@@ -212,7 +258,32 @@ namespace OSDConfig
             osd.Draw();
         }
 
+        void LoadSetting(OSDSetting setting)
+        {
+            for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
+            {
+                bool alt = false;
+                foreach (var a in OSDItemList.Alternates)
+                    if (OSDItemList.Avaliable[i] == a.Key && setting.IsEnabled(a.Value))
+                    {
+                        LIST_items.SetItemChecked(i, false);
+                        alt = true;
+                    }
 
+                if (!alt)
+                    LIST_items.SetItemChecked(i, setting.IsEnabled(OSDItemList.Avaliable[i]));
+            }
+
+
+            var adc = new List<ADSetting>();
+            adc.Add(setting.vbat_a);
+            adc.Add(setting.vbat_b);
+            adc.Add(setting.rssi);
+            adconfig.Configs = adc;
+
+            osd.Setting = setting;
+            osd.Draw();
+        }
 
         private void BUT_ReadOSD_Click(object sender, EventArgs e)
         {
@@ -225,23 +296,20 @@ namespace OSDConfig
             OSDSetting setting;
             osdPort.PortName = CMB_ComPort.Text;
             osdPort.Open();
-            if (osdPort.GetSetting(out setting))
+            bool ok = osdPort.GetSetting(out setting);
+            osdPort.Close();
+            if (ok)
             {
-                osd.Setting = setting;
-
-                //reload 
-                LIST_items.Items.Clear();
-                for (int i = 0; i < OSDItemName.Name.Length; i++)
-                    if (OSDItemName.Name[i] != null)
-                        LIST_items.Items.Add(OSDItemName.Name[i], osd.Setting.IsEnabled((OSDItem)i));
-                osd.Draw();
-                toolStripProgressBar1.Value = 100;
-                toolStripStatusLabel1.Text = "Read OSD Done";
+                LoadSetting(setting);
+                MessageBox.Show(this, "Read OSD Done", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //toolStripProgressBar1.Value = 100;
+                //toolStripStatusLabel1.Text = "Read OSD Done";
             }
             else
             {
-                toolStripStatusLabel1.Text = "Read OSD Failed";
-                toolStripProgressBar1.Value = 0;
+                MessageBox.Show(this, "Read OSD Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //toolStripStatusLabel1.Text = "Read OSD Failed";
+                //toolStripProgressBar1.Value = 0;
             }
             osdPort.Close();
         }
@@ -303,11 +371,12 @@ namespace OSDConfig
                     using (Stream f = ofd.OpenFile())
                     {
                         OSDSetting setting = new OSDSetting();
-                        byte[] buf = new byte[64];
+                        byte[] buf = new byte[128];
                         f.Read(buf, 0, 4);
                         f.Read(buf, 0, BitConverter.ToInt32(buf, 0));
                         setting.FromBytes(buf, 0);
-                        osd.Setting = setting;
+                        //osd.Setting = setting;
+                        LoadSetting(setting);
                     }
                 }
                 catch
@@ -660,7 +729,15 @@ namespace OSDConfig
         {
             try
             {
-                OSDItem info = (OSDItem)Array.IndexOf(OSDItemName.Name, LIST_items.SelectedItem.ToString());
+                OSDItem info = (OSDItem)Array.IndexOf(OSDItemList.Names, LIST_items.SelectedItem.ToString());
+
+                foreach (var alt in OSDItemList.Alternates)
+                    if (info == alt.Value)
+                    {
+                        info = alt.Key;
+                        break;
+                    }
+
                 osd.SetItemPosition(info, new Point((int)NUM_X.Value, (int)NUM_Y.Value));
                 osd.Draw();
             }
@@ -682,8 +759,8 @@ namespace OSDConfig
         private void configADCToolStripMenuItem_Click(object sender, EventArgs e)
         {
             osdPort.PortName = CMB_ComPort.Text;
-            ADConfig dlg = new ADConfig();
-            dlg.Port = osdPort;
+            //ADConfig dlg = new ADConfig();
+            //dlg.Port = osdPort;
             /*
             dlg.ChannelConfigs[0].Value1 = osd.Setting.volt_value / 100.0;
             dlg.ChannelConfigs[0].Read1 = osd.Setting.volt_read;
@@ -693,13 +770,15 @@ namespace OSDConfig
             dlg.ChannelConfigs[1].Value2 = 0;
             dlg.ChannelConfigs[1].Read2 = osd.Setting.rssi_min;
             */
+            adconfig.StartPosition = FormStartPosition.CenterParent;
 
-            if (dlg.ShowDialog(this) == DialogResult.OK)
+            if (adconfig.ShowDialog(this) == DialogResult.OK)
             {
-                osd.Setting.vbat_b = dlg.ChannelConfigs[0];
-                osd.Setting.rssi = dlg.ChannelConfigs[1];
+                osd.Setting.vbat_a = adconfig.Configs[0];
+                osd.Setting.vbat_b = adconfig.Configs[1];
+                osd.Setting.rssi = adconfig.Configs[2];
             }
-            osdPort.Close();
+            //osdPort.Close();
         }
     }
 }

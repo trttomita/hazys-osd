@@ -173,7 +173,7 @@ namespace OSDConfig
                     int ack = ReadByte();
                     if (ack != '!')
                     {
-                        MessageBox.Show("write setting error");
+                        //MessageBox.Show("write setting error");
                         ok = false;
                     }
                 }
