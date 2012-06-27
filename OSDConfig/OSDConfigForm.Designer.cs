@@ -60,21 +60,49 @@
             this.updateFirmwareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateFontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendTLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.configADCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.numVat0 = new System.Windows.Forms.NumericUpDown();
+            this.numVperB = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.num1 = new System.Windows.Forms.NumericUpDown();
+            this.lReading2 = new System.Windows.Forms.LinkLabel();
+            this.tbxReading1 = new System.Windows.Forms.TextBox();
+            this.tbxReading2 = new System.Windows.Forms.TextBox();
+            this.num2 = new System.Windows.Forms.NumericUpDown();
+            this.lReading1 = new System.Windows.Forms.LinkLabel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cbChannel = new System.Windows.Forms.ComboBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cbFunction = new System.Windows.Forms.ComboBox();
             this.osd = new OSDConfig.ArduOSD();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_X)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numVat0)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numVperB)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.num1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.num2)).BeginInit();
             this.SuspendLayout();
             // 
             // LIST_items
             // 
-            this.LIST_items.FormattingEnabled = true;
             resources.ApplyResources(this.LIST_items, "LIST_items");
+            this.LIST_items.FormattingEnabled = true;
             this.LIST_items.Name = "LIST_items";
             this.LIST_items.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.LIST_items_ItemCheck);
             this.LIST_items.SelectedIndexChanged += new System.EventHandler(this.LIST_items_SelectedIndexChanged);
@@ -251,9 +279,7 @@
             this.toolStripSeparator3,
             this.updateFirmwareToolStripMenuItem,
             this.updateFontToolStripMenuItem,
-            this.sendTLogToolStripMenuItem,
-            this.toolStripSeparator4,
-            this.configADCToolStripMenuItem});
+            this.sendTLogToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             resources.ApplyResources(this.optionsToolStripMenuItem, "optionsToolStripMenuItem");
             // 
@@ -296,22 +322,196 @@
             resources.ApplyResources(this.sendTLogToolStripMenuItem, "sendTLogToolStripMenuItem");
             this.sendTLogToolStripMenuItem.Click += new System.EventHandler(this.sendTLogToolStripMenuItem_Click);
             // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
-            // 
-            // configADCToolStripMenuItem
-            // 
-            this.configADCToolStripMenuItem.Name = "configADCToolStripMenuItem";
-            resources.ApplyResources(this.configADCToolStripMenuItem, "configADCToolStripMenuItem");
-            this.configADCToolStripMenuItem.Click += new System.EventHandler(this.configADCToolStripMenuItem_Click);
-            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             resources.ApplyResources(this.helpToolStripMenuItem, "helpToolStripMenuItem");
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            resources.ApplyResources(this.tabControl1, "tabControl1");
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.LIST_items);
+            this.tabPage1.Controls.Add(this.groupBox1);
+            resources.ApplyResources(this.tabPage1, "tabPage1");
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.groupBox3);
+            this.tabPage2.Controls.Add(this.groupBox2);
+            this.tabPage2.Controls.Add(this.cbChannel);
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.label3);
+            this.tabPage2.Controls.Add(this.cbFunction);
+            resources.ApplyResources(this.tabPage2, "tabPage2");
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.numVat0);
+            this.groupBox3.Controls.Add(this.numVperB);
+            this.groupBox3.Controls.Add(this.label7);
+            this.groupBox3.Controls.Add(this.label8);
+            resources.ApplyResources(this.groupBox3, "groupBox3");
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.TabStop = false;
+            // 
+            // numVat0
+            // 
+            this.numVat0.DecimalPlaces = 2;
+            resources.ApplyResources(this.numVat0, "numVat0");
+            this.numVat0.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numVat0.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
+            this.numVat0.Name = "numVat0";
+            this.numVat0.ValueChanged += new System.EventHandler(this.numVat0_ValueChanged);
+            // 
+            // numVperB
+            // 
+            this.numVperB.DecimalPlaces = 2;
+            resources.ApplyResources(this.numVperB, "numVperB");
+            this.numVperB.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numVperB.Minimum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            -2147483648});
+            this.numVperB.Name = "numVperB";
+            this.numVperB.ValueChanged += new System.EventHandler(this.numVperB_ValueChanged);
+            // 
+            // label7
+            // 
+            resources.ApplyResources(this.label7, "label7");
+            this.label7.Name = "label7";
+            // 
+            // label8
+            // 
+            resources.ApplyResources(this.label8, "label8");
+            this.label8.Name = "label8";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.num1);
+            this.groupBox2.Controls.Add(this.lReading2);
+            this.groupBox2.Controls.Add(this.tbxReading1);
+            this.groupBox2.Controls.Add(this.tbxReading2);
+            this.groupBox2.Controls.Add(this.num2);
+            this.groupBox2.Controls.Add(this.lReading1);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Controls.Add(this.label5);
+            resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.TabStop = false;
+            // 
+            // num1
+            // 
+            this.num1.DecimalPlaces = 1;
+            resources.ApplyResources(this.num1, "num1");
+            this.num1.Name = "num1";
+            this.num1.ValueChanged += new System.EventHandler(this.num1_ValueChanged);
+            // 
+            // lReading2
+            // 
+            resources.ApplyResources(this.lReading2, "lReading2");
+            this.lReading2.Name = "lReading2";
+            this.lReading2.TabStop = true;
+            this.lReading2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lReading2_LinkClicked);
+            // 
+            // tbxReading1
+            // 
+            resources.ApplyResources(this.tbxReading1, "tbxReading1");
+            this.tbxReading1.Name = "tbxReading1";
+            // 
+            // tbxReading2
+            // 
+            resources.ApplyResources(this.tbxReading2, "tbxReading2");
+            this.tbxReading2.Name = "tbxReading2";
+            // 
+            // num2
+            // 
+            this.num2.DecimalPlaces = 1;
+            resources.ApplyResources(this.num2, "num2");
+            this.num2.Name = "num2";
+            this.num2.ValueChanged += new System.EventHandler(this.num2_ValueChanged);
+            // 
+            // lReading1
+            // 
+            resources.ApplyResources(this.lReading1, "lReading1");
+            this.lReading1.Name = "lReading1";
+            this.lReading1.TabStop = true;
+            this.lReading1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lReading1_LinkClicked);
+            // 
+            // label4
+            // 
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
+            // 
+            // label5
+            // 
+            resources.ApplyResources(this.label5, "label5");
+            this.label5.Name = "label5";
+            // 
+            // cbChannel
+            // 
+            this.cbChannel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbChannel.FormattingEnabled = true;
+            this.cbChannel.Items.AddRange(new object[] {
+            resources.GetString("cbChannel.Items"),
+            resources.GetString("cbChannel.Items1"),
+            resources.GetString("cbChannel.Items2"),
+            resources.GetString("cbChannel.Items3"),
+            resources.GetString("cbChannel.Items4"),
+            resources.GetString("cbChannel.Items5"),
+            resources.GetString("cbChannel.Items6"),
+            resources.GetString("cbChannel.Items7")});
+            resources.ApplyResources(this.cbChannel, "cbChannel");
+            this.cbChannel.Name = "cbChannel";
+            this.cbChannel.SelectedIndexChanged += new System.EventHandler(this.cbChannel_SelectedIndexChanged);
+            // 
+            // label6
+            // 
+            resources.ApplyResources(this.label6, "label6");
+            this.label6.Name = "label6";
+            // 
+            // label3
+            // 
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Name = "label3";
+            // 
+            // cbFunction
+            // 
+            this.cbFunction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFunction.FormattingEnabled = true;
+            this.cbFunction.Items.AddRange(new object[] {
+            resources.GetString("cbFunction.Items"),
+            resources.GetString("cbFunction.Items1"),
+            resources.GetString("cbFunction.Items2"),
+            resources.GetString("cbFunction.Items3"),
+            resources.GetString("cbFunction.Items4")});
+            resources.ApplyResources(this.cbFunction, "cbFunction");
+            this.cbFunction.Name = "cbFunction";
+            this.cbFunction.SelectedIndexChanged += new System.EventHandler(this.cbFunction_SelectedIndexChanged);
             // 
             // osd
             // 
@@ -327,14 +527,13 @@
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.osd);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.BUT_ReadOSD);
             this.Controls.Add(this.CMB_ComPort);
             this.Controls.Add(this.BUT_WriteOSD);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.LIST_items);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "OSDConfigForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OSD_FormClosed);
@@ -347,6 +546,18 @@
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numVat0)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numVperB)).EndInit();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.num1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.num2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -386,8 +597,27 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private ArduOSD osd;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripMenuItem configADCToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ComboBox cbChannel;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cbFunction;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.NumericUpDown num1;
+        private System.Windows.Forms.LinkLabel lReading2;
+        private System.Windows.Forms.TextBox tbxReading1;
+        private System.Windows.Forms.TextBox tbxReading2;
+        private System.Windows.Forms.NumericUpDown num2;
+        private System.Windows.Forms.LinkLabel lReading1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.NumericUpDown numVat0;
+        private System.Windows.Forms.NumericUpDown numVperB;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
     }
 }
 

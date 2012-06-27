@@ -69,7 +69,9 @@ namespace OSDConfig
             new KeyValuePair<OSDItem, OSDItem>(OSDItem.BatA, OSDItem.BatA_ADC),
             new KeyValuePair<OSDItem, OSDItem>(OSDItem.BatB, OSDItem.BatB_ADC),
             new KeyValuePair<OSDItem, OSDItem>(OSDItem.RSSI, OSDItem.RSSI_ADC),
-            new KeyValuePair<OSDItem, OSDItem>(OSDItem.Alt, OSDItem.Alt_R)
+            new KeyValuePair<OSDItem, OSDItem>(OSDItem.Alt, OSDItem.Alt_R),
+            new KeyValuePair<OSDItem, OSDItem>(OSDItem.CurA, OSDItem.CurA_ADC),
+            new KeyValuePair<OSDItem, OSDItem>(OSDItem.CurB, OSDItem.CurB_ADC)
         };
 
         public static readonly OSDItem[] Avaliable = { 
@@ -79,6 +81,9 @@ namespace OSDConfig
         OSDItem.BatA,
         OSDItem.BatA_ADC,
         OSDItem.BatB_ADC,
+        OSDItem.CurA,
+        OSDItem.CurA_ADC,
+        OSDItem.CurB_ADC,
         OSDItem.GPSats,
         OSDItem.GPL,
         OSDItem.GPS,
@@ -105,7 +110,7 @@ namespace OSDConfig
             "Center", 
             "Pitch", 
             "Roll", 
-            "Battery A",
+            "Voltage A",
              null,
             "Visible Sats", 
             "GPS Lock", 
@@ -119,7 +124,7 @@ namespace OSDConfig
             null,
             null,
 
-            null,
+            "Current A",
             null,
             "Altitude (Absolute)", 
             "Velocity", 
@@ -127,11 +132,11 @@ namespace OSDConfig
             "Flight Mode", 
             "Horizon",
             "System Status",
-            "Battery A (ADC)",
-            "Battery B (ADC)",
-            null,
-            null,
-            "RSSI (ADC)",
+            "Voltage A (AD)",
+            "Voltage B (AD)",
+            "Current A (AD)",
+            "Current B (AD)",
+            "RSSI (AD)",
             "Altitude (Relative)"
                                            };
 
@@ -139,7 +144,7 @@ namespace OSDConfig
             "中心", 
             "俯仰", 
             "侧倾", 
-            "电池A",
+            "电池电压A",
             
             null,
             "卫星数量", 
@@ -155,7 +160,7 @@ namespace OSDConfig
             null,
             null,
 
-            null,
+            "电池电流A",
             null,
             
             "海拔高度", 
@@ -164,10 +169,10 @@ namespace OSDConfig
             "飞行模式", 
             "水平",
             "系统状态",
-            "电池A (ADC)",
-            "电池B (ADC)",
-            null,
-            null,
+            "电池电压A (AD)",
+            "电池电压B (AD)",
+            "电池电流A (AD)",
+            "电池电流B (AD)",
             "RSSI (ADC)",
             "相对高度",
             };
@@ -223,7 +228,7 @@ namespace OSDConfig
             {0, 0}, //  panWPDis_y_ADDR
             {22, 5}, ////  panRSSI_y_ADDR
             {21, 2}, //  panCur_A_y_ADDR
-            {2, 2}, //  panCur_B_y_ADDR
+            {21, 4}, //  panCur_B_y_ADDR
             {2, 2}, //  panAlt_y_ADDR
             {2, 3}, //  panVel_y_ADDR
             {2, 4}, //  panThr_y_ADDR
@@ -231,9 +236,8 @@ namespace OSDConfig
             {8, 7}, //  panHorizon_y_ADDR
             {11,4}
         };
-        public ADSetting vbat_a = new ADSetting();
-        public ADSetting vbat_b = new ADSetting();
-        public ADSetting rssi = new ADSetting();
+        public ADSetting[] ad_setting = new ADSetting[] { 
+            new ADSetting(), new ADSetting(), new ADSetting(),new ADSetting(), new ADSetting() };
 
         static UInt32 _BV(OSDItem bi)
         {
@@ -248,17 +252,15 @@ namespace OSDConfig
 
         public byte[] ToBytes()
         {
-            byte[] va = vbat_a.ToBytes();
-            byte[] vb = vbat_b.ToBytes();
-            byte[] r = rssi.ToBytes();
-            int size = sizeof(uint) + coord.Length + va.Length + vb.Length + r.Length;
+            int size = sizeof(uint) + coord.Length + ad_setting.Length * ADSetting.Size;
+
             byte[] buf = new byte[size];
             Array.Copy(BitConverter.GetBytes(enable), 0, buf, 0, sizeof(uint));
             Buffer.BlockCopy(coord, 0, buf, sizeof(uint), coord.Length);
+            for (int i = 0; i < ad_setting.Length; i++)
+                Buffer.BlockCopy(ad_setting[i].ToBytes(), 0,
+                    buf, sizeof(uint) + coord.Length + i * ADSetting.Size, ADSetting.Size);
 
-            Buffer.BlockCopy(va, 0, buf, sizeof(uint) + coord.Length, va.Length);
-            Buffer.BlockCopy(vb, 0, buf, sizeof(uint) + coord.Length + va.Length, vb.Length);
-            Buffer.BlockCopy(r, 0, buf, sizeof(uint) + coord.Length + va.Length + vb.Length, r.Length);
 
             return buf;
         }
@@ -267,9 +269,8 @@ namespace OSDConfig
         {
             enable = BitConverter.ToUInt32(data, offset);
             Buffer.BlockCopy(data, offset + sizeof(uint), coord, 0, coord.Length);
-            vbat_a.FromBytes(data, offset + sizeof(uint) + coord.Length);
-            vbat_b.FromBytes(data, offset + sizeof(uint) + coord.Length + ADSetting.Size);
-            rssi.FromBytes(data, offset + sizeof(uint) + coord.Length + 2 * ADSetting.Size);
+            for (int i = 0; i < ad_setting.Length; i++)
+                ad_setting[i].FromBytes(data, offset + sizeof(uint) + coord.Length + i * ADSetting.Size);
         }
     }
 }

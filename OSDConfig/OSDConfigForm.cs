@@ -31,6 +31,15 @@ namespace OSDConfig
         ArduOSDPort osdPort = new ArduOSDPort();
         ADConfig adconfig = new ADConfig();
 
+        bool fromuser = true;
+
+        class ADReading
+        {
+            public int reading = 0;
+            public decimal value = 0;
+        }
+        List<ADReading[]> adreadings = new List<ADReading[]>();
+
         int bootRate = 9600;
         int osdRate = 57600;
         string bgImage = "vlcsnap-2012-01-28-07h46m04s95.png";
@@ -49,6 +58,13 @@ namespace OSDConfig
                 LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
                     osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
 
+            for (int i = 0; i < osd.Setting.ad_setting.Length; i++)
+            {
+                var r = new ADReading[] { 
+                    new ADReading(), 
+                    new ADReading()};
+                adreadings.Add(r);
+            }
 
             osd.SelectedItemChanged += new EventHandler(osd_SelectedItemChanged);
             osd.ItemPositionChanged += new EventHandler(osd_ItemPositionChanged);
@@ -140,6 +156,8 @@ namespace OSDConfig
             catch { }
 
             osd.Draw();
+
+            cbFunction.SelectedIndex = 0;
         }
 
         private void LIST_items_SelectedIndexChanged(object sender, EventArgs e)
@@ -274,12 +292,13 @@ namespace OSDConfig
                     LIST_items.SetItemChecked(i, setting.IsEnabled(OSDItemList.Avaliable[i]));
             }
 
+            foreach (var r in adreadings)
+            {
+                r[0].reading = r[1].reading = 0;
+                r[0].value = r[1].value = 0;
+            }
 
-            var adc = new List<ADSetting>();
-            adc.Add(setting.vbat_a);
-            adc.Add(setting.vbat_b);
-            adc.Add(setting.rssi);
-            adconfig.Configs = adc;
+            cbFunction_SelectedIndexChanged(this, new EventArgs());
 
             osd.Setting = setting;
             osd.Draw();
@@ -756,29 +775,114 @@ namespace OSDConfig
             osd.Draw();
         }
 
-        private void configADCToolStripMenuItem_Click(object sender, EventArgs e)
+        private void numVperB_ValueChanged(object sender, EventArgs e)
         {
-            osdPort.PortName = CMB_ComPort.Text;
-            //ADConfig dlg = new ADConfig();
-            //dlg.Port = osdPort;
-            /*
-            dlg.ChannelConfigs[0].Value1 = osd.Setting.volt_value / 100.0;
-            dlg.ChannelConfigs[0].Read1 = osd.Setting.volt_read;
-            dlg.ChannelConfigs[1].Value1 = 100;
-            dlg.ChannelConfigs[1].Read1 =
-                osd.Setting.rssi_min + osd.Setting.rssi_range;
-            dlg.ChannelConfigs[1].Value2 = 0;
-            dlg.ChannelConfigs[1].Read2 = osd.Setting.rssi_min;
-            */
-            adconfig.StartPosition = FormStartPosition.CenterParent;
+            if (cbFunction.SelectedIndex >= 0 && fromuser)
+                osd.Setting.ad_setting[cbFunction.SelectedIndex].k = (float)numVat0.Value;
+        }
 
-            if (adconfig.ShowDialog(this) == DialogResult.OK)
+        private void numVat0_ValueChanged(object sender, EventArgs e)
+        {
+            if (cbFunction.SelectedIndex >= 0 && fromuser)
+                osd.Setting.ad_setting[cbFunction.SelectedIndex].b = (float)numVat0.Value;
+        }
+
+        private void num1_ValueChanged(object sender, EventArgs e)
+        {
+            if (cbFunction.SelectedIndex >= 0 && fromuser)
             {
-                osd.Setting.vbat_a = adconfig.Configs[0];
-                osd.Setting.vbat_b = adconfig.Configs[1];
-                osd.Setting.rssi = adconfig.Configs[2];
+                adreadings[cbFunction.SelectedIndex][0].value = num1.Value;
+                Calibrate();
             }
-            //osdPort.Close();
+        }
+
+        private void num2_ValueChanged(object sender, EventArgs e)
+        {
+            if (cbFunction.SelectedIndex >= 0 && fromuser)
+            {
+                adreadings[cbFunction.SelectedIndex][1].value = num2.Value;
+                Calibrate();
+            }
+        }
+
+        private void lReading1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ushort reading = 0;
+            int channel = cbChannel.SelectedIndex;
+            int func = cbFunction.SelectedIndex;
+
+            bool ok = osdPort.GetAnalog(channel, out reading);
+            osdPort.Close();
+            if (ok)
+            {
+                tbxReading1.Text = reading.ToString();
+                adreadings[func][0].reading = reading;
+                Calibrate();
+            }
+            else
+            {
+                MessageBox.Show(this, "Get ADC reading failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void lReading2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            ushort reading = 0;
+            int channel = cbChannel.SelectedIndex;
+            int func = cbFunction.SelectedIndex;
+
+            bool ok = osdPort.GetAnalog(channel, out reading);
+            osdPort.Close();
+            if (ok)
+            {
+                tbxReading1.Text = reading.ToString();
+                adreadings[func][1].reading = reading;
+                Calibrate();
+            }
+            else
+            {
+                MessageBox.Show(this, "Get ADC reading failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void cbFunction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            fromuser = false;
+            int idx = cbFunction.SelectedIndex;
+            var reading = adreadings[idx];
+            tbxReading1.Text = reading[0].reading.ToString();
+            tbxReading2.Text = reading[1].reading.ToString();
+
+            num1.Value = reading[0].value;
+            num2.Value = reading[1].value;
+
+            //Calibrate();
+            numVperB.Value = (decimal)osd.Setting.ad_setting[idx].k;
+            numVat0.Value = (decimal)osd.Setting.ad_setting[idx].b;
+            cbChannel.SelectedIndex = osd.Setting.ad_setting[idx].channel;
+            fromuser = true;
+        }
+
+        private void cbChannel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbFunction.SelectedIndex >= 0 && fromuser)
+                osd.Setting.ad_setting[cbFunction.SelectedIndex].channel = (byte)cbChannel.SelectedIndex;
+        }
+
+        void Calibrate()
+        {
+            //var config = ChannelConfigs[cbFunction.SelectedIndex];
+
+            if (tbxReading1.Text != tbxReading2.Text)
+            {
+                numVperB.Value = (num1.Value - num2.Value) / (int.Parse(tbxReading1.Text) - int.Parse(tbxReading2.Text));
+                numVat0.Value = (decimal)num1.Value - numVperB.Value * int.Parse(tbxReading1.Text);
+            }
+            else if (num1.Value == num2.Value)
+            {
+                numVperB.Value = 0;
+                numVat0.Value = num1.Value;
+            }
         }
     }
 }

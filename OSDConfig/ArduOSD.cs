@@ -13,10 +13,12 @@ namespace OSDConfig
 
 
         static float osd_vbat_A = 11.61f;                   // voltage in milivolt
+        static float osd_curr_A = 3.2f;
         //static UInt16 osd_battery_remaining = 50;      // 0 to 100 <=> 0 to 1000
         //static UInt16 osd_vbat_A = 50;
         static byte osd_battery_pic = 0xb4;         // picture to show battery remaining
         static float osd_vbat_B = 10.05f;
+        static float osd_curr_B = 1.0f;
 
         static UInt16 osd_mode = 3;                   // Navigation mode from RC AC2 = CH5, APM = CH8
         static byte osd_nav_mode = 4;               // Navigation mode from RC AC2 = CH5, APM = CH8
@@ -126,8 +128,11 @@ namespace OSDConfig
                             panRSSI();
                             break;
                         //if(osd_got_home == 1){
-                        case OSDItem.Alt_R:
-                            panAlt_R();
+                        case OSDItem.CurA:
+                            panCur_A();
+                            break;
+                        case OSDItem.CurB:
+                            panCur_B();
                             break;
                         case OSDItem.Alt:
                             panAlt(); //
@@ -213,7 +218,7 @@ namespace OSDConfig
         {
             ////setPanel(first_col, first_line);
             //openPanel();
-            printf("%c%3.0i%c", 0x87, osd_throttle, 0x25);
+            printf("%c%3.0i%%", 0x87, osd_throttle);
             //closePanel();
         }
 
@@ -344,6 +349,16 @@ namespace OSDConfig
             */
             printf(" %c%5.2f%c", 0xE3, (double)osd_vbat_A, 0x8E);
             //closePanel();
+        }
+
+        void panCur_A()
+        {
+            printf(" \xE4%5.2f\x8F", (double)osd_curr_A);
+        }
+
+        void panCur_B()
+        {
+            printf(" \xE5%5.2f\x8F", (double)osd_curr_B);
         }
 
         void panRSSI()
