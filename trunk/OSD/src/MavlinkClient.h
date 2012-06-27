@@ -1,91 +1,28 @@
-#ifndef OSD_Config_Func_h
-#define OSD_Config_Func_h
+#ifndef MAVLINK_CLIENT_H
+#define MAVLINK_CLIENT_H
 
-#include "Max7456.h"
-#include "MavlinkClient.h"
+#include <stdint.h>
 
-typedef unsigned char byte;
-
-enum OSD_ITEM
+enum MAVLINK_STATUS
 {
-    OSD_ITEM_Cen, OSD_ITEM_Pit, OSD_ITEM_Rol, OSD_ITEM_VBatA, OSD_ITEM_VBatB /*(!Not implemented)*/, OSD_ITEM_GPSats, OSD_ITEM_GPL, OSD_ITEM_GPS,
-    // panB_REG Byte has:
-    OSD_ITEM_Rose, OSD_ITEM_Head, OSD_ITEM_MavB, OSD_ITEM_HDir, OSD_ITEM_HDis, OSD_ITEM_WDir /*(!Not implemented)*/, OSD_ITEM_WDis /*(!Not implemented)*/, OSD_ITEM_RSSI /*(!Not implemented)*/,
-    // panC_REG Byte has:
-    OSD_ITEM_CurrA /*(!Not implemented)*/, OSD_ITEM_CurrB /*(!Not implemented)*/, OSD_ITEM_Alt, OSD_ITEM_Vel, OSD_ITEM_Thr, OSD_ITEM_FMod, OSD_ITEM_Hor, OSD_ITEM_SYS,
-
-    OSD_ITEM_VBatA_ADC, OSD_ITEM_VBatB_ADC, OSD_ITEM_CurrA_ADC, OSD_ITEM_CurrB_ADC, OSD_ITEM_RSSI_ADC, OSD_ITEM_Alt_R
-};
-
-enum AD_ITEM
-{
-	  AD_VBatA,
-	  AD_VBatB,
-	  AD_CurrA,
-	  AD_CurrB,
-	  AD_RSSI,
-	  AD_COUNT
-};
-/*
-enum OSD_ALT_CONF
-{
-    OSD_ALT_BAT_A_ADC = (1UL << 24),
-    OSD_ALT_BAT_B_ADC = (1UL << 25),
-    OSD_ALT_CUR_A_ADC = (1UL << 26),
-    OSD_ALT_CUR_B_ADC = (1UL << 27),
-    OSD_ALT_RSSI_ADC = (1UL << 28),
-    OSD_ALT_REL_ALT = (1UL << 31)
-}*/
-
-struct ad_setting_t
-{
-    uint8_t channel;
-    float	k;
-    float b;
-};
-
-struct osd_setting_t
-{
-    uint32_t enable;
-    uint8_t coord[24][2];
-    ad_setting_t ad_setting[(int)AD_COUNT];
+    MAVLINK_STATUS_INACTIVE,
+    MAVLINK_STATUS_WAIT_HEARTBEAT,
+    MAVLINK_STATUS_REQUIRE_DATA,
+    MAVLINK_STATUS_WAIT_DATA,
+    MAVLINK_STATUS_GET_DATA,
+    MAVLINK_STATUS_UPDATE_DATA
 };
 
 
-
-class ArduOSD : public OSD, MavlinkClient
+class MavlinkClient
 {
-public:
-    static void Init();
-    static void Run();
+protected:
+    static void RequestMavlinkRates();
+    static void ParseMavlink(uint8_t c);
 
-private:
-    // config functions
-    static void LoadSetting();
-    static void UploadFont();
-    static void UploadSetting();
-    static void GetSetting();
-    static void GetAnalog();
-    static void Reboot();
-
-    // data functions
-    //static void RequestMavlinkRates();
-    //static void ReadMavlink();
-    static void ReadMessage();
-    static inline void SetHomeVars();
-
-    // draw functions
-    static void Draw();
-    static void DrawLoadBar();
-    static void DrawLogo();
-    static void DrawArrow();
-    static inline void DrawHorizon(uint8_t start_col, uint8_t start_row);
-    static float analog_read(ad_setting_t& ad_setting);
-private:
-	/*
     static volatile float    	osd_vbat_A;                 // Battery A voltage in milivolt
     static volatile float    	osd_curr_A;                 // Battery A current
-    static volatile uint16_t 	osd_battery_remaining_A;    // 0 to 100 <=> 0 to 1000
+//  static volatile uint16_t 	osd_battery_remaining_A;    // 0 to 100 <=> 0 to 1000
     static volatile uint8_t  	osd_battery_pic_A;       		// picture to show battery remaining
     static volatile float    	osd_vbat_B;               	// voltage in milivolt
     static volatile float    	osd_curr_B;                 // Battery B current
@@ -128,15 +65,7 @@ private:
     static volatile uint8_t  	apm_mav_component;
     //static volatile bool  	 	enable_mav_request;
     static volatile uint8_t   mavlink_status;
-
-    //static volatile uint8_t 	modeScreen; //NTSC:0, PAL:1
-
-    //static volatile bool 			mavlink_active;*/
-    static volatile uint8_t 	crlf_count;
-
-
-    static osd_setting_t 			setting;
 };
 
-#endif // OSD_Config_Func_h
+#endif
 
