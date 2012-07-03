@@ -87,6 +87,8 @@ uint8_t get_mavlink_message_crc(uint8_t msgid)
         return 20;
     case MAVLINK_MSG_ID_ATTITUDE:     //id=30
         return 39;
+    case MAVLINK_MSG_ID_RC_CHANNELS_RAW: //id=35
+    	  return 244;
     default:  //ignore all others
         return 0;
     }
