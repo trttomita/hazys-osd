@@ -46,6 +46,7 @@ struct ad_setting_t
 
 struct osd_setting_t
 {
+	  uint8_t ver;
     uint32_t enable;
     uint8_t coord[24][2];
     ad_setting_t ad_setting[(int)AD_COUNT];

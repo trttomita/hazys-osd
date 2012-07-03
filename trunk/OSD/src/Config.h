@@ -1,7 +1,7 @@
 
 // Versio number, incrementing this will erase/upload factory settings.
 // Only devs should increment this
-#define DATA_VER 					4
+#define DATA_VER 					5
 
 #define OSD_VER						"1.02"
 

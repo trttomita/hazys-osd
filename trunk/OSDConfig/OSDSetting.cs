@@ -88,12 +88,13 @@ namespace OSDConfig
         OSDItem.GPL,
         OSDItem.GPS,
 
-        // panB_REG Byte has:
+        
         OSDItem.Rose,
         OSDItem.Head,
         OSDItem.MavB,
         OSDItem.HDir,
         OSDItem.HDis,
+        OSDItem.RSSI,
         OSDItem.RSSI_ADC,
 
         OSDItem.Alt,
@@ -111,7 +112,7 @@ namespace OSDConfig
             "Pitch", 
             "Roll", 
             "Voltage A",
-             null,
+            "Voltage B",
             "Visible Sats", 
             "GPS Lock", 
             "GPS Coord", 
@@ -120,18 +121,20 @@ namespace OSDConfig
             "Heading", 
             "Heart Beat", 
             "Home Direction", 
-            "Home Distance", 
-            null,
-            null,
+            "Home Distance",
+            "Waypoint Direction",
+            "Waypoint Distance",
+            "RSSI",
 
             "Current A",
-            null,
+            "Current B",
             "Altitude (Absolute)", 
             "Velocity", 
             "Throttle", 
             "Flight Mode", 
             "Horizon",
             "System Status",
+
             "Voltage A (AD)",
             "Voltage B (AD)",
             "Current A (AD)",
@@ -144,9 +147,8 @@ namespace OSDConfig
             "中心", 
             "俯仰", 
             "侧倾", 
-            "电池电压A",
-            
-            null,
+            "电池A电压",
+            "电池B电压",
             "卫星数量", 
             "GPS锁定", 
             "GPS坐标", 
@@ -156,12 +158,12 @@ namespace OSDConfig
             "心跳", 
             "回家方向", 
             "回家距离", 
-            null,
-            null,
-            null,
+            "航点方向",
+            "航点距离",
+            "信号强度",
 
-            "电池电流A",
-            null,
+            "电池A电流",
+            "电池B电流",
             
             "海拔高度", 
             "速度", 
@@ -169,11 +171,11 @@ namespace OSDConfig
             "飞行模式", 
             "水平",
             "系统状态",
-            "电池电压A (AD)",
-            "电池电压B (AD)",
-            "电池电流A (AD)",
-            "电池电流B (AD)",
-            "RSSI (ADC)",
+            "电池A电压 (AD)",
+            "电池B电压 (AD)",
+            "电池A电流 (AD)",
+            "电池B电流 (AD)",
+            "信号强度 (AD)",
             "相对高度",
             };
     }
@@ -205,6 +207,9 @@ namespace OSDConfig
 
     public class OSDSetting
     {
+        public const byte DataVersion = 5;
+
+        public byte ver;
         public UInt32 enable = _BV(OSDItem.Pit) | _BV(OSDItem.Rol) | _BV(OSDItem.BatA) | _BV(OSDItem.GPSats) | _BV(OSDItem.GPL) | _BV(OSDItem.GPS)
         | _BV(OSDItem.Rose) | _BV(OSDItem.Head) | _BV(OSDItem.MavB) | _BV(OSDItem.HDir) | _BV(OSDItem.HDis)
         | _BV(OSDItem.Alt) | _BV(OSDItem.Vel) | _BV(OSDItem.Thr) | _BV(OSDItem.FMod) | _BV(OSDItem.Hor) | _BV(OSDItem.SYS);
@@ -252,25 +257,30 @@ namespace OSDConfig
 
         public byte[] ToBytes()
         {
-            int size = sizeof(uint) + coord.Length + ad_setting.Length * ADSetting.Size;
+            int size = sizeof(byte) + sizeof(uint) + coord.Length + ad_setting.Length * ADSetting.Size;
 
             byte[] buf = new byte[size];
-            Array.Copy(BitConverter.GetBytes(enable), 0, buf, 0, sizeof(uint));
-            Buffer.BlockCopy(coord, 0, buf, sizeof(uint), coord.Length);
+            buf[0] = ver;
+            Array.Copy(BitConverter.GetBytes(enable), 0, buf, sizeof(byte), sizeof(uint));
+            Buffer.BlockCopy(coord, 0, buf, sizeof(uint) + sizeof(byte), coord.Length);
             for (int i = 0; i < ad_setting.Length; i++)
                 Buffer.BlockCopy(ad_setting[i].ToBytes(), 0,
-                    buf, sizeof(uint) + coord.Length + i * ADSetting.Size, ADSetting.Size);
+                    buf, sizeof(byte) + sizeof(uint) + coord.Length + i * ADSetting.Size, ADSetting.Size);
 
 
             return buf;
         }
 
-        public void FromBytes(byte[] data, int offset)
+        public bool FromBytes(byte[] data, int offset)
         {
-            enable = BitConverter.ToUInt32(data, offset);
-            Buffer.BlockCopy(data, offset + sizeof(uint), coord, 0, coord.Length);
+            if (data[0] != DataVersion)
+                return false;
+            ver = data[0];
+            enable = BitConverter.ToUInt32(data, offset + sizeof(byte));
+            Buffer.BlockCopy(data, offset + sizeof(byte) + sizeof(uint), coord, 0, coord.Length);
             for (int i = 0; i < ad_setting.Length; i++)
-                ad_setting[i].FromBytes(data, offset + sizeof(uint) + coord.Length + i * ADSetting.Size);
+                ad_setting[i].FromBytes(data, offset + sizeof(byte) + sizeof(uint) + coord.Length + i * ADSetting.Size);
+            return true;
         }
     }
 }

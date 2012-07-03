@@ -12,6 +12,7 @@ using System.IO;
 using ArdupilotMega;
 using System.Xml;
 using System.Threading;
+using System.Globalization;
 
 
 namespace OSDConfig
@@ -29,7 +30,7 @@ namespace OSDConfig
 
         //SerialPort comPort = new SerialPort();
         ArduOSDPort osdPort = new ArduOSDPort();
-        ADConfig adconfig = new ADConfig();
+        //ADConfig adconfig = new ADConfig();
 
         bool fromuser = true;
 
@@ -48,26 +49,8 @@ namespace OSDConfig
 
         public OSDConfigForm()
         {
+            xmlconfig(false);
             InitializeComponent();
-
-            // load default font
-            osdPort.ReadTimeout = 2000;
-            adconfig.Port = osdPort;
-
-            for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
-                LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
-                    osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
-
-            for (int i = 0; i < osd.Setting.ad_setting.Length; i++)
-            {
-                var r = new ADReading[] { 
-                    new ADReading(), 
-                    new ADReading()};
-                adreadings.Add(r);
-            }
-
-            osd.SelectedItemChanged += new EventHandler(osd_SelectedItemChanged);
-            osd.ItemPositionChanged += new EventHandler(osd_ItemPositionChanged);
         }
 
         void osd_ItemPositionChanged(object sender, EventArgs e)
@@ -134,8 +117,26 @@ namespace OSDConfig
             if (CMB_ComPort.Items.Count > 0)
                 CMB_ComPort.SelectedIndex = 0;
 
-            xmlconfig(false);
 
+
+
+
+            for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
+                LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
+                    osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
+
+            for (int i = 0; i < osd.Setting.ad_setting.Length; i++)
+            {
+                var r = new ADReading[] { 
+                    new ADReading(), 
+                    new ADReading()};
+                adreadings.Add(r);
+            }
+
+            osd.SelectedItemChanged += new EventHandler(osd_SelectedItemChanged);
+            osd.ItemPositionChanged += new EventHandler(osd_ItemPositionChanged);
+
+            osdPort.ReadTimeout = 2000;
             osdPort.BaudRate = osdRate;
 
             osd.Chars = mcm.readMCM2("OSD_SA_v5.mcm");
@@ -256,17 +257,9 @@ namespace OSDConfig
             bool ok = osdPort.UploadSetting(osd.Setting);
             osdPort.Close();
             if (ok)
-            {
                 MessageBox.Show(this, "Write OSD Done", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //toolStripProgressBar1.Value = 100;
-                //toolStripStatusLabel1.Text = "Write OSD Done";
-            }
             else
-            {
                 MessageBox.Show(this, "Write OSD Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //toolStripStatusLabel1.Text = "Write OSD Failed";
-                //toolStripProgressBar1.Value = 0;
-            }
         }
 
 
@@ -367,14 +360,17 @@ namespace OSDConfig
                 {
                     using (Stream s = sfd.OpenFile())
                     {
-                        byte[] bytes = osd.Setting.ToBytes();
+
+                        byte[] bytes = Encoding.ASCII.GetBytes("HOSD");
+                        s.Write(bytes, 0, 4);
+                        bytes = osd.Setting.ToBytes();
                         s.Write(BitConverter.GetBytes(bytes.Length), 0, sizeof(int));
                         s.Write(bytes, 0, bytes.Length);
                     }
                 }
                 catch
                 {
-                    MessageBox.Show("Error writing file");
+                    MessageBox.Show(this, "Error writing file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -382,6 +378,7 @@ namespace OSDConfig
         private void loadFromFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog() { Filter = "*.osd|*.osd" };
+            bool ok = false;
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -392,15 +389,20 @@ namespace OSDConfig
                         OSDSetting setting = new OSDSetting();
                         byte[] buf = new byte[128];
                         f.Read(buf, 0, 4);
-                        f.Read(buf, 0, BitConverter.ToInt32(buf, 0));
-                        setting.FromBytes(buf, 0);
-                        //osd.Setting = setting;
-                        LoadSetting(setting);
+                        if (Encoding.ASCII.GetString(buf, 0, 4) == "HOSD")
+                        {
+                            f.Read(buf, 0, 4);
+                            f.Read(buf, 0, BitConverter.ToInt32(buf, 0));
+                            if (ok = setting.FromBytes(buf, 0))
+                                LoadSetting(setting);
+                        }
+                        if (!ok)
+                            MessageBox.Show(this, "Invalid File Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch
                 {
-                    MessageBox.Show("Error Reading file");
+                    MessageBox.Show(this, "Error Reading file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -409,8 +411,9 @@ namespace OSDConfig
 
         private void loadDefaultsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            osd.Setting = new OSDSetting();
-            osd.Draw();
+            //osd.Setting = new OSDSetting();
+            LoadSetting(new OSDSetting());
+            //osd.Draw();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -635,6 +638,8 @@ namespace OSDConfig
                     xmlwriter.WriteElementString("Pal", CHK_pal.Checked.ToString());//osd.Mode.ToString());
                     //xmlwriter.WriteElementString("Pal", CHK_pal.Checked.ToString());
                     xmlwriter.WriteElementString("BackgroudImage", bgImage);
+                    xmlwriter.WriteElementString("Language", Thread.CurrentThread.CurrentUICulture.Name);
+
                     xmlwriter.WriteEndElement();
 
                     xmlwriter.WriteEndDocument();
@@ -684,6 +689,15 @@ namespace OSDConfig
                                         break;
                                     case "BackgroundImage":
                                         bgImage = xmlreader.ReadString();
+                                        break;
+                                    case "Language":
+                                        try
+                                        {
+                                            Thread.CurrentThread.CurrentUICulture = new CultureInfo(xmlreader.ReadString());
+                                        }
+                                        catch (Exception)
+                                        {
+                                        }
                                         break;
                                     default:
                                         if (xmlreader.Name == "") // line feeds
@@ -883,6 +897,31 @@ namespace OSDConfig
                 numVperB.Value = 0;
                 numVat0.Value = num1.Value;
             }
+        }
+
+        private void UILanguageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (object.ReferenceEquals(sender, EnglishUIToolStripMenuItem))
+                ChangeLanguage(new CultureInfo("en-US"));
+            else if (object.ReferenceEquals(sender, ChineseUIToolStripMenuItem))
+                ChangeLanguage(new CultureInfo("zh-Hans"));
+        }
+
+        private void ChangeLanguage(CultureInfo culture)
+        {
+            Thread.CurrentThread.CurrentUICulture = culture;
+
+            LIST_items.Items.Clear();
+            for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
+                LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
+                    osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
+
+            ComponentResourceManager rm = new ComponentResourceManager(this.GetType());
+            rm.ApplyResources(this);
+            //rm.ApplyResources(this.menuStrip1);
+            rm.ApplyResources(this, "$this");
+
+            xmlconfig(true);
         }
     }
 }

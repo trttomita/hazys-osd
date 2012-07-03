@@ -167,34 +167,40 @@
     <value>视频制式(&amp;V)</value>
   </data>
   <data name="showGrid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="showGrid.Text" xml:space="preserve">
     <value>显示网格</value>
   </data>
   <data name="customBGPictureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="customBGPictureToolStripMenuItem.Text" xml:space="preserve">
     <value>背景图片...</value>
   </data>
+  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
+  <data name="toolStripMenuItem1.Text" xml:space="preserve">
+    <value>语言</value>
+  </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 6</value>
+    <value>149, 6</value>
   </data>
   <data name="updateFirmwareToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="updateFirmwareToolStripMenuItem.Text" xml:space="preserve">
     <value>上传固件...</value>
   </data>
   <data name="updateFontToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="updateFontToolStripMenuItem.Text" xml:space="preserve">
     <value>上传字符集...</value>
   </data>
   <data name="sendTLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="sendTLogToolStripMenuItem.Text" xml:space="preserve">
     <value>发送 TLog...</value>
@@ -254,7 +260,7 @@
     <value>53, 12</value>
   </data>
   <data name="label6.Text" xml:space="preserve">
-    <value>通    道</value>
+    <value>AD  通道</value>
   </data>
   <data name="label3.Text" xml:space="preserve">
     <value>功    能</value>
@@ -272,7 +278,10 @@
     <value>电流B</value>
   </data>
   <data name="cbFunction.Items4" xml:space="preserve">
-    <value>RSSI</value>
+    <value>信号强度</value>
+  </data>
+  <data name="tabPage2.Text" xml:space="preserve">
+    <value>模/数</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -727,11 +736,7 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Hazy的OSD配置</value>
+    <value>Hazy's OSD 配置工具</value>
   </data>
 </root>
