@@ -19,12 +19,12 @@ enum OSD_ITEM
 
 enum AD_ITEM
 {
-	  AD_VBatA,
-	  AD_VBatB,
-	  AD_CurrA,
-	  AD_CurrB,
-	  AD_RSSI,
-	  AD_COUNT
+    AD_VBatA,
+    AD_VBatB,
+    AD_CurrA,
+    AD_CurrB,
+    AD_RSSI,
+    AD_COUNT
 };
 /*
 enum OSD_ALT_CONF
@@ -46,7 +46,7 @@ struct ad_setting_t
 
 struct osd_setting_t
 {
-	  uint8_t ver;
+    uint8_t ver;
     uint32_t enable;
     uint8_t coord[24][2];
     ad_setting_t ad_setting[(int)AD_COUNT];
@@ -80,18 +80,19 @@ private:
     static void DrawLoadBar();
     static void DrawLogo();
     static void DrawArrow();
+    static void DrawWaitingHB();
     static inline void DrawHorizon(uint8_t start_col, uint8_t start_row);
     static float analog_read(ad_setting_t& ad_setting);
 private:
-	/*
+    /*
     static volatile float    	osd_vbat_A;                 // Battery A voltage in milivolt
     static volatile float    	osd_curr_A;                 // Battery A current
     static volatile uint16_t 	osd_battery_remaining_A;    // 0 to 100 <=> 0 to 1000
     static volatile uint8_t  	osd_battery_pic_A;       		// picture to show battery remaining
     static volatile float    	osd_vbat_B;               	// voltage in milivolt
     static volatile float    	osd_curr_B;                 // Battery B current
-//  static volatile uint16_t 	osd_battery_remaining_B;  	// 0 to 100 <=> 0 to 1000
-//  static volatile uint8_t  	osd_battery_pic_B;     			// picture to show battery remaining
+    //  static volatile uint16_t 	osd_battery_remaining_B;  	// 0 to 100 <=> 0 to 1000
+    //  static volatile uint8_t  	osd_battery_pic_B;     			// picture to show battery remaining
 
     static volatile uint16_t 	osd_mode;                   // Navigation mode from RC AC2 = CH5, APM = CH8
     static volatile uint8_t  	osd_nav_mode;               // Navigation mode from RC AC2 = CH5, APM = CH8
@@ -120,7 +121,7 @@ private:
 
     static volatile uint8_t		osd_rssi;
 
-//MAVLink session control
+    //MAVLink session control
     static volatile bool  	 	mavbeat;
     static volatile long     	lastMAVBeat;
     //static volatile bool		 	waitingMAVBeats;

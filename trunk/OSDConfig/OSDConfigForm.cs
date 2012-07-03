@@ -194,6 +194,7 @@ namespace OSDConfig
         private void LIST_items_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             // if (((CheckedListBox)sender).SelectedItem != null && ((CheckedListBox)sender).SelectedItem.ToString() == "Horizon")
+            int idx = -1;
             if (((CheckedListBox)sender).SelectedItem != null)
             {
                 OSDItem item = (OSDItem)Array.IndexOf(OSDItemList.Names, ((CheckedListBox)sender).SelectedItem);
@@ -202,16 +203,14 @@ namespace OSDConfig
                 {
                     foreach (var conflict in OSDItemList.Conflits)
                     {
-                        if (item == conflict.Key)
+                        if (item == conflict.Key && (idx = LIST_items.Items.IndexOf(OSDItemList.Names[(int)conflict.Value])) >= 0)
                         {
-                            LIST_items.SetItemChecked(
-                                LIST_items.Items.IndexOf(OSDItemList.Names[(int)conflict.Value]), false);
+                            LIST_items.SetItemChecked(idx, false);
                             osd.SetItemEnabled(conflict.Value, false);
                         }
-                        else if (item == conflict.Value)
+                        else if (item == conflict.Value && (idx = LIST_items.Items.IndexOf(OSDItemList.Names[(int)conflict.Key])) >= 0)
                         {
-                            LIST_items.SetItemChecked(
-                                LIST_items.Items.IndexOf(OSDItemList.Names[(int)conflict.Key]), false);
+                            LIST_items.SetItemChecked(idx, false);
                             osd.SetItemEnabled(conflict.Key, false);
                         }
                     }
@@ -219,18 +218,18 @@ namespace OSDConfig
 
                 foreach (var alt in OSDItemList.Alternates)
                 {
-                    if (item == alt.Key && e.NewValue == CheckState.Checked)
+                    if (item == alt.Key && e.NewValue == CheckState.Checked && (idx = LIST_items.Items.IndexOf(OSDItemList.Names[(int)alt.Value])) >= 0)
                     {
-                        LIST_items.SetItemChecked(
-                               LIST_items.Items.IndexOf(OSDItemList.Names[(int)alt.Value]), false);
+                        LIST_items.SetItemChecked(idx, false);
                         osd.SetItemEnabled(alt.Value, false);
                         break;
                     }
                     else if (item == alt.Value)
                     {
-                        if (OSDItemList.Names[(int)alt.Key] != null && e.NewValue == CheckState.Checked)
-                            LIST_items.SetItemChecked(
-                                    LIST_items.Items.IndexOf(OSDItemList.Names[(int)alt.Key]), false);
+                        if (e.NewValue == CheckState.Checked
+                            && OSDItemList.Names[(int)alt.Key] != null
+                            && (idx = LIST_items.Items.IndexOf(OSDItemList.Names[(int)alt.Key])) >= 0)
+                            LIST_items.SetItemChecked(idx, false);
                         osd.SetItemEnabled(alt.Key, e.NewValue == CheckState.Checked);
                         break;
                     }
