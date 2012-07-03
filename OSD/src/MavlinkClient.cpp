@@ -88,7 +88,7 @@ uint8_t get_mavlink_message_crc(uint8_t msgid)
     case MAVLINK_MSG_ID_ATTITUDE:     //id=30
         return 39;
     case MAVLINK_MSG_ID_RC_CHANNELS_RAW: //id=35
-    	  return 244;
+        return 244;
     default:  //ignore all others
         return 0;
     }
@@ -135,14 +135,14 @@ void MavlinkClient::ParseMavlink(uint8_t c)
 #ifdef MAVLINK10
             osd_mode = mavlink_msg_heartbeat_get_custom_mode(msg);
             osd_nav_mode = 0;
-            //osd_sys_status = mavlink_msg_heartbeat_get_system_status(msg);
-            osd_sys_status =
-                (mavlink_msg_heartbeat_get_base_mode(msg) & (uint8_t)MAV_MODE_FLAG_SAFETY_ARMED)
-                == (uint8_t)MAV_MODE_FLAG_SAFETY_ARMED? MAV_STATE_ACTIVE: MAV_STATE_STANDBY;
+
+            if ((osd_sys_status = mavlink_msg_heartbeat_get_system_status(msg)) == MAV_STATE_ACTIVE)
+                osd_sys_status = ((mavlink_msg_heartbeat_get_base_mode(msg) & (uint8_t)MAV_MODE_FLAG_SAFETY_ARMED))?
+                                 MAV_STATE_ACTIVE: MAV_STATE_STANDBY;
 #endif
             lastMAVBeat = millis();
-            if (mavlink_status == (uint8_t)MAVLINK_STATUS_INACTIVE
-                    || mavlink_status == (uint8_t)MAVLINK_STATUS_WAIT_HEARTBEAT)
+
+            if (mavlink_status < (uint8_t)MAVLINK_STATUS_REQUIRE_DATA)
                 mavlink_status = (uint8_t)MAVLINK_STATUS_REQUIRE_DATA;
             /*if(waitingMAVBeats == 1)
             {
@@ -161,7 +161,7 @@ void MavlinkClient::ParseMavlink(uint8_t c)
             osd_vbat_A = (mavlink_msg_sys_status_get_voltage_battery(msg) / 1000.0f);
             osd_curr_A = (mavlink_msg_sys_status_get_current_battery(msg) / 100.0f);
             if (osd_curr_A < 0.0f)
-            	osd_curr_A = 0.0f;
+                osd_curr_A = 0.0f;
 #endif
             //osd_battery_remaining_A = mavlink_msg_sys_status_get_battery_remaining(msg);
             //osd_mode = apm_mav_component;//Debug
@@ -191,7 +191,7 @@ void MavlinkClient::ParseMavlink(uint8_t c)
             osd_lon = mavlink_msg_gps_raw_int_get_lon(msg) / 10000000;
             //osd_alt = mavlink_msg_gps_raw_get_alt(&msg);
             osd_fix_type = mavlink_msg_gps_raw_int_get_fix_type(msg);
-            osd_satellites_visible = mavlink_msg_gps_raw_int_get_satellites_visible(msg);  // Included here for MAVLINK 1.0 
+            osd_satellites_visible = mavlink_msg_gps_raw_int_get_satellites_visible(msg);  // Included here for MAVLINK 1.0
         }
         break;
 #endif
@@ -213,10 +213,10 @@ void MavlinkClient::ParseMavlink(uint8_t c)
             osd_yaw = ToDeg(mavlink_msg_attitude_get_yaw(msg));
         }
         break;
-#ifdef MAVLINK10:
-		    case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+#ifdef MAVLINK10
+        case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
             osd_rssi = mavlink_msg_rc_channels_raw_get_rssi(msg);
-        break;
+            break;
 #endif
         default:
             //Do nothing
