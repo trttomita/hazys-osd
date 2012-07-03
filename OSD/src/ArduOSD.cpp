@@ -22,6 +22,7 @@ volatile uint8_t 	ArduOSD::crlf_count;
 
 osd_setting_t ArduOSD::setting =
 {
+	  DATA_VER,
     _bv(OSD_ITEM_Pit) | _bv(OSD_ITEM_Rol) | _bv(OSD_ITEM_VBatA) | _bv(OSD_ITEM_GPSats) | _bv(OSD_ITEM_GPL) | _bv(OSD_ITEM_GPS)
     | _bv(OSD_ITEM_Rose) | _bv(OSD_ITEM_Head) | _bv(OSD_ITEM_MavB)| _bv(OSD_ITEM_HDir) | _bv(OSD_ITEM_HDis)
     | _bv(OSD_ITEM_Alt) | _bv(OSD_ITEM_Vel) | _bv(OSD_ITEM_Thr) | _bv(OSD_ITEM_FMod) | _bv(OSD_ITEM_Hor) | _bv(OSD_ITEM_SYS),
@@ -57,7 +58,7 @@ osd_setting_t ArduOSD::setting =
 };
 
 uint8_t mark_EE EEMEM;
-uint8_t verison_EE EEMEM;
+//uint8_t verison_EE EEMEM;
 osd_setting_t setting_EE EEMEM;
 
 void ArduOSD::Init()
@@ -88,7 +89,7 @@ void ArduOSD::Init()
 
 void ArduOSD::LoadSetting()
 {
-    if (eeprom_read_byte(&mark_EE) != 'O' || eeprom_read_byte(&verison_EE) != DATA_VER)
+    if (eeprom_read_byte(&mark_EE) != 'O' || eeprom_read_byte((const uint8_t*)&setting_EE) != DATA_VER)
     {
         setPanel(6,9);
         openPanel();
@@ -99,10 +100,9 @@ void ArduOSD::LoadSetting()
         delay(500);
 
         eeprom_write_byte(&mark_EE, 'O');
-        eeprom_write_byte(&verison_EE, DATA_VER);
+        //eeprom_write_byte(&setting_EE, DATA_VER);
         eeprom_write_block((const void*) &setting, &setting_EE, sizeof(setting));
-        //writeSettings();
-
+        
         setPanel(6,9);
         openPanel();
         print_P(PSTR("OSD Initialized   "));
@@ -171,9 +171,9 @@ void ArduOSD::UploadFont()
 
 void ArduOSD::GetSetting()
 {
-    uart_putc('s');
-    uart_putc((uint8_t)sizeof(setting));
     uint8_t checksum = 0;
+    uart_putc('s');
+    uart_putc(sizeof(setting));
     for (uint8_t* p = (uint8_t*)&setting; p < (uint8_t*)&setting + sizeof(setting); p++)
     {
         uint8_t c = *p;
@@ -216,7 +216,7 @@ void ArduOSD::UploadSetting()
         uint8_t ck = uart_wait_getc();
 
         wdt_reset();
-        if (ck == checksum)
+        if (ck == checksum && buf[0] == DATA_VER)
         {
             memcpy(&setting, buf, sizeof(setting));
             wdt_reset();
@@ -282,7 +282,7 @@ void ArduOSD::DrawLogo(/*int first_col, int first_line*/)
     setPanel(7, 5);
     openPanel();
     //print_P(PSTR("\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\xca\xcb\xcc\xcd\xce|Hazys OSD"));
-    print_P(PSTR("Hazys OSD v" OSD_VER "| for MAVLink 1.0"));
+    print_P(PSTR("Hazy's OSD v" OSD_VER "| for MAVLink 1.0"));
     closePanel();
 }
 

@@ -189,6 +189,7 @@ void MavlinkClient::ParseMavlink(uint8_t c)
             osd_lon = mavlink_msg_gps_raw_int_get_lon(msg) / 10000000;
             //osd_alt = mavlink_msg_gps_raw_get_alt(&msg);
             osd_fix_type = mavlink_msg_gps_raw_int_get_fix_type(msg);
+            osd_satellites_visible = mavlink_msg_gps_raw_int_get_satellites_visible(msg);  // Included here for MAVLINK 1.0 
         }
         break;
 #endif
@@ -210,6 +211,11 @@ void MavlinkClient::ParseMavlink(uint8_t c)
             osd_yaw = ToDeg(mavlink_msg_attitude_get_yaw(msg));
         }
         break;
+#ifdef MAVLINK10:
+		    case MAVLINK_MSG_ID_RC_CHANNELS_RAW:
+            osd_rssi = mavlink_msg_rc_channels_raw_get_rssi(msg);
+        break;
+#endif
         default:
             //Do nothing
             break;

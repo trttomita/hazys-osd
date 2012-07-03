@@ -12,6 +12,7 @@
     <AssemblyName>OSDConfig</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -46,12 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ADConfig.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ADConfig.Designer.cs">
-      <DependentUpon>ADConfig.cs</DependentUpon>
-    </Compile>
     <Compile Include="ArduinoSTK.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -61,6 +56,7 @@
     <Compile Include="ArduOSDPort.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ComponentResourceManagerEx.cs" />
     <Compile Include="IntelHex.cs" />
     <Compile Include="MavLink.cs" />
     <Compile Include="MAVLinkTypes0.9.cs" />
@@ -91,12 +87,6 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ADConfig.resx">
-      <DependentUpon>ADConfig.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ADConfig.zh-Hans.resx">
-      <DependentUpon>ADConfig.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="OSD.resx">
       <DependentUpon>OSD.cs</DependentUpon>
     </EmbeddedResource>
@@ -112,6 +102,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Resources\openHS.png" />
   </ItemGroup>
   <ItemGroup>

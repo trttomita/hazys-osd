@@ -136,8 +136,7 @@ namespace OSDConfig
                     if (ck == buf[size])
                     {
                         setting = new OSDSetting();
-                        setting.FromBytes(buf, 0);
-                        ok = true;
+                        ok = setting.FromBytes(buf, 0);
                     }
                 }
 
