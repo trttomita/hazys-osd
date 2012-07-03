@@ -187,8 +187,8 @@ void MavlinkClient::ParseMavlink(uint8_t c)
 #else
         case MAVLINK_MSG_ID_GPS_RAW_INT:
         {
-            osd_lat = mavlink_msg_gps_raw_int_get_lat(msg) / 10000000;
-            osd_lon = mavlink_msg_gps_raw_int_get_lon(msg) / 10000000;
+            osd_lat = mavlink_msg_gps_raw_int_get_lat(msg) / 10000000.0f;
+            osd_lon = mavlink_msg_gps_raw_int_get_lon(msg) / 10000000.0f;
             //osd_alt = mavlink_msg_gps_raw_get_alt(&msg);
             osd_fix_type = mavlink_msg_gps_raw_int_get_fix_type(msg);
             osd_satellites_visible = mavlink_msg_gps_raw_int_get_satellites_visible(msg);  // Included here for MAVLINK 1.0
