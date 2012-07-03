@@ -630,11 +630,11 @@ namespace OSDConfig
 
                     xmlwriter.WriteStartElement("Config");
 
-                    xmlwriter.WriteElementString("ComPort", CMB_ComPort.Text);
+                    xmlwriter.WriteElementString("ComPort", CMB_ComPort == null? "":CMB_ComPort.Text);
                     xmlwriter.WriteElementString("BootBuadRate", bootRate.ToString());
                     xmlwriter.WriteElementString("OsdBuadRate", osdRate.ToString());
 
-                    xmlwriter.WriteElementString("Pal", CHK_pal.Checked.ToString());//osd.Mode.ToString());
+                    xmlwriter.WriteElementString("Pal", CHK_pal == null? "True": CHK_pal.Checked.ToString());//osd.Mode.ToString());
                     //xmlwriter.WriteElementString("Pal", CHK_pal.Checked.ToString());
                     xmlwriter.WriteElementString("BackgroudImage", bgImage);
                     xmlwriter.WriteElementString("Language", Thread.CurrentThread.CurrentUICulture.Name);
