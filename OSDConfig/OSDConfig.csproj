@@ -64,6 +64,11 @@
     <Compile Include="MegaLoad.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
     <Compile Include="OSD.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -76,6 +81,12 @@
     <Compile Include="OSDConfigForm.designer.cs">
       <DependentUpon>OSDConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="OSDItem.cs" />
+    <Compile Include="OSDItemNames.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OSDItemNames.resx</DependentUpon>
+    </Compile>
     <Compile Include="OSDSetting.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +98,11 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Messages.zh-Hans.resx" />
     <EmbeddedResource Include="OSD.resx">
       <DependentUpon>OSD.cs</DependentUpon>
     </EmbeddedResource>
@@ -96,6 +112,11 @@
     <EmbeddedResource Include="OSDConfigForm.zh-Hans.resx">
       <DependentUpon>OSDConfigForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OSDItemNames.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>OSDItemNames.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OSDItemNames.zh-Hans.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
