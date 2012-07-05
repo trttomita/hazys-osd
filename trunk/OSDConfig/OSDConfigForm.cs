@@ -13,12 +13,17 @@ using ArdupilotMega;
 using System.Xml;
 using System.Threading;
 using System.Globalization;
+using System.Resources;
+using OSDConfig.Properties;
 
 
 namespace OSDConfig
 {
     public partial class OSDConfigForm : Form
     {
+
+        ResourceManager rmMessages = new ResourceManager("OSDConfig.Messages", typeof(OSDConfigForm).Assembly);
+        ResourceManager rmItemNames = new ResourceManager("OSDConfig.OSDItemNames", typeof(OSDConfigForm).Assembly);
         /// <summary>
         /// 328 eeprom memory
         /// </summary>
@@ -76,12 +81,14 @@ namespace OSDConfig
                     foreach (var alt in OSDItemList.Alternates)
                         if (osd.SelectedItem == alt.Key && osd.Setting.IsEnabled(alt.Value))
                         {
-                            LIST_items.SelectedItem = OSDItemList.Names[(int)alt.Value];
+                            //LIST_items.SelectedItem = OSDItemList.Names[(int)alt.Value];
+                            LIST_items.SelectedIndex = Array.IndexOf(OSDItemList.Avaliable, alt.Value);
                             isalt = true;
                             break;
                         }
                     if (!isalt)
-                        LIST_items.SelectedItem = OSDItemList.Names[(int)osd.SelectedItem];
+                        //LIST_items.SelectedItem = OSDItemList.Names[(int)osd.SelectedItem];
+                        LIST_items.SelectedIndex = Array.IndexOf(OSDItemList.Avaliable, osd.SelectedItem);
                 }
             }
         }
@@ -122,8 +129,10 @@ namespace OSDConfig
 
 
             for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
-                LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
-                    osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
+                //LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
+                //  osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
+                LIST_items.Items.Add(rmItemNames.GetString(OSDItemList.Avaliable[i].ToString()),
+                osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
 
             for (int i = 0; i < osd.Setting.ad_setting.Length; i++)
             {
@@ -169,8 +178,9 @@ namespace OSDConfig
             }
             else
             {
-                string item = ((CheckedListBox)sender).SelectedItem.ToString();
-                OSDItem sel = (OSDItem)Array.IndexOf(OSDItemList.Names, item);
+
+                //string item = ((CheckedListBox)sender).SelectedItem.ToString();
+                OSDItem sel = OSDItemList.Avaliable[LIST_items.SelectedIndex];//(OSDItem)Array.IndexOf(OSDItemList.Names, item);
 
 
                 foreach (var alt in OSDItemList.Alternates)
@@ -197,18 +207,18 @@ namespace OSDConfig
             int idx = -1;
             if (((CheckedListBox)sender).SelectedItem != null)
             {
-                OSDItem item = (OSDItem)Array.IndexOf(OSDItemList.Names, ((CheckedListBox)sender).SelectedItem);
+                OSDItem item = OSDItemList.Avaliable[LIST_items.SelectedIndex];//(OSDItem)Array.IndexOf(OSDItemList.Names, ((CheckedListBox)sender).SelectedItem);
 
                 if (e.NewValue == CheckState.Checked)
                 {
                     foreach (var conflict in OSDItemList.Conflits)
                     {
-                        if (item == conflict.Key && (idx = LIST_items.Items.IndexOf(OSDItemList.Names[(int)conflict.Value])) >= 0)
+                        if (item == conflict.Key && (idx = Array.IndexOf(OSDItemList.Avaliable, conflict.Value)) >= 0)
                         {
                             LIST_items.SetItemChecked(idx, false);
                             osd.SetItemEnabled(conflict.Value, false);
                         }
-                        else if (item == conflict.Value && (idx = LIST_items.Items.IndexOf(OSDItemList.Names[(int)conflict.Key])) >= 0)
+                        else if (item == conflict.Value && (idx = Array.IndexOf(OSDItemList.Avaliable, conflict.Key)) >= 0)
                         {
                             LIST_items.SetItemChecked(idx, false);
                             osd.SetItemEnabled(conflict.Key, false);
@@ -218,7 +228,7 @@ namespace OSDConfig
 
                 foreach (var alt in OSDItemList.Alternates)
                 {
-                    if (item == alt.Key && e.NewValue == CheckState.Checked && (idx = LIST_items.Items.IndexOf(OSDItemList.Names[(int)alt.Value])) >= 0)
+                    if (item == alt.Key && e.NewValue == CheckState.Checked && (idx = Array.IndexOf(OSDItemList.Avaliable, alt.Value)) >= 0)
                     {
                         LIST_items.SetItemChecked(idx, false);
                         osd.SetItemEnabled(alt.Value, false);
@@ -227,8 +237,8 @@ namespace OSDConfig
                     else if (item == alt.Value)
                     {
                         if (e.NewValue == CheckState.Checked
-                            && OSDItemList.Names[(int)alt.Key] != null
-                            && (idx = LIST_items.Items.IndexOf(OSDItemList.Names[(int)alt.Key])) >= 0)
+                            //&& OSDItemList.Names[(int)alt.Key] != null
+                            && (idx = Array.IndexOf(OSDItemList.Avaliable, alt.Key)) >= 0)
                             LIST_items.SetItemChecked(idx, false);
                         osd.SetItemEnabled(alt.Key, e.NewValue == CheckState.Checked);
                         break;
@@ -246,6 +256,9 @@ namespace OSDConfig
 
         private void BUT_WriteOSD_Click(object sender, EventArgs e)
         {
+            //OSDConfig.Messages.
+
+
             toolStripProgressBar1.Style = ProgressBarStyle.Continuous;
             toolStripProgressBar1.Value = 0;
             toolStripProgressBar1.Maximum = 100;
@@ -256,9 +269,9 @@ namespace OSDConfig
             bool ok = osdPort.UploadSetting(osd.Setting);
             osdPort.Close();
             if (ok)
-                MessageBox.Show(this, "Write OSD Done", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(this, rmMessages.GetString("Write_OSD_Done"), rmMessages.GetString("Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
-                MessageBox.Show(this, "Write OSD Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, rmMessages.GetString("Write_OSD_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
 
@@ -312,22 +325,18 @@ namespace OSDConfig
             if (ok)
             {
                 LoadSetting(setting);
-                MessageBox.Show(this, "Read OSD Done", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                //toolStripProgressBar1.Value = 100;
-                //toolStripStatusLabel1.Text = "Read OSD Done";
+                MessageBox.Show(this, rmMessages.GetString("Read_OSD_Done"), rmMessages.GetString("Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show(this, "Read OSD Failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                //toolStripStatusLabel1.Text = "Read OSD Failed";
-                //toolStripProgressBar1.Value = 0;
+                MessageBox.Show(this, rmMessages.GetString("Read_OSD_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             osdPort.Close();
         }
 
         void sp_Progress(int progress)
         {
-            toolStripStatusLabel1.Text = "Uploading " + progress + " %";
+            toolStripStatusLabel1.Text = rmMessages.GetString("Uploading") + " " + progress + " %";
             toolStripProgressBar1.Value = progress;
 
             statusStrip1.Refresh();
@@ -369,7 +378,7 @@ namespace OSDConfig
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Error writing file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, rmMessages.GetString("Save_Setting_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -396,12 +405,12 @@ namespace OSDConfig
                                 LoadSetting(setting);
                         }
                         if (!ok)
-                            MessageBox.Show(this, "Invalid File Format", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, rmMessages.GetString("Invalid_File_Format"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch
                 {
-                    MessageBox.Show(this, "Error Reading file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, rmMessages.GetString("Read_Setting_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -471,7 +480,7 @@ namespace OSDConfig
 
                     sp.Open();
                 }
-                catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+                catch { MessageBox.Show("Error opening com port", rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
 
                 toolStripStatusLabel1.Text = "Connecting";
 
@@ -562,7 +571,10 @@ namespace OSDConfig
                     osdPort.Open();
 
                 }
-                catch { MessageBox.Show("Error opening com port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
+                catch
+                {
+                    MessageBox.Show("Error opening com port", rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error); return;
+                }
 
                 BinaryReader br = new BinaryReader(ofd.OpenFile());
 
@@ -575,21 +587,6 @@ namespace OSDConfig
                         try
                         {
                             byte[] bytes = br.ReadBytes(20);
-                            /*for (int i = 0; i < msgs.Length; i++)
-                            {
-                                //if (i == 1)
-                                //    continue;
-                                byte[] bytes = MavLink.generatePacket(types[i], msgs[i]);
-                                comPort.Write(bytes, 0, bytes.Length);
-                                // comPort.Write(msg, 0, msg.Length);
-
-                                //System.Threading.Thread.Sleep(1000);
-                                System.Threading.Thread.Sleep(100);
-                                string ack = comPort.ReadExisting();
-                                //Console.Write("{0}:  ", MavLink.packetcount);
-                                if (!string.IsNullOrEmpty(ack))
-                                    Console.WriteLine(ack);
-                            }*/
                             Thread.Sleep(10);
                         }
                         catch (Exception ce)
@@ -630,11 +627,11 @@ namespace OSDConfig
 
                     xmlwriter.WriteStartElement("Config");
 
-                    xmlwriter.WriteElementString("ComPort", CMB_ComPort == null? "":CMB_ComPort.Text);
+                    xmlwriter.WriteElementString("ComPort", CMB_ComPort == null ? "" : CMB_ComPort.Text);
                     xmlwriter.WriteElementString("BootBuadRate", bootRate.ToString());
                     xmlwriter.WriteElementString("OsdBuadRate", osdRate.ToString());
 
-                    xmlwriter.WriteElementString("Pal", CHK_pal == null? "True": CHK_pal.Checked.ToString());//osd.Mode.ToString());
+                    xmlwriter.WriteElementString("Pal", CHK_pal == null ? "True" : CHK_pal.Checked.ToString());//osd.Mode.ToString());
                     //xmlwriter.WriteElementString("Pal", CHK_pal.Checked.ToString());
                     xmlwriter.WriteElementString("BackgroudImage", bgImage);
                     xmlwriter.WriteElementString("Language", Thread.CurrentThread.CurrentUICulture.Name);
@@ -739,12 +736,18 @@ namespace OSDConfig
             osdPort.Close();
 
             if (ok)
-                toolStripStatusLabel1.Text = "CharSet Done";
+            {
+                MessageBox.Show(this, rmMessages.GetString("Upload_CharSet_Done"), rmMessages.GetString("Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
             else
-                toolStripStatusLabel1.Text = "Update CharSet Failed";
+            {
+                MessageBox.Show(this, rmMessages.GetString("Upload_CharSet_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            //if (ok)
+            //    toolStripStatusLabel1.Text = "CharSet Done";
+            //else
+            //    toolStripStatusLabel1.Text = "Update CharSet Failed";
 
-            //}
-            //}
         }
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
@@ -761,16 +764,16 @@ namespace OSDConfig
         {
             try
             {
-                OSDItem info = (OSDItem)Array.IndexOf(OSDItemList.Names, LIST_items.SelectedItem.ToString());
-
+                //OSDItem info = (OSDItem)Array.IndexOf(OSDItemList.Names, LIST_items.SelectedItem.ToString());
+                OSDItem item = OSDItemList.Avaliable[LIST_items.SelectedIndex];
                 foreach (var alt in OSDItemList.Alternates)
-                    if (info == alt.Value)
+                    if (item == alt.Value)
                     {
-                        info = alt.Key;
+                        item = alt.Key;
                         break;
                     }
 
-                osd.SetItemPosition(info, new Point((int)NUM_X.Value, (int)NUM_Y.Value));
+                osd.SetItemPosition(item, new Point((int)NUM_X.Value, (int)NUM_Y.Value));
                 osd.Draw();
             }
             catch { return; }
@@ -834,7 +837,7 @@ namespace OSDConfig
             }
             else
             {
-                MessageBox.Show(this, "Get ADC reading failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, rmMessages.GetString("Get_ADC_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -854,7 +857,7 @@ namespace OSDConfig
             }
             else
             {
-                MessageBox.Show(this, "Get ADC reading failed", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, rmMessages.GetString("Get_ADC_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -912,8 +915,13 @@ namespace OSDConfig
 
             LIST_items.Items.Clear();
             for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
-                LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
+            {
+                LIST_items.Items.Add(rmItemNames.GetString(OSDItemList.Avaliable[i].ToString()),
                     osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
+
+                //LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
+                //osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
+            }
 
             ComponentResourceManager rm = new ComponentResourceManager(this.GetType());
             rm.ApplyResources(this);
