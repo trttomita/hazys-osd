@@ -20,3 +20,4 @@ http://hazys-osd.googlecode.com/svn/wiki/image/adc.jpg
    # Change the actual value, measure it and input in *Real Value 2*.
    # Click the *AD Reading 2* to sample the new signal again.
    # The Value / bit and Value @ 0 will calculated automatically.
+ # Click "Write to OSD", save settings.
