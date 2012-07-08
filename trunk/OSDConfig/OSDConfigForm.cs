@@ -39,6 +39,9 @@ namespace OSDConfig
 
         bool fromuser = true;
 
+        ToolStripMenuItem[] langMenus;
+        CultureInfo[] langs;
+
         class ADReading
         {
             public int reading = 0;
@@ -56,6 +59,8 @@ namespace OSDConfig
         {
             xmlconfig(false);
             InitializeComponent();
+            langMenus = new ToolStripMenuItem[] { EnglishUIToolStripMenuItem, PolishUIToolStripMenuItem, ChineseUIToolStripMenuItem };
+            langs = new CultureInfo[] { new CultureInfo("en-US"), new CultureInfo("pl"), new CultureInfo("zh-Hans") };
         }
 
         void osd_ItemPositionChanged(object sender, EventArgs e)
@@ -119,13 +124,19 @@ namespace OSDConfig
             string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.Text = this.Text + " " + strVersion;
 
+            string lang = Thread.CurrentThread.CurrentUICulture.Name;
+
+            if (lang.StartsWith("zh", StringComparison.CurrentCultureIgnoreCase))
+                ChineseUIToolStripMenuItem.Checked = true;
+            else if (lang.StartsWith("pl", StringComparison.CurrentCultureIgnoreCase))
+                PolishUIToolStripMenuItem.Checked = true;
+            else
+                EnglishUIToolStripMenuItem.Checked = true;
+
             CMB_ComPort.Items.AddRange(GetPortNames());
 
             if (CMB_ComPort.Items.Count > 0)
                 CMB_ComPort.SelectedIndex = 0;
-
-
-
 
 
             for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
@@ -689,7 +700,9 @@ namespace OSDConfig
                                     case "Language":
                                         try
                                         {
-                                            Thread.CurrentThread.CurrentUICulture = new CultureInfo(xmlreader.ReadString());
+                                            string lang = xmlreader.ReadString();
+                                            Thread.CurrentThread.CurrentUICulture = new CultureInfo(lang);
+
                                         }
                                         catch (Exception)
                                         {
@@ -903,10 +916,16 @@ namespace OSDConfig
 
         private void UILanguageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (object.ReferenceEquals(sender, EnglishUIToolStripMenuItem))
-                ChangeLanguage(new CultureInfo("en-US"));
-            else if (object.ReferenceEquals(sender, ChineseUIToolStripMenuItem))
-                ChangeLanguage(new CultureInfo("zh-Hans"));
+
+            for (int i = 0; i < langMenus.Length; i++)
+                if (object.ReferenceEquals(sender, langMenus[i]))
+                {
+                    langMenus[i].Checked = true;
+                    ChangeLanguage(langs[i]);
+                }
+                else
+                    langMenus[i].Checked = false;
+
         }
 
         private void ChangeLanguage(CultureInfo culture)
@@ -927,8 +946,28 @@ namespace OSDConfig
             rm.ApplyResources(this);
             //rm.ApplyResources(this.menuStrip1);
             rm.ApplyResources(this, "$this");
+            string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Text = this.Text + " " + strVersion;
+
+            //cbFunctions
+            int idx = cbFunction.SelectedIndex;
+            cbFunction.Items.Clear();
+            cbFunction.Items.AddRange(new object[] {
+            rm.GetString("cbFunction.Items"),
+            rm.GetString("cbFunction.Items1"),
+            rm.GetString("cbFunction.Items2"),
+            rm.GetString("cbFunction.Items3"),
+            rm.GetString("cbFunction.Items4")});
+            cbFunction.SelectedIndex = idx;
+
+            
 
             xmlconfig(true);
+        }
+
+        private void PolishUIToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
