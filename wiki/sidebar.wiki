@@ -3,6 +3,7 @@
  =====[Remzibi About Remzibi's OSD]=====
  =====[Wiring Wire Connection]=====
 ====Configuration====
- =====[Firmware Uploading Firmware]=====
- =====[Charset Uploading Charset]=====
+ =====[Firmware Upload Firmware]=====
+ =====[Charset Upload Charset]=====
  =====[Setting Set Display Information]=====
+ =====[ADConfig Config Analog/Digital Conversion]====
