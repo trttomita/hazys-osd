@@ -6,7 +6,7 @@ Hazy 的 OSD 支持通过模数(A/D)转换读取信息。当前支持的功能�
 
 但是，AD 转换需要额外配置，包括选择通道、每数字位表示的真实值，和读数0时的真实值，如下所述：
 
-http://hazys-osd.googlecode.com/svn/wiki/image/adc_zh.jpg
+http://hazys-osd.googlecode.com/svn/wiki/image/adc_zh.JPG
 
  # *功能*: 从下拉列表中选择需要配置的功能。
  # *AD 通道*: 选择连接到信号的引脚。具体请参考硬件电路图。
