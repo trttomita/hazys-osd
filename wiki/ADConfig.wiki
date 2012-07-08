@@ -1,0 +1,22 @@
+#summary One-sentence summary of this page.
+
+= Analog Digital Conversion Configuration =
+
+Hazy's OSD support using Analog/Digital (AD) Conversion for reading useful information. Currently supported functions including Voltage A/B, Current A/B and RSSI.
+
+However, the AD conversion need additional configuration, including channels, actual value per digital bit, and actual value at zero reading, as explained in the following text.
+
+http://hazys-osd.googlecode.com/svn/wiki/image/adc.jpg
+
+ # *Function*: Choose the function that needs to config from the drop down list.
+ # *Channel*: Choose which pin is connected to corresponding signal. Refer to the electrical schematic from your hardware manufacturer for more detail.
+ # *A/D conversion parameters*: these parameters controls how a internal reading value represents a actual value. (e.g. reading 1 represents 0.1v, 1v, or 5v?). There are two ways to input these parameters:
+  * 3 a) *Raw parameter*:
+   # *Value / bit*: how much does the actual value (i.e. voltage, current, etc) increase while ADC reading increase 1. Refer to your electrical schematic for exact parameter value.
+   # *Value @ 0*: how much is the actual value when ADC reading is 0.
+  * 3 b) *Sampling*: It is quite difficult for users to calculate such complex parameters. Instead, the config tool can calculate those parameters by two sampling:
+   # Measure the actual value using a instrument (e.g. a multimeter), input the value in *Real Value 1*.
+   # Click the *AD Reading 1*, the config tool will ask OSD to sample the signal. The internal reading will be shown beside AD Reading 1.
+   # Change the actual value, measure it and input in *Real Value 2*.
+   # Click the *AD Reading 2* to sample the new signal again.
+   # The Value / bit and Value @ 0 will calculated automatically.
