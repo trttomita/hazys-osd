@@ -47,5 +47,7 @@ namespace OSDConfig
                     ApplyResources(rm, (item as ToolStripMenuItem).DropDownItems);
             }
         }
+
+        
     }
 }
