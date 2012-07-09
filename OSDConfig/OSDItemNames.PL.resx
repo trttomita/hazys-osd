@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Alt" xml:space="preserve">
     <value>Wysokość (bezwzględna)</value>
@@ -136,7 +136,7 @@
     <value>Napięcie B (AD)</value>
   </data>
   <data name="Cen" xml:space="preserve">
-    <value>Środek</value>
+    <value>Celownik</value>
   </data>
   <data name="CurA" xml:space="preserve">
     <value>Prąd A</value>
@@ -163,28 +163,28 @@
     <value>Widoczne satelity</value>
   </data>
   <data name="HDir" xml:space="preserve">
-    <value>Kierunek do miejsca startu</value>
+    <value>Kierunek do domu</value>
   </data>
   <data name="HDis" xml:space="preserve">
-    <value>Odległość do miejsca startu</value>
+    <value>Odległość do domu</value>
   </data>
   <data name="Head" xml:space="preserve">
     <value>Kurs</value>
   </data>
   <data name="Hor" xml:space="preserve">
-    <value>Horyzont</value>
+    <value>Sztuczny horyzont</value>
   </data>
   <data name="MavB" xml:space="preserve">
-    <value>Heart Beat</value>
+    <value>Heartbeat</value>
   </data>
   <data name="Pit" xml:space="preserve">
-    <value>Wysokość</value>
+    <value>Wznoszenie</value>
   </data>
   <data name="Rol" xml:space="preserve">
     <value>Przechył</value>
   </data>
   <data name="Rose" xml:space="preserve">
-    <value>Róża wiatrów</value>
+    <value>Kompas</value>
   </data>
   <data name="RSSI" xml:space="preserve">
     <value>RSSI</value>
@@ -199,7 +199,7 @@
     <value>Przepustnica</value>
   </data>
   <data name="Vel" xml:space="preserve">
-    <value>Przyspieszenie</value>
+    <value>Prędkość</value>
   </data>
   <data name="WDir" xml:space="preserve">
     <value>Kierunek do punktu</value>
