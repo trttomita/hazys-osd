@@ -930,6 +930,7 @@ namespace OSDConfig
 
         private void ChangeLanguage(CultureInfo culture)
         {
+            Size size = this.Size;
             Thread.CurrentThread.CurrentUICulture = culture;
 
             LIST_items.Items.Clear();
@@ -960,9 +961,8 @@ namespace OSDConfig
             rm.GetString("cbFunction.Items4")});
             cbFunction.SelectedIndex = idx;
 
-            
-
             xmlconfig(true);
+            this.Size = size;
         }
 
         private void PolishUIToolStripMenuItem_Click(object sender, EventArgs e)
