@@ -136,10 +136,10 @@
     <value>Błąd odczytu OSD.</value>
   </data>
   <data name="Read_Setting_Failed" xml:space="preserve">
-    <value>Odczyt konfiguracji zakończony niepowodzeniem.</value>
+    <value>Błąd odczytu konfiguracji.</value>
   </data>
   <data name="Save_Setting_Failed" xml:space="preserve">
-    <value>Zapis konfiguracji zakończony niepowodzeniem.</value>
+    <value>Błąd zapisu konfiguracji.</value>
   </data>
   <data name="Uploading" xml:space="preserve">
     <value>Ładowanie</value>
