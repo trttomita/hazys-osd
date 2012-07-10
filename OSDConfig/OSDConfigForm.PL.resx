@@ -157,11 +157,29 @@
   <data name="videoModeToolStripMenuItem.Text" xml:space="preserve">
     <value>&amp;Tryb wideo</value>
   </data>
+  <data name="showGrid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 22</value>
+  </data>
   <data name="showGrid.Text" xml:space="preserve">
     <value>Pokaż siatkę</value>
   </data>
+  <data name="customBGPictureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 22</value>
+  </data>
+  <data name="customBGPictureToolStripMenuItem.Text" xml:space="preserve">
+    <value>Obrazek tła...</value>
+  </data>
+  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 22</value>
+  </data>
   <data name="toolStripMenuItem1.Text" xml:space="preserve">
     <value>Język</value>
+  </data>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 6</value>
+  </data>
+  <data name="updateFirmwareToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 22</value>
   </data>
   <data name="updateFirmwareToolStripMenuItem.Text" xml:space="preserve">
     <value>Aktualizuj firmware...</value>
@@ -169,11 +187,17 @@
   <data name="updateFirmwareToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>Załaduj nowy plik firmware do OSD</value>
   </data>
+  <data name="updateFontToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 22</value>
+  </data>
   <data name="updateFontToolStripMenuItem.Text" xml:space="preserve">
     <value>Aktualizuj CharSet...</value>
   </data>
   <data name="updateFontToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>Załaduj plik czcionek do OSD</value>
+  </data>
+  <data name="sendTLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 22</value>
   </data>
   <data name="sendTLogToolStripMenuItem.Text" xml:space="preserve">
     <value>Wyślij TLog...</value>
@@ -699,5 +723,9 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
 </root>

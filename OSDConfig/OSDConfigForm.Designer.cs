@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OSDConfigForm));
-            OSDConfig.OSDSetting osdSetting1 = new OSDConfig.OSDSetting();
+            OSDConfig.OSDSetting osdSetting2 = new OSDConfig.OSDSetting();
             this.LIST_items = new System.Windows.Forms.CheckedListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -86,6 +86,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cbFunction = new System.Windows.Forms.ComboBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.osd = new OSDConfig.ArduOSD();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_Y)).BeginInit();
@@ -101,6 +103,8 @@
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.num1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num2)).BeginInit();
+            this.panel2.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // LIST_items
@@ -162,8 +166,8 @@
             // 
             // CMB_ComPort
             // 
-            resources.ApplyResources(this.CMB_ComPort, "CMB_ComPort");
             this.CMB_ComPort.FormattingEnabled = true;
+            resources.ApplyResources(this.CMB_ComPort, "CMB_ComPort");
             this.CMB_ComPort.Name = "CMB_ComPort";
             this.CMB_ComPort.Click += new System.EventHandler(this.CMB_ComPort_Click);
             // 
@@ -545,27 +549,39 @@
             this.cbFunction.Name = "cbFunction";
             this.cbFunction.SelectedIndexChanged += new System.EventHandler(this.cbFunction_SelectedIndexChanged);
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.osd);
+            this.panel2.Controls.Add(this.tableLayoutPanel1);
+            resources.ApplyResources(this.panel2, "panel2");
+            this.panel2.Name = "panel2";
+            // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.BUT_WriteOSD, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.BUT_ReadOSD, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.CMB_ComPort, 1, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
             // osd
             // 
-            resources.ApplyResources(this.osd, "osd");
             this.osd.Chars = null;
+            resources.ApplyResources(this.osd, "osd");
             this.osd.Mode = OSDConfig.VideoMode.PAL;
             this.osd.Name = "osd";
             this.osd.SelectedItem = OSDConfig.OSDItem.NULL;
-            this.osd.Setting = osdSetting1;
+            this.osd.Setting = osdSetting2;
             this.osd.ShowGrid = true;
             // 
             // OSDConfigForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this.osd);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.BUT_ReadOSD);
-            this.Controls.Add(this.CMB_ComPort);
-            this.Controls.Add(this.BUT_WriteOSD);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "OSDConfigForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OSD_FormClosed);
@@ -590,6 +606,8 @@
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.num1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.num2)).EndInit();
+            this.panel2.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -654,6 +672,8 @@
         private System.Windows.Forms.ToolStripMenuItem EnglishUIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ChineseUIToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem PolishUIToolStripMenuItem;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }
 
