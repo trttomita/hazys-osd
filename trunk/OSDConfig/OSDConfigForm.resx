@@ -121,6 +121,10 @@
   <data name="LIST_items.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="LIST_items.HorizontalScrollbar" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="LIST_items.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
@@ -128,7 +132,6 @@
   <data name="LIST_items.Size" type="System.Drawing.Size, System.Drawing">
     <value>138, 237</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="LIST_items.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
@@ -466,19 +469,19 @@
     <value>Background Image...</value>
   </data>
   <data name="EnglishUIToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="EnglishUIToolStripMenuItem.Text" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="PolishUIToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="PolishUIToolStripMenuItem.Text" xml:space="preserve">
     <value>Polski</value>
   </data>
   <data name="ChineseUIToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>148, 22</value>
   </data>
   <data name="ChineseUIToolStripMenuItem.Text" xml:space="preserve">
     <value>中文（简体）</value>
@@ -1153,7 +1156,7 @@
     <value>osd</value>
   </data>
   <data name="&gt;&gt;osd.Type" xml:space="preserve">
-    <value>OSDConfig.ArduOSD, OSDConfig, Version=1.0.2.1, Culture=neutral, PublicKeyToken=null</value>
+    <value>OSDConfig.ArduOSD, OSDConfig, Version=1.0.2.2, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;osd.Parent" xml:space="preserve">
     <value>$this</value>
