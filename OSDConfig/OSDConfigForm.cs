@@ -24,23 +24,22 @@ namespace OSDConfig
 
         ResourceManager rmMessages = new ResourceManager("OSDConfig.Messages", typeof(OSDConfigForm).Assembly);
         ResourceManager rmItemNames = new ResourceManager("OSDConfig.OSDItemNames", typeof(OSDConfigForm).Assembly);
-        /// <summary>
-        /// 328 eeprom memory
-        /// </summary>
-        byte[] eeprom = new byte[1024];
-        /// <summary>
-        /// background image
-        /// </summary>
-        //bool incli = false;
 
-        //SerialPort comPort = new SerialPort();
         ArduOSDPort osdPort = new ArduOSDPort();
-        //ADConfig adconfig = new ADConfig();
 
         bool fromuser = true;
 
         ToolStripMenuItem[] langMenus;
         CultureInfo[] langs;
+
+
+        string lang;
+        bool pal = true;
+        int bootRate = 9600;
+        int osdRate = 57600;
+        string bgImage = "vlcsnap-2012-01-28-07h46m04s95.png";
+        string comPort = "";
+
 
         class ADReading
         {
@@ -49,11 +48,9 @@ namespace OSDConfig
         }
         List<ADReading[]> adreadings = new List<ADReading[]>();
 
-        int bootRate = 9600;
-        int osdRate = 57600;
-        string bgImage = "vlcsnap-2012-01-28-07h46m04s95.png";
 
         bool fromOSD = true;
+
 
         public OSDConfigForm()
         {
@@ -121,10 +118,12 @@ namespace OSDConfig
 
         private void OSD_Load(object sender, EventArgs e)
         {
+            //xmlconfig(false);
+
             string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             this.Text = this.Text + " " + strVersion;
 
-            string lang = Thread.CurrentThread.CurrentUICulture.Name;
+            //string lang = Thread.CurrentThread.CurrentUICulture.Name;
 
             if (lang.StartsWith("zh", StringComparison.CurrentCultureIgnoreCase))
                 ChineseUIToolStripMenuItem.Checked = true;
@@ -133,15 +132,15 @@ namespace OSDConfig
             else
                 EnglishUIToolStripMenuItem.Checked = true;
 
+            CHK_pal.Checked = pal;
+
             CMB_ComPort.Items.AddRange(GetPortNames());
 
-            if (CMB_ComPort.Items.Count > 0)
-                CMB_ComPort.SelectedIndex = 0;
+            if (CMB_ComPort.Items.IndexOf(comPort) >= 0)
+                CMB_ComPort.Text = comPort;
 
 
             for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
-                //LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
-                //  osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
                 LIST_items.Items.Add(rmItemNames.GetString(OSDItemList.Avaliable[i].ToString()),
                 osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
 
@@ -160,16 +159,7 @@ namespace OSDConfig
             osdPort.BaudRate = osdRate;
 
             osd.Chars = mcm.readMCM2("OSD_SA_v5.mcm");
-            /*
-            Bitmap m = new Bitmap(12 * 16, 18 * 16);
-            Graphics g = Graphics.FromImage(m);
-            for (int i = 0; i < 16; i++)
-                for (int j = 0; j < 16; j++)
-                {
-                    g.DrawImage(osd.Chars[i * 16 + j], j * 12, i * 18);
-                }
-            m.Save("fonts.png");*/
-            // load default bg picture
+
             try
             {
                 osd.BackgroundImage/*bgpicture*/ = Image.FromFile(bgImage);
@@ -670,15 +660,10 @@ namespace OSDConfig
                                 switch (xmlreader.Name)
                                 {
                                     case "ComPort":
-                                        string temp = xmlreader.ReadString();
-                                        //CMB_ComPort.Text = temp;
-                                        if (CMB_ComPort.Items.IndexOf(temp) >= 0)
-                                            CMB_ComPort.Text = temp;
-
+                                        comPort = xmlreader.ReadString();
                                         break;
-                                    case "VideoMode":
-                                        string temp2 = xmlreader.ReadString();
-                                        CHK_pal.Checked = (temp2 == "True");
+                                    case "Pal":
+                                        bool.TryParse(xmlreader.ReadString(), out pal);
                                         break;
                                     case "BootBuadRate":
                                         int brate = 0;
@@ -700,9 +685,8 @@ namespace OSDConfig
                                     case "Language":
                                         try
                                         {
-                                            string lang = xmlreader.ReadString();
+                                            lang = xmlreader.ReadString();
                                             Thread.CurrentThread.CurrentUICulture = new CultureInfo(lang);
-
                                         }
                                         catch (Exception)
                                         {
@@ -930,7 +914,6 @@ namespace OSDConfig
 
         private void ChangeLanguage(CultureInfo culture)
         {
-            Size size = this.Size;
             Thread.CurrentThread.CurrentUICulture = culture;
 
             LIST_items.Items.Clear();
@@ -945,10 +928,9 @@ namespace OSDConfig
 
             ComponentResourceManager rm = new ComponentResourceManager(this.GetType());
             rm.ApplyResources(this);
-            //rm.ApplyResources(this.menuStrip1);
-            rm.ApplyResources(this, "$this");
+
             string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            this.Text = this.Text + " " + strVersion;
+            this.Text = rm.GetString("$this.Text") + " " + strVersion;
 
             //cbFunctions
             int idx = cbFunction.SelectedIndex;
@@ -962,7 +944,7 @@ namespace OSDConfig
             cbFunction.SelectedIndex = idx;
 
             xmlconfig(true);
-            this.Size = size;
+
         }
 
         private void PolishUIToolStripMenuItem_Click(object sender, EventArgs e)
