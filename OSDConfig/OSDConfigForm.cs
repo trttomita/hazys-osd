@@ -33,7 +33,7 @@ namespace OSDConfig
         CultureInfo[] langs;
 
 
-        string lang;
+        string lang = "en";
         bool pal = true;
         int bootRate = 9600;
         int osdRate = 57600;
