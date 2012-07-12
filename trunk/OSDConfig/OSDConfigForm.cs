@@ -33,7 +33,7 @@ namespace OSDConfig
         CultureInfo[] langs;
 
 
-        string lang = "en";
+        string lang = "";
         bool pal = true;
         int bootRate = 9600;
         int osdRate = 57600;
@@ -635,7 +635,7 @@ namespace OSDConfig
                     xmlwriter.WriteElementString("Pal", CHK_pal == null ? "True" : CHK_pal.Checked.ToString());//osd.Mode.ToString());
                     //xmlwriter.WriteElementString("Pal", CHK_pal.Checked.ToString());
                     xmlwriter.WriteElementString("BackgroudImage", bgImage);
-                    xmlwriter.WriteElementString("Language", Thread.CurrentThread.CurrentUICulture.Name);
+                    xmlwriter.WriteElementString("Language", (lang = Thread.CurrentThread.CurrentUICulture.Name));
 
                     xmlwriter.WriteEndElement();
 
