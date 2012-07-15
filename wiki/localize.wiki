@@ -9,4 +9,22 @@ Many friends are interested in translate the config tool into their own language
  * A svn tool to download and upload files. I personally recommend TortoiseSVN. You can download it from here.
  * A Google Account for permission to upload the code. Drop me a e-mail (huangxiaojiang (at) pku.edu.cn) and I will add you to the committer group.
 
-= Details =
+= Step 1. Checkout files using SVN =
+
+1. Open the Windows Explorer, navigate to an directory. This will be the directory that stores the code file. In this example I'll use "D:\HazyOSD".
+
+2. Right Click on the directory, click on the "SVN Checkout..." Menu, as follows
+
+3. Fill in repository's URL in the pop-up dialog
+
+4. Click "OK" button in the dialog
+
+5. Wait till all files are checked out, click "OK".
+
+There will be two directories, i.e. "OSD" and "OSDConfig". The "OSD" directory contains the source files of the firmware, and the "OSDConfig" direcotry contains the source files of the config tool.
+
+= Step 2. Translate the main form =
+
+= Step 3. Translate the OSD Function names and Messages =
+
+= Step 4. Upload the new files =
