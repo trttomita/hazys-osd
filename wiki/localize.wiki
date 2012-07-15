@@ -11,20 +11,22 @@ Many friends are interested in translate the config tool into their own language
 
 = Step 1. Checkout files using SVN =
 
-1. Open the Windows Explorer, navigate to an directory. This will be the directory that stores the code file. In this example I'll use "D:\HazyOSD".
+1. Open the Windows Explorer, navigate to an directory. This will be the directory that stores the code file. In this example I'll use "D:\HazyOSD". Right Click on the directory, click on the "SVN Checkout..." Menu, as follows
 
-2. Right Click on the directory, click on the "SVN Checkout..." Menu, as follows
+http://hazys-osd.googlecode.com/svn/wiki/image/svn1.JPG
 
-3. Fill in repository's URL in the pop-up dialog
+2. Fill in repository's URL in the pop-up dialog, and click "OK"
 
-4. Click "OK" button in the dialog
+http://hazys-osd.googlecode.com/svn/wiki/image/svn2.JPG
 
-5. Wait till all files are checked out, click "OK".
+3. Wait till all files are checked out, click "OK".
+
+http://hazys-osd.googlecode.com/svn/wiki/image/svn3.JPG
 
 There will be two directories, i.e. "OSD" and "OSDConfig". The "OSD" directory contains the source files of the firmware, and the "OSDConfig" direcotry contains the source files of the config tool.
 
 = Step 2. Translate the main form =
 
-= Step 3. Translate the OSD Function names and Messages =
+= Step 3. Translate the function names and messages =
 
 = Step 4. Upload the new files =
