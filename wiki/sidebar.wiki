@@ -7,3 +7,5 @@
  =====[Charset Upload Charset]=====
  =====[Setting Set Display Information]=====
  =====[ADConfig Config Analog/Digital Conversion]====
+====Development====
+ =====[localize UI Localization]=====
