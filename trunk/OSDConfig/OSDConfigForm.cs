@@ -56,8 +56,8 @@ namespace OSDConfig
         {
             xmlconfig(false);
             InitializeComponent();
-            langMenus = new ToolStripMenuItem[] { EnglishUIToolStripMenuItem, PolishUIToolStripMenuItem, ChineseUIToolStripMenuItem };
-            langs = new CultureInfo[] { new CultureInfo("en-US"), new CultureInfo("pl"), new CultureInfo("zh-Hans") };
+            langMenus = new ToolStripMenuItem[] { EnglishUIToolStripMenuItem, SpanishUIToolStripMenuItem, PolishUIToolStripMenuItem, ChineseUIToolStripMenuItem };
+            langs = new CultureInfo[] { new CultureInfo("en-US"), new CultureInfo("es"), new CultureInfo("pl"), new CultureInfo("zh-Hans") };
         }
 
         void osd_ItemPositionChanged(object sender, EventArgs e)
@@ -129,6 +129,8 @@ namespace OSDConfig
                 ChineseUIToolStripMenuItem.Checked = true;
             else if (lang.StartsWith("pl", StringComparison.CurrentCultureIgnoreCase))
                 PolishUIToolStripMenuItem.Checked = true;
+            else if (lang.StartsWith("es", StringComparison.CurrentCultureIgnoreCase))
+                SpanishUIToolStripMenuItem.Checked = true;
             else
                 EnglishUIToolStripMenuItem.Checked = true;
 
