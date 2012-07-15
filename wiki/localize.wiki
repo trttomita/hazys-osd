@@ -1,0 +1,12 @@
+#UI localization for config tool.
+
+= Introduction =
+
+Many friends are interested in translate the config tool into their own language, and I really appreciate their willing to help. In this guide, I'll introduce how to translate the config tool step by step.
+
+= What do I need =
+ * Visual Studio 2010, or Visual C# Express 2010. The former one is commercial product (and really expensive), but you can download a trial vision from here. The letter one is completely free, you can download from here.
+ * A svn tool to download and upload files. I personally recommend TortoiseSVN. You can download it from here.
+ * A Google Account for permission to upload the code. Drop me a e-mail (huangxiaojiang (at) pku.edu.cn) and I will add you to the committer group.
+
+= Details =
