@@ -87,8 +87,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.cbFunction = new System.Windows.Forms.ComboBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.osd = new OSDConfig.ArduOSD();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.SpanishUIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_X)).BeginInit();
@@ -312,6 +313,7 @@
             // 
             this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.EnglishUIToolStripMenuItem,
+            this.SpanishUIToolStripMenuItem,
             this.PolishUIToolStripMenuItem,
             this.ChineseUIToolStripMenuItem});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
@@ -556,14 +558,6 @@
             resources.ApplyResources(this.panel2, "panel2");
             this.panel2.Name = "panel2";
             // 
-            // tableLayoutPanel1
-            // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Controls.Add(this.BUT_WriteOSD, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.BUT_ReadOSD, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.CMB_ComPort, 1, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            // 
             // osd
             // 
             this.osd.Chars = null;
@@ -573,6 +567,20 @@
             this.osd.SelectedItem = OSDConfig.OSDItem.NULL;
             this.osd.Setting = osdSetting2;
             this.osd.ShowGrid = true;
+            // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.BUT_WriteOSD, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.BUT_ReadOSD, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.CMB_ComPort, 1, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
+            // SpanishUIToolStripMenuItem
+            // 
+            this.SpanishUIToolStripMenuItem.Name = "SpanishUIToolStripMenuItem";
+            resources.ApplyResources(this.SpanishUIToolStripMenuItem, "SpanishUIToolStripMenuItem");
+            this.SpanishUIToolStripMenuItem.Click += new System.EventHandler(this.UILanguageToolStripMenuItem_Click);
             // 
             // OSDConfigForm
             // 
@@ -674,6 +682,7 @@
         private System.Windows.Forms.ToolStripMenuItem PolishUIToolStripMenuItem;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.ToolStripMenuItem SpanishUIToolStripMenuItem;
     }
 }
 

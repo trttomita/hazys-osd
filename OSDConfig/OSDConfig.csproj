@@ -98,6 +98,7 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Messages.es.resx" />
     <EmbeddedResource Include="Messages.PL.resx" />
     <EmbeddedResource Include="Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -106,6 +107,9 @@
     <EmbeddedResource Include="Messages.zh-Hans.resx" />
     <EmbeddedResource Include="OSD.resx">
       <DependentUpon>OSD.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OSDConfigForm.es.resx">
+      <DependentUpon>OSDConfigForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OSDConfigForm.pl.resx">
       <DependentUpon>OSDConfigForm.cs</DependentUpon>
@@ -116,6 +120,7 @@
     <EmbeddedResource Include="OSDConfigForm.zh-Hans.resx">
       <DependentUpon>OSDConfigForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OSDItemNames.es.resx" />
     <EmbeddedResource Include="OSDItemNames.PL.resx" />
     <EmbeddedResource Include="OSDItemNames.resx">
       <Generator>ResXFileCodeGenerator</Generator>
