@@ -12,10 +12,10 @@ Since there is actually no many texts in the config tool, I write all of them in
 
 Maybe you want to know how it works, or you want to adjust the looking in your language (e.g. A label isn't long enough to show the text), you can use the Programming Environment to modify the code. That's actually how I integrate the language translation into the project.
 
-== What do I need ==
+== What do you need ==
  * Visual C# Express 2010. This one is completely free, you can download from [http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express here]. You can also use the commercial Visual Studio 2010 (are you that rich?). There are trial visions [http://www.microsoft.com/visualstudio/en-us/try here]. 
  * A svn tool to download and upload files. I personally recommend TortoiseSVN. You can download it from [http://tortoisesvn.net/ here].
- * A Google Account for permission to upload the code. If you haven't have one, you can create a account [https://accounts.google.com/NewAccount here]. Drop me a e-mail (hazyhxj@gmail.com) and I will add you to the committer group.
+ * A Google Account for permission to upload the code. If you haven't have one, you can create a account [https://accounts.google.com/NewAccount here]. Drop me a e-mail (hazyhxj@gmail.com) so I can add you to the committer group.
 
 == Step 1. Checkout files using SVN ==
 
