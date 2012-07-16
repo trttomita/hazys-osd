@@ -2,14 +2,22 @@
 
 = Introduction =
 
-Many friends are interested in translate the config tool into their own language, and I really appreciate their willing to help. In this guide, I'll introduce how to translate the config tool step by step.
+Many friends are interested in translate the config tool into their own language, and we really appreciate their willing to help. In this guide, I'll introduce two different ways for helping us translate the config tools.
 
-= What do I need =
+= Simplest Way - Text Translation Only =
+
+Since there is actually no many texts in the config tool, I write all of them in a plain text file ([http://hazys-osd.googlecode.com/svn/wiki/language.txt here]). You can simply translate them into your language, and send the translation to me (hazyhxj@gmail.com). Please keep the English text, and write the translation in a new line under each English text so that I can match them up.
+
+= Complex Way - Using Programming Environment =
+
+Maybe you want to know how it works, or you want to adjust the looking in your language (e.g. A label isn't long enough to show the text), you can use the Programming Environment to modify the code. That's actually how I integrate the language translation into the project.
+
+== What do I need ==
  * Visual C# Express 2010. This one is completely free, you can download from [http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express here]. You can also use the commercial Visual Studio 2010 (are you that rich?). There are trial visions [http://www.microsoft.com/visualstudio/en-us/try here]. 
  * A svn tool to download and upload files. I personally recommend TortoiseSVN. You can download it from [http://tortoisesvn.net/ here].
- * A Google Account for permission to upload the code. If you haven't have one, you can create a account [https://accounts.google.com/NewAccount here]. Drop me a e-mail (huangxiaojiang (at) pku.edu.cn) and I will add you to the committer group.
+ * A Google Account for permission to upload the code. If you haven't have one, you can create a account [https://accounts.google.com/NewAccount here]. Drop me a e-mail (hazyhxj@gmail.com) and I will add you to the committer group.
 
-= Step 1. Checkout files using SVN =
+== Step 1. Checkout files using SVN ==
 
 1. Open the Windows Explorer, navigate to an directory. This will be the directory that stores the code file. In this example I'll use "D:\HazyOSD". Right Click on the directory, click on the "SVN Checkout..." Menu, as follows
 
@@ -25,8 +33,8 @@ http://hazys-osd.googlecode.com/svn/wiki/image/svn3.JPG
 
 There will be two directories, i.e. "OSD" and "OSDConfig". The "OSD" directory contains the source files of the firmware, and the "OSDConfig" direcotry contains the source files of the config tool.
 
-= Step 2. Translate the main form =
+== Step 2. Translate the main form ==
 
-= Step 3. Translate the function names and messages =
+== Step 3. Translate the function names and messages ==
 
-= Step 4. Upload the new files =
+== Step 4. Upload the new files ==
