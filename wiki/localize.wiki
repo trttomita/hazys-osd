@@ -4,10 +4,12 @@
 
 Many friends are interested in translate the config tool into their own language, and we really appreciate their willing to help. In this guide, I'll introduce two different ways for helping us translate the config tools.
 
+-------
 = Simplest Way - Text Translation Only =
 
 Since there is actually no many texts in the config tool, I write all of them in a plain text file ([http://hazys-osd.googlecode.com/svn/wiki/language.txt here]). You can simply translate them into your language, and send the translation to me (hazyhxj@gmail.com). Please keep the English text, and write the translation in a new line under each English text so that I can match them up.
 
+------
 = Complex Way - Using Programming Environment =
 
 Maybe you want to know how it works, or you want to adjust the looking in your language (e.g. A label isn't long enough to show the text), you can use the Programming Environment to modify the code. That's actually how I integrate the language translation into the project.
