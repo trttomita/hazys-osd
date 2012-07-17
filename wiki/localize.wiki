@@ -34,7 +34,37 @@ http://hazys-osd.googlecode.com/svn/wiki/image/svn3.JPG
 There will be two directories, i.e. "OSD" and "OSDConfig". The "OSD" directory contains the source files of the firmware, and the "OSDConfig" direcotry contains the source files of the config tool.
 
 == Step 2. Translate the main form ==
+The Visual Studio provides a simple UI designer that suppose localization of forms. In this step we'll use this designer to edit the main form.
+
+1. Open the designer for "OSDConfigForm" by double click the item.
+
+2. Select the form by click on the title bar of the form. Do not select the components in the form.
+
+3. Navigate to the "Language" property in the Property Window, change the language into your own language.
+
+4. Edit the components in the Form. Click each components, navigate to the "Text" property, and write down the caption in your language. Sometime you may also want to edit the "ToolTipText" property.
+
+You will notice a new file named "OSDConfigForm.LANG.resx" are created automatically, where "LANG" stands for code for your language, e.g. "es" for Spanish, "pl" for Polish, etc. Remember this code, you will need them in the following step.
 
 == Step 3. Translate the function names and messages ==
+For the consideration of further upgrade, the function names are loaded dynamically from a resource file. The prompt messages are also loaded from a resource file. Unlike the localization of Form, the Visual Studio does not provide a simple UI to create localized resource files, and you have to add them manually.
+
+1. Make copies of "OSDItemNames.resx" and "Messages.resx", and name them as "OSDItemNames.LANG.resx" and "Messages.LANG.resx". Here "LANG" stands for the code for your language, e.g. "en" for English, "es" for Spanish. Refer to Step 2 to check the code if you are not sure.
+
+2. Add the copied resource file into the project.
+
+3. Open the resource file by double click the name, and translate the texts into your language.
 
 == Step 4. Upload the new files ==
+
+It is easy to upload the new files using the SVN tool. All you need to do is:
+
+1. Open the directory of the project.
+
+2. Right click on the directory, click "SVN Commit..." in the menu.
+
+3. Write down a message of what have been changed, and click "OK".
+
+4. A dialog of user name and password may pop up if you haven't save them before. Input your Google Account and the password for Google Code. If you don't know the password, it can be found [http://code.google.com/hosting/settings here].
+
+5. Wait till upload is done.
