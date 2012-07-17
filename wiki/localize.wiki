@@ -7,7 +7,17 @@ Many friends are interested in translate the config tool into their own language
 -------
 = Simplest Way - Text Translation Only =
 
-Since there is actually no many texts in the config tool, I write all of them in a plain text file ([http://hazys-osd.googlecode.com/svn/wiki/language.txt here]). You can simply translate them into your language, and send the translation to me (hazyhxj@gmail.com). Please keep the English text, and write the translation in a new line under each English text so that I can match them up.
+Since there are actually not many texts in the config tool, I write all of them in a plain text file ([http://hazys-osd.googlecode.com/svn/wiki/language.txt here]). You can simply translate them into your language, and send the translation to me (hazyhxj@gmail.com). Please keep the English text, and write the translation in a new line under each English text so that I can match them up.
+
+The lines like
+ 
+{{{
+/************* OSD Function Names *************/
+/************* Prompt Messages ****************/
+/************* Form UI ************************/
+}}}
+
+are just for separating the sections in the text, you do not have to translate them :)
 
 ------
 = Complex Way - Using Programming Environment =
