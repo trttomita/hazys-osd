@@ -69,6 +69,8 @@ For the consideration of further upgrade, the function names are loaded dynamica
 
 3. Open the resource file by double click the name, and translate the texts into your language.
 
+*Note* You may also edit the resources of the main form using this way. Copy the "OSDConfigForm.es.resx" and rename it accordingly. Do not copy "OSDConfigForm.resx", because it contains other information that may cause confusion.
+
 == Step 4. Upload the new files ==
 
 It is easy to upload the new files using the SVN tool. All you need to do is:
