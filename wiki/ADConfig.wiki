@@ -21,3 +21,13 @@ http://hazys-osd.googlecode.com/svn/wiki/image/adc.jpg
    # Click the *AD Reading 2* to sample the new signal again.
    # The Value / bit and Value @ 0 will calculated automatically.
  # Click "Write to OSD", save settings.
+
+== Example ==
+=== RSSI ===
+The RSSI value in this OSD is displayed as parentage, rather than raw value, i.e., in order to show 100%, you should enter 100 as the real value, but not the voltage of the RSSI pin. Here are a simple instruction of setting RSSI:
+
+ # Open the transmitter, place it at a proper distance from the receiver, let's say about 1m or 2m. That's because some same receivers get bad signals when they are too close to the transmitter.
+ # Input 100 in the Real Value 1, click AD Reading 1 to get ADC value.
+ # Turn off the transmitter, input 0 in the Real Value 2, and click AD Reading 2 to get another value.
+ # Click "Save to OSD"
+ 
