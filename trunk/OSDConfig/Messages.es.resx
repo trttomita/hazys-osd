@@ -121,39 +121,39 @@
     <value>Error</value>
   </data>
   <data name="Get_ADC_Failed" xml:space="preserve">
-    <value>Read analog value failed.</value>
+    <value>Lectura de datos analógicos fallida.</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Info</value>
+    <value>Información</value>
   </data>
   <data name="Invalid_File_Format" xml:space="preserve">
-    <value>Invalid file format.</value>
+    <value>Formato de archivo inválido.</value>
   </data>
   <data name="Read_OSD_Done" xml:space="preserve">
-    <value>Read OSD done.</value>
+    <value>Lectura del OSD realizada.</value>
   </data>
   <data name="Read_OSD_Failed" xml:space="preserve">
-    <value>Read OSD failed.</value>
+    <value>Lectura del OSD fallida.</value>
   </data>
   <data name="Read_Setting_Failed" xml:space="preserve">
-    <value>Read setting failed.</value>
+    <value>Fallo en la obtención de la configuración.</value>
   </data>
   <data name="Save_Setting_Failed" xml:space="preserve">
-    <value>Save setting failed.</value>
+    <value>Fallo al guardar la configuración.</value>
   </data>
   <data name="Uploading" xml:space="preserve">
-    <value>Uploading</value>
+    <value>Subiendo</value>
   </data>
   <data name="Upload_CharSet_Done" xml:space="preserve">
-    <value>Upload charset done.</value>
+    <value>Actualización de los caracteres realizada.</value>
   </data>
   <data name="Upload_CharSet_Failed" xml:space="preserve">
-    <value>Upload charset failed.</value>
+    <value>Actualización de los caracteres fallida.</value>
   </data>
   <data name="Write_OSD_Done" xml:space="preserve">
-    <value>Write OSD done.</value>
+    <value>Escritura en OSD realizada.</value>
   </data>
   <data name="Write_OSD_Failed" xml:space="preserve">
-    <value>Write OSD failed.</value>
+    <value>Escritura en OSD fallida.</value>
   </data>
 </root>
