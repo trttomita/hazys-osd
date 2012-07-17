@@ -2,7 +2,7 @@
 
 = Analog Digital Conversion Configuration =
 
-Hazy's OSD support using Analog/Digital (AD) Conversion for reading useful information. Currently supported functions including Voltage A/B, Current A/B and RSSI.
+This OSD firmware support using Analog/Digital (AD) Conversion for reading useful information. Currently supported functions including Voltage A/B, Current A/B and RSSI.
 
 However, the AD conversion need additional configuration, including channels, actual value per digital bit, and actual value at zero reading, as explained in the following text.
 
