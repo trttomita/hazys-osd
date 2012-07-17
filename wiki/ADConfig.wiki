@@ -32,4 +32,4 @@ The RSSI value in this OSD is displayed as parentage, rather than the raw value.
  # Turn off the transmitter, input 0 in the Real Value 2, and click AD Reading 2 to get another value.
  # Click "Save to OSD"
 
-*Note*: I suggest the radio signal strength is linear to the RSSI voltage. If it is not true, the display value will not be true, either. 
+*Note*: I assume that the radio signal strength is linear to the RSSI voltage. If it is not true, the display value will not be true, either. 
