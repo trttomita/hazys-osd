@@ -22,6 +22,7 @@ http://hazys-osd.googlecode.com/svn/wiki/image/adc.jpg
    # The Value / bit and Value @ 0 will calculated automatically.
  # Click "Write to OSD", save settings.
 
+-------
 == Example ==
 === RSSI ===
 The RSSI value in this OSD is displayed as parentage, rather than raw value, i.e., in order to show 100%, you should enter 100 as the real value, but not the voltage of the RSSI pin. Here are a simple instruction of setting RSSI:
