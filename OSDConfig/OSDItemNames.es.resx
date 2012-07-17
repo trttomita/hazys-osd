@@ -112,99 +112,99 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Alt" xml:space="preserve">
-    <value>Altitude (Absolute)</value>
+    <value>Altitud (Absoluta)</value>
   </data>
   <data name="Alt_R" xml:space="preserve">
-    <value>Altitude (Relative)</value>
+    <value>Altitud (Relativa)</value>
   </data>
   <data name="BatA" xml:space="preserve">
-    <value>Voltage A</value>
+    <value>Voltaje A</value>
   </data>
   <data name="BatA_ADC" xml:space="preserve">
-    <value>Voltage A (AD)</value>
+    <value>Voltaje A (ADC)</value>
   </data>
   <data name="BatB" xml:space="preserve">
-    <value>Voltage B</value>
+    <value>Voltaje B</value>
   </data>
   <data name="BatB_ADC" xml:space="preserve">
-    <value>Voltage B (AD)</value>
+    <value>Voltaje B (ADC)</value>
   </data>
   <data name="Cen" xml:space="preserve">
-    <value>Center</value>
+    <value>Punto de mira</value>
   </data>
   <data name="CurA" xml:space="preserve">
-    <value>Current A</value>
+    <value>Consumo A</value>
   </data>
   <data name="CurA_ADC" xml:space="preserve">
-    <value>Current A (AD)</value>
+    <value>Consumo A (ADC)</value>
   </data>
   <data name="CurB" xml:space="preserve">
-    <value>Current B</value>
+    <value>Consumo B</value>
   </data>
   <data name="CurB_ADC" xml:space="preserve">
-    <value>Current B (AD)</value>
+    <value>Consumo B (ADC)</value>
   </data>
   <data name="FMod" xml:space="preserve">
-    <value>Flight Mode</value>
+    <value>Modo de vuelo</value>
   </data>
   <data name="GPL" xml:space="preserve">
-    <value>GPS Lock</value>
+    <value>Estado del GPS</value>
   </data>
   <data name="GPS" xml:space="preserve">
-    <value>GPS Coord</value>
+    <value>Coordenadas GPS</value>
   </data>
   <data name="GPSats" xml:space="preserve">
-    <value>Visible Sats</value>
+    <value>Satélites visibles</value>
   </data>
   <data name="HDir" xml:space="preserve">
-    <value>Home Direction</value>
+    <value>Dirección inicio</value>
   </data>
   <data name="HDis" xml:space="preserve">
-    <value>Home Distance</value>
+    <value>Distancia inicio</value>
   </data>
   <data name="Head" xml:space="preserve">
-    <value>Heading</value>
+    <value>Rumbo</value>
   </data>
   <data name="Hor" xml:space="preserve">
-    <value>Horizon</value>
+    <value>Horizonte</value>
   </data>
   <data name="MavB" xml:space="preserve">
-    <value>Heart Beat</value>
+    <value>Pulso de control</value>
   </data>
   <data name="Pit" xml:space="preserve">
-    <value>Pitch</value>
+    <value>Cabezeo</value>
   </data>
   <data name="Rol" xml:space="preserve">
-    <value>Roll</value>
+    <value>Alabeo</value>
   </data>
   <data name="Rose" xml:space="preserve">
-    <value>Heading Rose</value>
+    <value>Indicador de rumbo</value>
   </data>
   <data name="RSSI" xml:space="preserve">
     <value>RSSI</value>
   </data>
   <data name="RSSI_ADC" xml:space="preserve">
-    <value>RSSI (AD)</value>
+    <value>RSSI (ADC)</value>
   </data>
   <data name="SYS" xml:space="preserve">
-    <value>System Status</value>
+    <value>Estado del sistema</value>
   </data>
   <data name="Thr" xml:space="preserve">
-    <value>Throttle</value>
+    <value>Mando de gases</value>
   </data>
   <data name="Vel" xml:space="preserve">
-    <value>Velocity</value>
+    <value>Velocidad</value>
   </data>
   <data name="WDir" xml:space="preserve">
-    <value>Waypoint Direction</value>
+    <value>Dirección al waypoint</value>
   </data>
   <data name="WDis" xml:space="preserve">
-    <value>Waypoint Distance</value>
+    <value>Distancia al waypoint</value>
   </data>
 </root>

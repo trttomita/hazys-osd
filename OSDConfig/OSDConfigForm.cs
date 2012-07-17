@@ -56,8 +56,18 @@ namespace OSDConfig
         {
             xmlconfig(false);
             InitializeComponent();
-            langMenus = new ToolStripMenuItem[] { EnglishUIToolStripMenuItem, SpanishUIToolStripMenuItem, PolishUIToolStripMenuItem, ChineseUIToolStripMenuItem };
-            langs = new CultureInfo[] { new CultureInfo("en-US"), new CultureInfo("es"), new CultureInfo("pl"), new CultureInfo("zh-Hans") };
+            langMenus = new ToolStripMenuItem[] { 
+                EnglishUIToolStripMenuItem, 
+                SpanishUIToolStripMenuItem, 
+                PolishUIToolStripMenuItem,
+                ChineseUIToolStripMenuItem 
+            };
+            langs = new CultureInfo[] {
+                new CultureInfo("en-US"), 
+                new CultureInfo("es"),
+                new CultureInfo("pl"),
+                new CultureInfo("zh-Hans") 
+            };
         }
 
         void osd_ItemPositionChanged(object sender, EventArgs e)
@@ -125,14 +135,35 @@ namespace OSDConfig
 
             //string lang = Thread.CurrentThread.CurrentUICulture.Name;
 
-            if (lang.StartsWith("zh", StringComparison.CurrentCultureIgnoreCase))
-                ChineseUIToolStripMenuItem.Checked = true;
-            else if (lang.StartsWith("pl", StringComparison.CurrentCultureIgnoreCase))
-                PolishUIToolStripMenuItem.Checked = true;
-            else if (lang.StartsWith("es", StringComparison.CurrentCultureIgnoreCase))
-                SpanishUIToolStripMenuItem.Checked = true;
-            else
+            //EnglishUIToolStripMenuItem.Checked =
+            bool foundlang = false;
+            for (int i = 0; i < langs.Length && !foundlang; i++)
+            {
+                var cul = Thread.CurrentThread.CurrentUICulture;
+                while (!cul.Equals(CultureInfo.InvariantCulture))
+                {
+                    if (cul.Equals(langs[i]))
+                    {
+                        langMenus[i].Checked = true;
+                        foundlang = true;
+                        break;
+                    }
+                    cul = cul.Parent;
+                }
+            }
+
+            if (!foundlang)
                 EnglishUIToolStripMenuItem.Checked = true;
+
+
+            //if (lang.StartsWith("zh", StringComparison.CurrentCultureIgnoreCase))
+            //    ChineseUIToolStripMenuItem.Checked = true;
+            //else if (lang.StartsWith("pl", StringComparison.CurrentCultureIgnoreCase))
+            //    PolishUIToolStripMenuItem.Checked = true;
+            //else if (lang.StartsWith("es", StringComparison.CurrentCultureIgnoreCase))
+            //    SpanishUIToolStripMenuItem.Checked = true;
+            //else
+            //    EnglishUIToolStripMenuItem.Checked = true;
 
             CHK_pal.Checked = pal;
 
@@ -793,7 +824,7 @@ namespace OSDConfig
         private void numVperB_ValueChanged(object sender, EventArgs e)
         {
             if (cbFunction.SelectedIndex >= 0 && fromuser)
-                osd.Setting.ad_setting[cbFunction.SelectedIndex].k = (float)numVat0.Value;
+                osd.Setting.ad_setting[cbFunction.SelectedIndex].k = (float)numVperB.Value;
         }
 
         private void numVat0_ValueChanged(object sender, EventArgs e)
@@ -916,6 +947,9 @@ namespace OSDConfig
 
         private void ChangeLanguage(CultureInfo culture)
         {
+            if (Thread.CurrentThread.CurrentUICulture.Equals(culture))
+                return;
+
             Thread.CurrentThread.CurrentUICulture = culture;
 
             LIST_items.Items.Clear();
