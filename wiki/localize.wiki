@@ -36,13 +36,15 @@ There will be two directories, i.e. "OSD" and "OSDConfig". The "OSD" directory c
 == Step 2. Translate the main form ==
 The Visual Studio provides a simple UI designer that suppose localization of forms. In this step we'll use this designer to edit the main form.
 
-1. Open the designer for "OSDConfigForm" by double click the item.
+1. Open the project using Visual C# or Visual Studio. Sometimes the Visual Studio may crash at startup. I haven't figure out the reason, but you can close Visual Studio and open it again, then it will be ok.
 
-2. Select the form by click on the title bar of the form. Do not select the components in the form.
+2. Open the designer for "OSDConfigForm" by double click the item.
 
-3. Navigate to the "Language" property in the Property Window, change the language into your own language.
+3. Select the form by click on the title bar of the form. Do not select the components in the form.
 
-4. Edit the components in the Form. Click each components, navigate to the "Text" property, and write down the caption in your language. Sometime you may also want to edit the "ToolTipText" property.
+4. Navigate to the "Language" property in the Property Window, change the language into your own language.
+
+5. Edit the components in the Form. Click each components, navigate to the "Text" property, and write down the caption in your language. Sometime you may also want to edit the "ToolTipText" property.
 
 You will notice a new file named "OSDConfigForm.LANG.resx" are created automatically, where "LANG" stands for code for your language, e.g. "es" for Spanish, "pl" for Polish, etc. Remember this code, you will need them in the following step.
 
