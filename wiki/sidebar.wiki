@@ -6,6 +6,7 @@
  =====[Firmware Upload Firmware]=====
  =====[Charset Upload Charset]=====
  =====[Setting Set Display Information]=====
- =====[ADConfig Config Analog/Digital Conversion]====
+ =====[ADConfig Config Analog/Digital Conversion]=====
 ====Development====
+ =====[svn Download & Upload code files]=====
  =====[localize UI Localization]=====
