@@ -26,26 +26,9 @@ Maybe you want to know how it works, or you want to adjust the looking in your l
 
 == What do you need ==
  * Visual C# Express 2010. This one is completely free, you can download from [http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-csharp-express here]. You can also use the commercial Visual Studio 2010 (are you that rich?). There are trial visions [http://www.microsoft.com/visualstudio/en-us/try here]. 
- * A svn tool to download and upload files. I personally recommend TortoiseSVN. You can download it from [http://tortoisesvn.net/ here].
- * A Google Account for permission to upload the code. If you haven't have one, you can create a account [https://accounts.google.com/NewAccount here]. Drop me a e-mail (hazyhxj@gmail.com) so I can add you to the committer group.
+ * A svn tool and a Google Account. Refer to [svn download and upload code files] for more details.
 
-== Step 1. Checkout files using SVN ==
-
-1. Open the Windows Explorer, navigate to an directory. This will be the directory that stores the code file. In this example I'll use "D:\HazyOSD". Right Click on the directory, click on the "SVN Checkout..." Menu, as follows
-
-http://hazys-osd.googlecode.com/svn/wiki/image/svn1.JPG
-
-2. Fill in repository's URL in the pop-up dialog, and click "OK"
-
-http://hazys-osd.googlecode.com/svn/wiki/image/svn2.JPG
-
-3. Wait till all files are checked out, click "OK".
-
-http://hazys-osd.googlecode.com/svn/wiki/image/svn3.JPG
-
-There will be two directories, i.e. "OSD" and "OSDConfig". The "OSD" directory contains the source files of the firmware, and the "OSDConfig" direcotry contains the source files of the config tool.
-
-== Step 2. Translate the main form ==
+== Translate the main form ==
 The Visual Studio provides a simple UI designer that suppose localization of forms. In this step we'll use this designer to edit the main form.
 
 1. Open the project using Visual C# or Visual Studio. Sometimes the Visual Studio may crash at startup. I haven't figure out the reason, but you can close Visual Studio and open it again, then it will be ok.
@@ -60,7 +43,7 @@ The Visual Studio provides a simple UI designer that suppose localization of for
 
 You will notice a new file named "OSDConfigForm.LANG.resx" are created automatically, where "LANG" stands for code for your language, e.g. "es" for Spanish, "pl" for Polish, etc. Remember this code, you will need them in the following step.
 
-== Step 3. Translate the function names and messages ==
+== Translate the function names and messages ==
 For the consideration of further upgrade, the function names are loaded dynamically from a resource file. The prompt messages are also loaded from a resource file. Unlike the localization of Form, the Visual Studio does not provide a simple UI to create localized resource files, and you have to add them manually.
 
 1. Make copies of "OSDItemNames.resx" and "Messages.resx", and name them as "OSDItemNames.LANG.resx" and "Messages.LANG.resx". Here "LANG" stands for the code for your language, e.g. "en" for English, "es" for Spanish. Refer to Step 2 to check the code if you are not sure.
@@ -70,17 +53,3 @@ For the consideration of further upgrade, the function names are loaded dynamica
 3. Open the resource file by double click the name, and translate the texts into your language.
 
 *Note* Actually you may also edit the resources of the main form using this way. Copy the "OSDConfigForm.resx", rename it accordingly and then edit the text in the file. I suggest not to do this way because this file also contains many other meta data that shouldn't be edited manually, and thus it may be difficult to find the right items for translation.
-
-== Step 4. Upload the new files ==
-
-It is easy to upload the new files using the SVN tool. All you need to do is:
-
-1. Open the directory of the project.
-
-2. Right click on the directory, click "SVN Commit..." in the menu.
-
-3. Write down a message of what have been changed, and click "OK".
-
-4. A dialog of user name and password may pop up if you haven't save them before. Input your Google Account and the password for Google Code. If you don't know the password, it can be found [http://code.google.com/hosting/settings here].
-
-5. Wait till upload is done.
