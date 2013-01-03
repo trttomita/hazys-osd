@@ -306,6 +306,7 @@ namespace OSDConfig
                 MessageBox.Show(this, rmMessages.GetString("Write_OSD_Done"), rmMessages.GetString("Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
                 MessageBox.Show(this, rmMessages.GetString("Write_OSD_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+            osdPort.Close();
         }
 
 
@@ -485,6 +486,8 @@ namespace OSDConfig
                     FLASH = hex.RawData;
                 }
                 catch { MessageBox.Show("Bad Hex File"); return; }
+                
+                toolStripStatusLabel1.Text = "Rebooting";
 
                 bool fail = false;
                 //ArduinoSTK sp;
