@@ -114,7 +114,7 @@ namespace OSDConfig
                 waitCount = 0;
 
                 char c = (char)ReadByte();
-                //Console.Write(c);
+                Console.Write(c);
 
                 switch (c)
                 {
