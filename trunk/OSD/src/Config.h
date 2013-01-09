@@ -3,7 +3,7 @@
 // Only devs should increment this
 #define DATA_VER 					5
 
-#define OSD_VER						"1.02"
+#define OSD_VER						"1.03"
 
 #define TELEMETRY_SPEED  	57600  // How fast our MAVLink telemetry is coming to Serial port
 #define BOOTTIME         	2000   // Time in milliseconds that we show boot loading bar and wait user input
