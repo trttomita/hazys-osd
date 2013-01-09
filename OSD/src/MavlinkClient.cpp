@@ -1,24 +1,18 @@
 #include "MavlinkClient.h"
 
-#define MAVLINK_COMM_NUM_BUFFERS 1
+#define MAVLINK_COMM_NUM_BUFFERS 	1
 #define MAVLINK_USE_CONVENIENCE_FUNCTIONS
-#define MAVLINK_MAX_PAYLOAD_LEN 127
+#define MAVLINK_MAX_PAYLOAD_LEN 	96
 
-#ifdef MAVLINK10
-#ifndef MAVLINK_CRC_EXTRA
-#define MAVLINK_CRC_EXTRA 1
-#endif
 uint8_t get_mavlink_message_crc(uint8_t msgid);
 #define MAVLINK_MESSAGE_CRC(msgid) get_mavlink_message_crc(msgid)
+
+#include "../GCS_MAVLink/include/mavlink/v1.0/ardupilotmega/version.h"
 #include "../GCS_MAVLink/include/mavlink/v1.0/mavlink_types.h"
 #include "../GCS_MAVLink/include/mavlink/v1.0/ardupilotmega/mavlink.h"
-#else
-#include "../GCS_MAVLink/include/mavlink/v0.9/mavlink_types.h"
-#include "../GCS_MAVLink/include/mavlink/v0.9/ardupilotmega/mavlink.h"
-#endif
 
 
-#include "Mavlink_compat.h"
+//#include "Mavlink_compat.h"
 #include "time.h"
 
 #define ToDeg(x) 	(x*57.2957795131)  // *180/pi
@@ -68,7 +62,7 @@ volatile uint8_t  MavlinkClient::apm_mav_component;
 //volatile bool  	 	MavlinkClient::enable_mav_request;
 volatile uint8_t MavlinkClient::mavlink_status = MAVLINK_STATUS_INACTIVE;
 
-mavlink_system_t mavlink_system = {12,1,0,0};
+mavlink_system_t mavlink_system = {7,1,0,0};
 
 #ifdef MAVLINK10
 uint8_t get_mavlink_message_crc(uint8_t msgid)
