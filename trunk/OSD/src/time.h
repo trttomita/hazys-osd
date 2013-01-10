@@ -19,8 +19,13 @@ extern "C" {
         TCCR0 = _BV(CS01) | _BV(CS00);
         // enable timer 0 overflow interrupt
         TIMSK |= _BV(TOIE0);
+        
+        TCCR2 = _BV(CS22) | _BV(CS21) | _BV(CS20);
+        TIMSK |= _BV(TOIE2);
     }
-
+    
+    
+	extern volatile char timer2_tick;
 #ifdef __cplusplus
 }
 #endif

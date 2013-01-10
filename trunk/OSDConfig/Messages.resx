@@ -156,4 +156,7 @@
   <data name="Write_OSD_Failed" xml:space="preserve">
     <value>Write OSD failed.</value>
   </data>
+  <data name="Read_OSD_Wrong_Ver" xml:space="preserve">
+    <value>Wrong Data Version.</value>
+  </data>
 </root>

@@ -108,9 +108,9 @@ namespace OSDConfig
             //    toolStripStatusLabel1.Text = "CharSet Done";
         }
 
-        public bool GetSetting(out OSDSetting setting)
+        public int GetSetting(out OSDSetting setting)
         {
-            bool ok = false;
+            int ok = -1;
             setting = null;
             try
             {
@@ -136,7 +136,7 @@ namespace OSDConfig
                     if (ck == buf[size])
                     {
                         setting = new OSDSetting();
-                        ok = setting.FromBytes(buf, 0);
+                        ok = setting.FromBytes(buf, 0) ? 0 : 1;
                     }
                 }
 
