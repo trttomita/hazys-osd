@@ -80,6 +80,8 @@ void ArduOSD::Init()
     uart_init(UART_BAUD_SELECT_DOUBLE_SPEED(TELEMETRY_SPEED, F_CPU));
     spi_init();
     analog_init();
+    
+    PORTD |= _BV(PD6);	//PD6 key input, pull up
 
     sei();
 
@@ -126,7 +128,7 @@ void ArduOSD::LoadSetting()
         
     if (setting.option & _BV(OSD_OPT_M_ISO))
     { 
-    		converts = 3.6;
+    	converts = 3.6;
         convertd = 1.0;
         spd_sym = 0x81;
         dst_sym = 0x8D;
@@ -399,7 +401,7 @@ inline void ArduOSD::DrawHorizon(uint8_t start_col, uint8_t start_row)
 void ArduOSD::Draw()
 {
 
-    for (uint8_t i = 0; i < 24; i++)
+    for (uint8_t i = 0; i < sizeof(setting.coord)/sizeof(uint8_t*); i++)
     {
         if (setting.enable & (1UL << i))
         {
@@ -460,10 +462,10 @@ void ArduOSD::Draw()
                 }
                 break;//13x3
             case OSD_ITEM_HDis:
-                if (osd_got_home==1) printf_P(PSTR("\x1F%5.0f%c"), (double)(osd_home_distance * convertd), dst_sym);
+                /*if (osd_got_home==1) */printf_P(PSTR("\x1F%5.0f%c"), (double)(osd_home_distance * convertd), dst_sym);
                 break;//13x3
             case OSD_ITEM_HDir:
-                if (osd_got_home==1) DrawArrow(osd_home_direction);//panHomeDir(); //13x3
+                /*if (osd_got_home==1) */DrawArrow(osd_home_direction);//panHomeDir(); //13x3
                 break;
             case OSD_ITEM_WDir:
             		{
@@ -705,8 +707,11 @@ void ArduOSD::ReadMessage()
 
 void ArduOSD::Run()
 {
-    static unsigned long lasttime  = 0;
+    unsigned long lasttime  = 0;
+    //unsigned long key_time = 0;
+    
     unsigned long timeout = 0;
+    unsigned char key_state = 0;
 
     DrawLogo();
     LoadSetting();
@@ -778,8 +783,39 @@ void ArduOSD::Run()
             mavlink_status = MAVLINK_STATUS_WAIT_HEARTBEAT;
             DrawWaitingHB();
         }
+        
+        if (timer2_tick)
+       	{
+       		//key_time = now + 20;
+       		timer2_tick = false;
+       		char key_down = !(PIND & _BV(PD6));
+       		
+       		if (key_down)
+       		{
+       			if (key_state == 0)
+       				key_state = 1;
+       			else if (key_state = 1)
+       				key_state = 2;	//confirm down
+       			else if (key_state = 3)
+       				key_state = 2;
+       		}
+       		else
+       		{
+       			if (key_state = 1)
+       				key_state = 0;
+       			else if (key_state = 2)
+       				key_state = 3;
+       			else if (key_state = 3)
+       			{
+       				key_state = 0;	//confirm up
+       				//key pressed
+       				osd_got_home = 0;
+       				osd_home_distance = 0;
+       				osd_home_direction = 0;
+       			}
+       		}
+       	}
     }
-
 }
 
 float ArduOSD::analog_read(ad_setting_t& ad_setting)

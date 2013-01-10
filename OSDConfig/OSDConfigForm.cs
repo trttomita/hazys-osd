@@ -200,7 +200,7 @@ namespace OSDConfig
             }
             catch { }
 
-            
+
 
             osd.Draw();
 
@@ -347,7 +347,7 @@ namespace OSDConfig
             rbImperial.Checked = !rbMetric.Checked;
 
             cbFunction_SelectedIndexChanged(this, new EventArgs());
-            
+
             osd.Setting = setting;
             osd.Draw();
         }
@@ -363,17 +363,17 @@ namespace OSDConfig
             OSDSetting setting;
             osdPort.PortName = CMB_ComPort.Text;
             osdPort.Open();
-            bool ok = osdPort.GetSetting(out setting);
+            int ok = osdPort.GetSetting(out setting);
             osdPort.Close();
-            if (ok)
+            if (ok == 0)
             {
                 LoadSetting(setting);
                 MessageBox.Show(this, rmMessages.GetString("Read_OSD_Done"), rmMessages.GetString("Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            else
-            {
+            else if (ok == -1)
                 MessageBox.Show(this, rmMessages.GetString("Read_OSD_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            else if (ok == 1)
+                MessageBox.Show(this, rmMessages.GetString("Read_OSD_Wrong_Ver"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
             osdPort.Close();
         }
 
@@ -1019,6 +1019,6 @@ namespace OSDConfig
             return 1 << i;
         }
 
-        
+
     }
 }

@@ -68,7 +68,6 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.osd = new OSDConfig.ArduOSD();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.rbImperial = new System.Windows.Forms.RadioButton();
@@ -95,6 +94,7 @@
             this.cbChannel = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.osd = new OSDConfig.ArduOSD();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_Y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUM_X)).BeginInit();
@@ -395,16 +395,6 @@
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // osd
-            // 
-            resources.ApplyResources(this.osd, "osd");
-            this.osd.Chars = null;
-            this.osd.Mode = OSDConfig.VideoMode.PAL;
-            this.osd.Name = "osd";
-            this.osd.SelectedItem = OSDConfig.OSDItem.NULL;
-            this.osd.Setting = osdSetting1;
-            this.osd.ShowGrid = true;
-            // 
             // tabPage2
             // 
             resources.ApplyResources(this.tabPage2, "tabPage2");
@@ -626,6 +616,16 @@
             this.tableLayoutPanel1.Controls.Add(this.BUT_ReadOSD, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.CMB_ComPort, 1, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
+            // osd
+            // 
+            resources.ApplyResources(this.osd, "osd");
+            this.osd.Chars = null;
+            this.osd.Mode = OSDConfig.VideoMode.PAL;
+            this.osd.Name = "osd";
+            this.osd.SelectedItem = OSDConfig.OSDItem.NULL;
+            this.osd.Setting = osdSetting1;
+            this.osd.ShowGrid = true;
             // 
             // OSDConfigForm
             // 

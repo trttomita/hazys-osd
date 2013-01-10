@@ -6,6 +6,8 @@ volatile unsigned long timer0_overflow_count = 0;
 volatile unsigned long timer0_millis = 0;
 static unsigned char timer0_fract = 0;
 
+volatile char timer2_tick = 0;
+
 
 // the prescaler is set so that timer0 ticks every 64 clock cycles, and the
 // the overflow handler is called every 256 ticks.
@@ -40,6 +42,11 @@ ISR(TIMER0_OVF_vect)
     timer0_millis = m;
     timer0_overflow_count++;
     //PORTD ^= _BV(PD1);
+}
+
+ISR(TIMER2_OVF_vect)
+{
+	timer2_tick = 1;
 }
 
 
