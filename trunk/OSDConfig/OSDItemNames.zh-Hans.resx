@@ -184,7 +184,7 @@
     <value>侧倾角</value>
   </data>
   <data name="Rose" xml:space="preserve">
-    <value>航向防卫圈</value>
+    <value>航向方位圈</value>
   </data>
   <data name="RSSI" xml:space="preserve">
     <value>信号强度</value>
@@ -206,5 +206,11 @@
   </data>
   <data name="WDis" xml:space="preserve">
     <value>航点距离</value>
+  </data>
+  <data name="AS" xml:space="preserve">
+    <value>空速</value>
+  </data>
+  <data name="HAlt" xml:space="preserve">
+    <value>相对高度</value>
   </data>
 </root>

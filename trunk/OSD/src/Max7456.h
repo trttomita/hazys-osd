@@ -79,28 +79,28 @@
 class OSD
 {
 public:
-    static void init(void);
-    static void clear(void);
-    inline static void select(void)
+    static void Init(void);
+    static void Clear(void);
+    inline static void Select(void)
     {
         PORTB &= ~_BV(PB3);
     }
-    inline static void deSelect(void)
+    inline static void DeSelect(void)
     {
         PORTB |= _BV(PB3);
     }
-    static void setPanel(uint8_t start_col, uint8_t start_row);
-    static void openPanel(void);
-    static void closePanel(void);
-    static void control(uint8_t ctrl);
-    static void detectMode(void);
-    static void setMode(int mode);
-    static void openSingle(uint8_t x, uint8_t y);
-    inline static int getMode(void)
+    static void SetPanel(uint8_t start_col, uint8_t start_row);
+    static void OpenPanel(void);
+    static void ClosePanel(void);
+    static void Control(uint8_t ctrl);
+    static void DetectMode(void);
+    static void SetMode(int mode);
+    static void OpenSingle(uint8_t x, uint8_t y);
+    inline static int GetMode(void)
     {
         return video_mode;
     }
-    inline static int getCenter(void)
+    inline static int GetCenter(void)
     {
         return video_center;
     }

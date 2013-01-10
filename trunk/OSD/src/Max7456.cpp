@@ -14,17 +14,17 @@ uint8_t OSD::video_mode;
 
 //------------------ init ---------------------------------------------------
 
-void OSD::init()
+void OSD::Init()
 {
     //PIN_MODE(PORTB, PB3,OUTPUT);
     //PIN_MODE(MAX7456_VSYNC, INPUT);
     //DIGITAL_WRITE(MAX7456_VSYNC,HIGH); //enabling pull-up resistor
     DDRB |= _BV(PB3);
 
-    detectMode();
+    DetectMode();
 
     //DIGITAL_WRITE(PORTB, PB3,LOW);
-    select();;
+    Select();;
     //read black level register
     spi_transfer(MAX7456_OSDBL_reg_read);//black level read register
     byte osdbl_r = spi_transfer(0xff);
@@ -44,26 +44,26 @@ void OSD::init()
     }
     // define sync (auto,int,ext) and
     // making sure the Max7456 is enabled
-    control(1);
+    Control(1);
 }
 
 //------------------ Detect Mode (PAL/NTSC) ---------------------------------
 
-void OSD::detectMode()
+void OSD::DetectMode()
 {
-    select();;
+    Select();;
 
     //read STAT and auto detect Mode PAL/NTSC
     spi_transfer(MAX7456_STAT_reg_read);//status register
     byte osdstat_r = spi_transfer(0xff);
 
-    setMode((0x02 & osdstat_r)?MAX7456_MODE_NTCS:MAX7456_MODE_PAL);
-    deSelect();;
+    SetMode((0x02 & osdstat_r)?MAX7456_MODE_NTCS:MAX7456_MODE_PAL);
+    DeSelect();;
 }
 
 //------------------ Set Mode (PAL/NTSC) ------------------------------------
 
-void OSD::setMode(int themode)
+void OSD::SetMode(int themode)
 {
     video_mode = themode;
     video_center = themode == MAX7456_MODE_NTCS? MAX7456_CENTER_NTSC: MAX7456_CENTER_PAL;
@@ -72,20 +72,20 @@ void OSD::setMode(int themode)
 
 //------------------ clear ---------------------------------------------------
 
-void OSD::clear()
+void OSD::Clear()
 {
     // clear the screen
     //DIGITAL_WRITE(PORTB, PB3,LOW);
-    select();;
+    Select();;
     spi_transfer(MAX7456_DMM_reg);
     spi_transfer(MAX7456_CLEAR_display);
-    deSelect();;
+    DeSelect();;
     //DIGITAL_WRITE(PORTB, PB3,HIGH);
 }
 
 //------------------ set panel -----------------------------------------------
 
-void OSD::setPanel(uint8_t st_col, uint8_t st_row)
+void OSD::SetPanel(uint8_t st_col, uint8_t st_row)
 {
     col = st_col;
     row = st_row;
@@ -93,7 +93,7 @@ void OSD::setPanel(uint8_t st_col, uint8_t st_row)
 
 //------------------ open panel ----------------------------------------------
 
-void OSD::openPanel(void)
+void OSD::OpenPanel(void)
 {
     unsigned int linepos;
     byte settings, char_address_hi, char_address_lo;
@@ -109,7 +109,7 @@ void OSD::openPanel(void)
     //No need to set next char address. Just send them
     settings = MAX7456_INCREMENT_auto; //To Enable DMM Auto Increment
     //DIGITAL_WRITE(PORTB, PB3,LOW);
-    select();;
+    Select();;
     spi_transfer(MAX7456_DMM_reg); //dmm
     spi_transfer(settings);
 
@@ -123,17 +123,17 @@ void OSD::openPanel(void)
 
 //------------------ close panel ---------------------------------------------
 
-void OSD::closePanel(void)
+void OSD::ClosePanel(void)
 {
     spi_transfer(MAX7456_DMDI_reg);
     spi_transfer(MAX7456_END_string); //This is needed "trick" to finish auto increment
-    deSelect();;
+    DeSelect();;
     row++; //only after finish the auto increment the new row will really act as desired
 }
 
 //------------------ write single char ---------------------------------------------
 
-void OSD::openSingle(uint8_t x, uint8_t y)
+void OSD::OpenSingle(uint8_t x, uint8_t y)
 {
     unsigned int linepos;
     byte char_address_hi, char_address_lo;
@@ -146,7 +146,7 @@ void OSD::openSingle(uint8_t x, uint8_t y)
     char_address_lo = linepos;
 
     //DIGITAL_WRITE(PORTB, PB3,LOW);
-    select();;
+    Select();;
 
     spi_transfer(MAX7456_DMAH_reg); // set start address high
     spi_transfer(char_address_hi);
@@ -162,8 +162,8 @@ void OSD::write(uint8_t c)
 {
     if(c == '|')
     {
-        closePanel(); //It does all needed to finish auto increment and change current row
-        openPanel(); //It does all needed to re-enable auto increment
+        ClosePanel(); //It does all needed to finish auto increment and change current row
+        OpenPanel(); //It does all needed to re-enable auto increment
     }
     else
     {
@@ -174,9 +174,9 @@ void OSD::write(uint8_t c)
 
 //---------------------------------
 
-void OSD::control(uint8_t ctrl)
+void OSD::Control(uint8_t ctrl)
 {
-    select();;
+    Select();;
     spi_transfer(MAX7456_VM0_reg);
     switch(ctrl)
     {
@@ -190,7 +190,7 @@ void OSD::control(uint8_t ctrl)
         break;
     }
     //DIGITAL_WRITE(PORTB, PB3,HIGH);
-    deSelect();;
+    DeSelect();;
 }
 
 void OSD::write_NVM(int font_count, uint8_t *character_bitmap)
@@ -205,7 +205,7 @@ void OSD::write_NVM(int font_count, uint8_t *character_bitmap)
 
     // disable display
     //DIGITAL_WRITE(PORTB, PB3,LOW);
-    select();;
+    Select();;
     spi_transfer(MAX7456_VM0_reg);
     spi_transfer(MAX7456_DISABLE_display);
 
@@ -231,7 +231,7 @@ void OSD::write_NVM(int font_count, uint8_t *character_bitmap)
     spi_transfer(MAX7456_VM0_reg); // turn on screen next vertical
     spi_transfer(MAX7456_ENABLE_display_vert);
     //DIGITAL_WRITE(PORTB, PB3,HIGH);
-    deSelect();;
+    DeSelect();;
 }
 
 void OSD::print_P(const prog_char *s)

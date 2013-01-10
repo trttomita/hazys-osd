@@ -112,13 +112,13 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Alt" xml:space="preserve">
-    <value>Altitude (Absolute)</value>
+    <value>Altitude</value>
   </data>
   <data name="Alt_R" xml:space="preserve">
     <value>Altitude (Relative)</value>
@@ -206,5 +206,11 @@
   </data>
   <data name="WDis" xml:space="preserve">
     <value>Waypoint Distance</value>
+  </data>
+  <data name="AS" xml:space="preserve">
+    <value>Airspeed</value>
+  </data>
+  <data name="HAlt" xml:space="preserve">
+    <value>Home Altitude</value>
   </data>
 </root>

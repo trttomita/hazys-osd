@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 
+using uint8_t = System.Byte;
+
+
+
 namespace OSDConfig
 {
     class ArduOSD : OSD
@@ -31,30 +35,40 @@ namespace OSDConfig
         static byte osd_got_home = 1;               // tels if got home position or not
         //static float osd_home_lat = 0;               // home latidude
         //static float osd_home_lon = 0;               // home longitude
-        //static float osd_home_alt = 0;
-        static long osd_home_distance = 0;          // distance from home
+        static float osd_home_alt = 100;
+        static long osd_home_distance = 1000;          // distance from home
         static byte osd_home_direction = 0;             // Arrow direction pointing to home (1-16 to CW loop)
 
-        static SByte osd_pitch = 30;                  // pitch form DCM
-        static SByte osd_roll = 30;                   // roll form DCM
+        static SByte osd_pitch = 5;                  // pitch form DCM
+        static SByte osd_roll = 3;                   // roll form DCM
         //static byte osd_yaw = 0;                    // relative heading form DCM
         static float osd_heading = 0;                // ground course heading from GPS
         static float osd_alt = 200;                    // altitude
         static float osd_groundspeed = 12;            // ground speed
+        static float osd_airspeed = 10;
         static UInt16 osd_throttle = 52;               // throtle
         static byte osd_rssi = 100;
 
+        static byte wp_number = 1;
+        static int wp_dist = 100;
+
+        static float convertd = 0;
+        static float converts = 0;
+        static char dst_sym = '\0';
+        static char spd_sym = '\0';
         //MAVLink session control
-        static bool mavbeat = true;
+        static byte mavbeat = 1;
         //static float lastMAVBeat = 0;
         //static boolean waitingMAVBeats = 1;
         static byte apm_mav_type = 2;
+
+        static byte osd_sys_status = 3;
         //static byte apm_mav_system = 7;
         //static byte apm_mav_component = 0;
         //static boolean enable_mav_request = 0;
 
 
-        
+
 
         public ArduOSD()
         {
@@ -69,6 +83,21 @@ namespace OSDConfig
 
             Clear();
 
+            if (Setting.GetOption(OSDOption.M_ISO))
+            {
+                converts = 3.6f;
+                convertd = 1.0f;
+                spd_sym = (char)0x81;
+                dst_sym = (char)0x8D;
+            }
+            else
+            {
+                converts = 2.23f;
+                convertd = 3.28f;
+                spd_sym = (char)0xfb;
+                dst_sym = (char)0x66;
+            }
+            /*
             for (int i = 0; i < Setting.coord.GetLength(0); i++)
             {
                 if ((Setting.IsEnabled((OSDItem)i)))
@@ -158,15 +187,225 @@ namespace OSDConfig
                     ClosePanel();
                 }
             }
+            */
 
+            for (int i = 0; i < 26; i++)
+            {
+                if ((setting.enable & (1UL << i)) != 0)
+                {
+                    curItem = (OSDItem)i;
+
+                    SetPanel(setting.coord[i, 0], setting.coord[i, 1]);
+                    OpenPanel();
+
+                    switch (i)
+                    {
+                        case OSD_ITEM_Cen:
+                            print_P(PSTR("\x05\x03\x04\x05|\x15\x13\x14\x15"));
+                            break;
+                        case OSD_ITEM_Pit:
+                            printf_P(PSTR("%4i\xb0\xb1"), osd_pitch);
+                            break;
+                        case OSD_ITEM_Rol:
+                            printf_P(PSTR("%4i\xb0\xb2"), osd_roll);
+                            break;
+                        case OSD_ITEM_VBatA:
+                            printf_P(PSTR("\xE2%5.2f\x8E"), (double)osd_vbat_A);
+                            break;
+                        case OSD_ITEM_VBatB:
+                            printf_P(PSTR("\xE3%5.2f\x8E"), (double)osd_vbat_B);
+                            break;
+                        case OSD_ITEM_GPSats:
+                            printf_P(PSTR("\x0f%2i"), osd_satellites_visible);
+                            break;
+                        case OSD_ITEM_GPL:
+                            switch (osd_fix_type)
+                            {
+                                case 0:
+                                case 1:
+                                    print_P(PSTR("\x10\x20"));
+                                    break;
+                                case 2: //If not APM, x01 would show 2D fix
+                                case 3:
+                                    print_P(PSTR("\x11\x20"));//If not APM, x02 would show 3D fix
+                                    break;
+                            }
+                            break;
+                        case OSD_ITEM_GPS:
+                            printf_P(PSTR("\x83%11.6f|\x84%11.6f"), (double)osd_lat, (double)osd_lon);
+                            break;
+                        case OSD_ITEM_Rose:
+                            printf_P(PSTR("\x20\xc0\xc0\xc0\xc0\xc0\xc7\xc0\xc0\xc0\xc0\xc0\x20|\xd0%s\xd1"), getHeadingPatern(osd_heading));
+                            break;
+                        case OSD_ITEM_Head:
+                            printf_P(PSTR("%4.0f\xb0"), (double)osd_heading);
+                            break;//13x3
+                        case OSD_ITEM_MavB:
+                            if (mavbeat == 1)
+                            {
+                                print_P(PSTR("\xEA\xEC"));
+                                mavbeat = 0;
+                            }
+                            else
+                            {
+                                print_P(PSTR("\xEA\xEB"));
+                            }
+                            break;//13x3
+                        case OSD_ITEM_HDis:
+                            if (osd_got_home == 1) printf_P(PSTR("\x1F%5.0f%c"), (double)(osd_home_distance * convertd), dst_sym);
+                            break;//13x3
+                        case OSD_ITEM_HDir:
+                            if (osd_got_home == 1) DrawArrow();//panHomeDir(); //13x3
+                            break;
+                        case OSD_ITEM_WDir:
+                            {
+                                //int8_t wp_target_bearing_rotate_int = round(((float)wp_target_bearing - osd_heading) / 360.0 * 16.0) + 1; //Convert to int 0-16 
+                                //if (wp_target_bearing_rotate_int < 0) wp_target_bearing_rotate_int += 16; //normalize
+                                DrawArrow();
+                            }
+                            break;
+                        case OSD_ITEM_WDis:
+                            printf_P(PSTR("\x57%2i\x00%4.0f%c"), wp_number, (double)(wp_dist * convertd), dst_sym);
+                            break;
+                        case OSD_ITEM_RSSI:
+                            printf_P(PSTR("\xE1%3i%%"), osd_rssi);
+                            break;
+                        case OSD_ITEM_CurrA:
+                            printf_P(PSTR("\xE4%5.2f\x8F"), osd_curr_A);
+                            break;
+                        case OSD_ITEM_CurrB:
+                            printf_P(PSTR("\xE5%5.2f\x8F"), osd_curr_B);
+                            break;
+                        case OSD_ITEM_Alt:
+                            printf_P(PSTR("\xe6%5.0f%c"),
+                                (double)(osd_alt * convertd), dst_sym);
+                            break;
+                        case OSD_ITEM_HAlt:
+                            printf_P(PSTR("\xe7%5.0f%c"),
+                                (double)((osd_alt - osd_home_alt) * convertd), dst_sym);
+                            break;
+                        case OSD_ITEM_Vel:
+                            printf_P(PSTR("\xe9%3.0f%c"), (double)osd_groundspeed * converts, spd_sym);
+                            break;
+                        case OSD_ITEM_AS:
+                            printf_P(PSTR("\xe8%3.0f%c"), (double)osd_airspeed * converts, spd_sym);
+                            break;
+                        case OSD_ITEM_Thr:
+                            printf_P(PSTR("\x87%3i%%"), osd_throttle);
+                            break;
+                        case OSD_ITEM_FMod:
+                            {
+                                if (apm_mav_type == 1 && osd_mode <= 12 || osd_mode <= 10)
+                                {
+                                    write('\xE0');
+                                    print_P(apm_mav_type == 1 ? FM_APM[osd_mode] : FM_ACM[osd_mode]);
+                                }
+                            }
+                            break;
+                        case OSD_ITEM_Hor:
+                            for (uint8_t j = 0; j < 5; j++)
+                            {
+                                char c = (j == 2 ? '\xd8' : '\xc8');
+                                write(c);
+                                for (uint8_t k = 0; k < 12; k++)
+                                    write('\x20');
+                                write(++c);
+                                write('|');
+                            }
+                            ClosePanel();
+                            DrawHorizon(setting.coord[OSD_ITEM_Hor, 0] + 1, setting.coord[OSD_ITEM_Hor, 1]);
+                            break;
+                        case OSD_ITEM_SYS:
+                            if (osd_sys_status < 3)
+                                print_P(PSTR("APM Init"));
+                            else if (osd_sys_status != 4)
+                                print_P(PSTR("Disarmed"));
+                            else
+                                print_P(PSTR("        "));
+                            break;
+                    }
+
+                    if (i != OSD_ITEM_Hor)
+                        ClosePanel();
+                }
+            }
             base.Draw();
             mod = false;
+        }
+
+        uint _BV(int bit)
+        {
+            return (uint)(1UL << bit);
         }
 
         string PSTR(string input)
         {
             return input;
         }
+
+
+        void DrawArrow()
+        {
+            char c = '\x90';
+            if (osd_home_direction > 1)
+                c = (char)(c + ((osd_home_direction - 1) << 1));
+
+            write(c);
+            write(++c);
+        }
+
+        void DrawHorizon(int start_col, int start_row)
+        {
+
+            int x, nose, row, minval, hit, subval = 0;
+            int cols = 12;
+            int rows = 5;
+            int[] col_hit = new int[cols];
+            double pitch, roll;
+
+            pitch = (abs(osd_pitch) == 90) ? 89.99 * (90 / osd_pitch) * -0.017453293 : osd_pitch * -0.017453293;
+            roll = (abs(osd_roll) == 90) ? 89.99 * (90 / osd_roll) * 0.017453293 : osd_roll * 0.017453293;
+
+            nose = round(tan(pitch) * (rows * 9));
+            for (int col = 1; col <= cols; col++)
+            {
+                x = (col * 12) - (cols * 6) - 6;//center X point at middle of each col
+                col_hit[col - 1] = (int)((tan(roll) * x) + nose + (rows * 9) - 1);//calculating hit point on Y plus offset to eliminate negative values
+                //col_hit[(col-1)] = nose + (rows * 9);
+            }
+
+            for (int col = 0; col < cols; col++)
+            {
+                hit = col_hit[col];
+                if (hit > 0 && hit < (rows * 18))
+                {
+                    row = rows - ((hit - 1) / 18);
+                    minval = rows * 18 - row * 18 + 1;
+                    subval = hit - minval;
+                    subval = round((subval * 9) / 18);
+                    if (subval == 0) subval = 1;
+                    OpenSingle(start_col + col, start_row + row - 1);
+                    write((char)('\x05' + subval));
+                    //write('0' + start_row + row - 1);
+                }
+            }
+        }
+
+        string getHeadingPatern(float heading)
+        {
+            int start;
+            start = round((heading * 36) / 360);
+            start -= 5;
+            if (start < 0) start += 36;
+            for (int x = 0; x <= 10; x++)
+            {
+                buf_show[x] = (char)buf_Rule[start];
+                if (++start > 35) start = 0;
+            }
+            //buf_show[11] = '\0';
+            return new String(buf_show);
+        }
+
         /* **************************************************************** */
         // Panel  : panAlt
         // Needs  : X, Y locations
@@ -264,13 +503,13 @@ namespace OSDConfig
             ////setPanel(first_col, first_line);
             //openPanel();
 
-           
+
             print_P(PSTR("\xc8\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xc9|"));
             print_P(PSTR("\xc8\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xc9|"));
             print_P(PSTR("\xd8\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xd9|"));
             print_P(PSTR("\xc8\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xc9|"));
             print_P(PSTR("\xc8\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\xc9"));
-           
+
             showHorizon((first_col + 1), first_line);
         }
 
@@ -508,21 +747,6 @@ namespace OSDConfig
         // Size   : 1 x 2  (rows x chars)
         // Staus  : done
 
-        void panMavBeat(/*int first_col, int first_line*/)
-        {
-            //setPanel(first_col, first_line);
-            //openPanel();
-            if (mavbeat)
-            {
-                print_P(PSTR("\xEA\xEC"));
-                mavbeat = false;
-            }
-            else
-            {
-                print_P(PSTR("\xEA\xEB"));
-            }
-            //closePanel();
-        }
 
 
         /* **************************************************************** */
@@ -672,35 +896,36 @@ namespace OSDConfig
             SetPanel(col, row);
             OpenPanel();
             //write((char)('\x05' + subval));
-            
-            switch (subval){
+
+            switch (subval)
+            {
                 case 1:
-                print_P(PSTR("\x06"));
-                break;
-              case 2:
-                print_P(PSTR("\x07"));
-                break;
-              case 3:
-                print_P(PSTR("\x08"));
-                break;
-              case 4:
-                print_P(PSTR("\x09"));
-                break;
-              case 5:
-                print_P(PSTR("\x0a"));
-                break;
-              case 6:
-                print_P(PSTR("\x0b"));
-                break;
-              case 7:
-                print_P(PSTR("\x0c"));
-                break;
-              case 8:
-                print_P(PSTR("\x0d"));
-                break;
-              case 9:
-                print_P(PSTR("\x0e"));
-                break;
+                    print_P(PSTR("\x06"));
+                    break;
+                case 2:
+                    print_P(PSTR("\x07"));
+                    break;
+                case 3:
+                    print_P(PSTR("\x08"));
+                    break;
+                case 4:
+                    print_P(PSTR("\x09"));
+                    break;
+                case 5:
+                    print_P(PSTR("\x0a"));
+                    break;
+                case 6:
+                    print_P(PSTR("\x0b"));
+                    break;
+                case 7:
+                    print_P(PSTR("\x0c"));
+                    break;
+                case 8:
+                    print_P(PSTR("\x0d"));
+                    break;
+                case 9:
+                    print_P(PSTR("\x0e"));
+                    break;
             }
         }
 
@@ -775,20 +1000,25 @@ namespace OSDConfig
             rose = new string(buf_show);
         }
 
-        const string FM_STAB = "\x00E0stab";
-        const string FM_ACRO = "\x00E0acro";
-        const string FM_ALTH = "\x00E0alth";
-        const string FM_AUTO = "\x00E0auto";
-        const string FM_GUID = "\x00E0guid";
-        const string FM_LOIT = "\x00E0loit";
-        const string FM_RETL = "\x00E0retl";
-        const string FM_CIRC = "\x00E0circ";
-        const string FM_POSI = "\x00E0posi";
-        const string FM_OFLO = "\x00E0oflo";
-        const string FM_MANU = "\x00E0manu";
-        const string FM_FBWA = "\x00E0fbwa";
-        const string FM_FBWB = "\x00E0fbwb";
-        const string FM_LAND = "\x00E0land";
+        const string FM_STAB = "stab";
+        const string FM_ACRO = "acro";
+        const string FM_ALTH = "alth";
+        const string FM_AUTO = "auto";
+        const string FM_GUID = "guid";
+        const string FM_LOIT = "loit";
+        const string FM_RETL = "retl";
+        const string FM_CIRC = "circ";
+        const string FM_POSI = "posi";
+        const string FM_OFLO = "oflo";
+        const string FM_MANU = "manu";
+        const string FM_FBWA = "fbwa";
+        const string FM_FBWB = "fbwb";
+        const string FM_LAND = "land";
+
+
+
+        string[] FM_ACM = { FM_STAB, FM_STAB, FM_ALTH, FM_AUTO, FM_GUID, FM_LOIT, FM_RETL, FM_CIRC, FM_POSI, FM_LAND, FM_OFLO };
+        string[] FM_APM = { FM_MANU, FM_CIRC, FM_STAB, FM_STAB, FM_STAB, FM_FBWA, FM_FBWB, FM_STAB, FM_STAB, FM_STAB, FM_AUTO, FM_RETL, FM_LOIT };
 
         string rose;
         char[] buf_show = new char[11];
@@ -798,5 +1028,41 @@ namespace OSDConfig
                            0xc3,0xc0,0xc0,0xc1,0xc0,0xc0,0xc1,0xc0,0xc0,
                            0xc5,0xc0,0xc0,0xc1,0xc0,0xc0,0xc1,0xc0,0xc0
                           };
+
+
+        const int OSD_ITEM_Cen = 0;
+        const int OSD_ITEM_Pit = 1;
+        const int OSD_ITEM_Rol = 2;
+        const int OSD_ITEM_VBatA = 3;
+        const int OSD_ITEM_VBatB = 4;
+        const int OSD_ITEM_GPSats = 5;
+        const int OSD_ITEM_GPL = 6;
+        const int OSD_ITEM_GPS = 7;
+        // panB_REG Byte has:
+        const int OSD_ITEM_Rose = 8;
+        const int OSD_ITEM_Head = 9;
+        const int OSD_ITEM_MavB = 10;
+        const int OSD_ITEM_HDir = 11;
+        const int OSD_ITEM_HDis = 12;
+        const int OSD_ITEM_WDir = 13 /*(!Not implemented)*/;
+        const int OSD_ITEM_WDis = 14;
+        const int OSD_ITEM_RSSI = 15;
+        // panC_REG Byte has:
+        const int OSD_ITEM_CurrA = 16;
+        const int OSD_ITEM_CurrB = 17;
+        const int OSD_ITEM_Alt = 18;
+        const int OSD_ITEM_HAlt = 19;
+        const int OSD_ITEM_Vel = 20;
+        const int OSD_ITEM_AS = 21;
+        const int OSD_ITEM_Thr = 22;
+        const int OSD_ITEM_FMod = 23;
+        const int OSD_ITEM_Hor = 24;
+        const int OSD_ITEM_SYS = 25;
+
+
+        const int OSD_OPT_Alt_R = 7;
+        //OSD_ITEM_VBatA_ADC, OSD_ITEM_VBatB_ADC, OSD_ITEM_CurrA_ADC, OSD_ITEM_CurrB_ADC, OSD_ITEM_RSSI_ADC, OSD_ITEM_Alt_R
+
+
     }
 }

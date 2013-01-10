@@ -95,7 +95,7 @@ namespace OSDConfig
             //gr = Graphics.FromImage(screen);
         }
 
-        OSDSetting setting;
+        internal OSDSetting setting;
         //[Browse
         public OSDSetting Setting
         {
@@ -237,7 +237,10 @@ namespace OSDConfig
                 //if (w1 < basesize.Width && h1 < basesize.Height)
                 {
                     if (selected == curItem)
+                    {
+                        Console.WriteLine("Sel {0}", selected);
                         gr.DrawRectangle(Pens.Red, (col * 12) % screen.Width, (row * 18), 12, 18);
+                    }
                     // check if this box has bene used
                     //if (usedPostion[w1][h1] != null)
                     //{
@@ -293,6 +296,7 @@ namespace OSDConfig
             Array.Clear(itemInPos, 0, itemInPos.Length);
         }
 
+
         public void SetPanel(int col, int row)
         {
             startCol = this.col = col;
@@ -301,6 +305,12 @@ namespace OSDConfig
             startRow = this.row = row;
         }
 
+        public void OpenSingle(int col, int row)
+        {
+            SetPanel(col, row);
+        }
+
+        
         public void OpenPanel()
         {
 
