@@ -160,12 +160,6 @@
   <data name="fileToolStripMenuItem.Text" xml:space="preserve">
     <value>文件(&amp;F)</value>
   </data>
-  <data name="nTSCToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
-  </data>
-  <data name="CHK_pal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
-  </data>
   <data name="videoModeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 21</value>
   </data>
@@ -173,28 +167,28 @@
     <value>视频制式(&amp;T)</value>
   </data>
   <data name="showGrid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>145, 22</value>
   </data>
   <data name="showGrid.Text" xml:space="preserve">
     <value>显示网格</value>
   </data>
   <data name="customBGPictureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>145, 22</value>
   </data>
   <data name="customBGPictureToolStripMenuItem.Text" xml:space="preserve">
     <value>背景图片...</value>
   </data>
   <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>145, 22</value>
   </data>
   <data name="toolStripMenuItem1.Text" xml:space="preserve">
     <value>语言</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+    <value>142, 6</value>
   </data>
   <data name="updateFirmwareToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>145, 22</value>
   </data>
   <data name="updateFirmwareToolStripMenuItem.Text" xml:space="preserve">
     <value>更新固件...</value>
@@ -203,7 +197,7 @@
     <value>将新固件上传到 OSD 中</value>
   </data>
   <data name="updateFontToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>145, 22</value>
   </data>
   <data name="updateFontToolStripMenuItem.Text" xml:space="preserve">
     <value>上传字符集...</value>
@@ -212,7 +206,7 @@
     <value>将字体上传到 OSD 中</value>
   </data>
   <data name="sendTLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>145, 22</value>
   </data>
   <data name="sendTLogToolStripMenuItem.Text" xml:space="preserve">
     <value>发送 TLog...</value>
@@ -235,17 +229,26 @@
   <data name="tabPage1.Text" xml:space="preserve">
     <value>功能</value>
   </data>
-  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 12</value>
+  <data name="rbImperial.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 16</value>
   </data>
-  <data name="label7.Text" xml:space="preserve">
-    <value>值 @ 0</value>
+  <data name="rbImperial.Text" xml:space="preserve">
+    <value>英制</value>
   </data>
-  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 12</value>
+  <data name="rbMetric.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 16</value>
   </data>
-  <data name="label8.Text" xml:space="preserve">
-    <value>值 / 位</value>
+  <data name="rbMetric.Text" xml:space="preserve">
+    <value>公制</value>
+  </data>
+  <data name="groupBox5.Text" xml:space="preserve">
+    <value>单位</value>
+  </data>
+  <data name="label9.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 12</value>
+  </data>
+  <data name="label9.Text" xml:space="preserve">
+    <value>启    用</value>
   </data>
   <data name="lReading2.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 12</value>
@@ -271,14 +274,17 @@
   <data name="label5.Text" xml:space="preserve">
     <value>真实值 2</value>
   </data>
-  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 12</value>
+  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 12</value>
   </data>
-  <data name="label6.Text" xml:space="preserve">
-    <value>AD  通道</value>
+  <data name="label7.Text" xml:space="preserve">
+    <value>值 @ 0</value>
   </data>
-  <data name="label3.Text" xml:space="preserve">
-    <value>功    能</value>
+  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 12</value>
+  </data>
+  <data name="label8.Text" xml:space="preserve">
+    <value>值 / 位</value>
   </data>
   <data name="cbFunction.Items" xml:space="preserve">
     <value>电压 A</value>
@@ -295,8 +301,20 @@
   <data name="cbFunction.Items4" xml:space="preserve">
     <value>信号强度</value>
   </data>
-  <data name="tabPage2.Text" xml:space="preserve">
+  <data name="label3.Text" xml:space="preserve">
+    <value>功    能</value>
+  </data>
+  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 12</value>
+  </data>
+  <data name="label6.Text" xml:space="preserve">
+    <value>AD  通道</value>
+  </data>
+  <data name="groupBox4.Text" xml:space="preserve">
     <value>模/数</value>
+  </data>
+  <data name="tabPage2.Text" xml:space="preserve">
+    <value>设置</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

@@ -18,42 +18,49 @@
 #define _bv(x) 		(1UL << (x))
 
 volatile uint8_t 	ArduOSD::crlf_count;
+char ArduOSD::spd_sym;
+char ArduOSD::dst_sym;
+float ArduOSD::converts;
+float ArduOSD::convertd;		
 
 
 osd_setting_t ArduOSD::setting =
 {
     DATA_VER,
+    0,
     _bv(OSD_ITEM_Pit) | _bv(OSD_ITEM_Rol) | _bv(OSD_ITEM_VBatA) | _bv(OSD_ITEM_GPSats) | _bv(OSD_ITEM_GPL) | _bv(OSD_ITEM_GPS)
     | _bv(OSD_ITEM_Rose) | _bv(OSD_ITEM_Head) | _bv(OSD_ITEM_MavB)| _bv(OSD_ITEM_HDir) | _bv(OSD_ITEM_HDis)
-    | _bv(OSD_ITEM_Alt) | _bv(OSD_ITEM_Vel) | _bv(OSD_ITEM_Thr) | _bv(OSD_ITEM_FMod) | _bv(OSD_ITEM_Hor) | _bv(OSD_ITEM_SYS),
+    | _bv(OSD_ITEM_Alt) | _bv(OSD_ITEM_HAlt) | _bv(OSD_ITEM_Vel) | _bv(OSD_ITEM_AS) | _bv(OSD_ITEM_Thr) | _bv(OSD_ITEM_FMod) 
+    | _bv(OSD_ITEM_Hor) | _bv(OSD_ITEM_SYS),
 
 
-    {   {13, 7}, 	// panCenter_y_ADDR
-        {22, 9}, 	// panPitch_y_ADDR
-        {11, 1}, 	// panRoll_y_ADDR
-        {21, 1}, 	// panBatt_A_y_ADDR
-        {21, 3}, 	// panBatt_B_y_ADDR
-        {2, 13}, 	// panGPSats_y_ADDR
-        {5, 13}, 	// panGPL_y_ADDR
-        {2, 14}, 	// panGPS_y_ADDR
-
-        {16, 14}, // panRose_y_ADDR
-        {24, 13}, // panHeading_y_ADDR
-        {2, 9}, 	// panMavBeat_y_ADDR
-        {14, 3}, 	// panHomeDir_y_ADDR
-        {2, 1}, 	// panHomeDis_y_ADDR
-        {0, 0}, 	// panWPDir_y_ADDR
-        {0, 0}, 	// panWPDis_y_ADDR
-        {22, 5},	// panRSSI_y_ADDR
-
-        {21, 2},  // panCur_A_y_ADDR
-        {21, 4},  // panCur_B_R
-        {2, 2},   // panAlt_y_ADDR
-        {2, 3},   // panVel_y_ADDR
-        {2, 4},   // panThr_y_ADDR
-        {17, 13}, // panFMod_y_ADDR
-        {8, 7},   // panHorizon_y_ADDR}
-        {11, 4},  // sys status
+    {   
+    	{13, 7}, //  panCenter_y_ADDR
+      {22, 9}, //  panPitch_y_ADDR
+            {11, 1}, //  panRoll_y_ADDR
+            {1, 6}, //  panBatt_A_y_ADDR
+            {1, 8}, //  panBatt_B_y_ADDR
+            {1, 13}, // panGPSats_y_ADDR
+            {4, 13}, // panGPL_y_ADDR
+            {1, 14}, // panGPS_y_ADDR
+            {16, 14}, // panRose_y_ADDR
+            {24, 13}, // panHeading_y_ADDR
+            {14, 15}, // panMavBeat_y_ADDR
+            {14, 3}, //  panHomeDir_y_ADDR
+            {22, 1}, //  panHomeDis_y_ADDR
+            {17, 12}, //  panWPDir_y_ADDR
+            {20, 12}, //  panWPDis_y_ADDR
+            {22, 5}, ////  panRSSI_y_ADDR
+            {1, 7}, //  panCur_A_y_ADDR
+            {1, 9}, //  panCur_B_y_ADDR
+            {22, 3}, //  panAlt_y_ADDR
+            {22, 2}, //homeAlt
+            {1, 2}, //  panVel_y_ADDR
+            {1, 1}, // panAS
+            {1, 4}, //  panThr_y_ADDR
+            {17, 13}, // panFMod_y_ADDR
+            {8, 6}, //  panHorizon_y_ADDR
+            {11,4}
     }
 };
 
@@ -76,7 +83,7 @@ void ArduOSD::Init()
 
     sei();
 
-    OSD::init();
+    OSD::Init();
 
 
     wdt_enable(WDTO_2S);
@@ -86,10 +93,10 @@ void ArduOSD::LoadSetting()
 {
     if (eeprom_read_byte(&mark_EE) != 'O' || eeprom_read_byte((const uint8_t*)&setting_EE) != DATA_VER)
     {
-        setPanel(6,9);
-        openPanel();
+        SetPanel(6,9);
+        OpenPanel();
         print_P(PSTR("Missing/Old Config"));
-        closePanel();
+        ClosePanel();
 
         //loadBar();
         delay(500);
@@ -98,10 +105,10 @@ void ArduOSD::LoadSetting()
         //eeprom_write_byte(&setting_EE, DATA_VER);
         eeprom_write_block((const void*) &setting, &setting_EE, sizeof(setting));
 
-        setPanel(6,9);
-        openPanel();
+        SetPanel(6,9);
+        OpenPanel();
         print_P(PSTR("OSD Initialized   "));
-        closePanel();
+        ClosePanel();
 
         delay(500);
     }
@@ -110,12 +117,26 @@ void ArduOSD::LoadSetting()
         eeprom_read_block(&setting, &setting_EE, sizeof(setting));
     }
 
-    if (getMode() == MAX7456_MODE_NTCS)
+    if (GetMode() == MAX7456_MODE_NTCS)
         for (int j = 0; j < 24; j++)
         {
-            if(setting.coord[j][1] >= getCenter())
+            if(setting.coord[j][1] >= GetCenter())
                 setting.coord[j][1] -= 3;//Cutting lines offset after center if NTSC
         }
+        
+    if (setting.option & _BV(OSD_OPT_M_ISO))
+    { 
+    		converts = 3.6;
+        convertd = 1.0;
+        spd_sym = 0x81;
+        dst_sym = 0x8D;
+    } else 
+    {
+        converts = 2.23;
+        convertd = 3.28;
+        spd_sym = 0xfb;
+        dst_sym = 0x66;
+    } 
 }
 
 void ArduOSD::UploadFont()
@@ -161,7 +182,7 @@ void ArduOSD::UploadFont()
         }
     }
 
-    clear();
+    Clear();
 }
 
 void ArduOSD::GetSetting()
@@ -218,7 +239,7 @@ void ArduOSD::UploadSetting()
             eeprom_write_block((const void*) &setting, &setting_EE, sizeof(setting));
             wdt_reset();
             ack = '!';
-            clear();
+            Clear();
         }
     }
     uart_putc(ack);
@@ -227,12 +248,12 @@ void ArduOSD::UploadSetting()
 void ArduOSD::Reboot()
 {
     uart_putc('R');
-    clear();
+    Clear();
     DrawLogo();
-    setPanel(6,9);
-    openPanel();
+    SetPanel(6,9);
+    OpenPanel();
     print_P(PSTR("Rebooting..."));
-    closePanel();
+    ClosePanel();
     /*for (uint8_t i = 0; i < 10; i++)
     {
         delay(100);
@@ -287,93 +308,12 @@ const char buf_Rule[36] = {0xc2,0xc0,0xc0,0xc1,0xc0,0xc0,0xc1,0xc0,0xc0,
 
 void ArduOSD::DrawLogo(/*int first_col, int first_line*/)
 {
-    setPanel(7, 5);
-    openPanel();
+    SetPanel(7, 5);
+    OpenPanel();
     //print_P(PSTR("\x20\x20\x20\xba\xbb\xbc\xbd\xbe|\x20\x20\x20\xca\xcb\xcc\xcd\xce|Hazys OSD"));
     print_P(PSTR("Hazy's OSD v" OSD_VER "| for MAVLink 1.0"));
-    closePanel();
+    ClosePanel();
 }
-
-
-/* **************************************************************** */
-// Panel  : panFlightMode
-// Needs  : X, Y locations
-// Output : 2 symbols, one static name symbol and another that changes by flight modes
-// Size   : 1 x 2  (rows x chars)
-// Status : done
-
-#ifndef MAVLINK10
-inline const char* getFlightModeString(uint8_t apm_mav_type, uint8_t osd_nav_mode, uint16_t osd_mode)
-{
-    const char* str = NULL;
-
-    if(apm_mav_type == 2) //ArduCopter MultiRotor or ArduCopter Heli
-    {
-        switch(osd_mode)
-        {
-        case 100:
-            //str= FM_STAB;
-            //break;
-            return FM_STAB;
-        case 101:
-            return FM_ACRO;
-            //break;
-        case 102:
-            return FM_ALTH;
-            //break;
-        case MAV_MODE_AUTO:
-            switch (osd_nav_mode)
-            {
-            case MAV_NAV_WAYPOINT:
-                return FM_AUTO;
-                //break;
-            case MAV_NAV_HOLD:
-                return FM_LOIT;
-                //break;
-            case MAV_NAV_RETURNING:
-                return FM_RETL;
-                //break;
-            }
-            break;
-        case MAV_MODE_GUIDED:
-            if (osd_nav_mode == MAV_NAV_WAYPOINT) return FM_GUID;
-        case 107:
-            return FM_CIRC;
-
-        case 108:
-            return FM_POSI;
-
-        case 109:
-            return FM_LAND;
-
-        case 110:
-            return FM_OFLO;
-
-        }
-    }
-    else if(apm_mav_type == 1) //ArduPlane
-    {
-
-        if(osd_mode == MAV_MODE_TEST1 && osd_nav_mode == MAV_NAV_VECTOR) return FM_STAB;//Stabilize
-        else if(osd_mode == MAV_MODE_TEST2)
-        {
-            if (osd_nav_mode == 1) return FM_FBWA;//FLY_BY_WIRE_A
-            else if(osd_nav_mode == 2) return FM_FBWB;//FLY_BY_WIRE_B
-        }
-        else if(osd_mode == MAV_MODE_MANUAL && osd_nav_mode == MAV_NAV_VECTOR) return FM_MANU;//Manual
-        else if(osd_mode == MAV_MODE_AUTO)
-        {
-            if (osd_nav_mode == MAV_NAV_RETURNING)        			return FM_RETL;
-            else if (osd_nav_mode== MAV_NAV_WAYPOINT)        				return FM_AUTO;
-            else if (osd_nav_mode == MAV_NAV_LOITER) return FM_LOIT;//Loiter
-        }
-        else  if(osd_mode == MAV_MODE_TEST3) return FM_CIRC;//CIRCLE
-    }
-
-    return NULL;
-}
-#endif
-
 
 inline char getBatteryPic(uint16_t bat_level)
 {
@@ -404,11 +344,11 @@ inline const char* getHeadingPatern(float heading)
 
 // ---------------- EXTRA FUNCTIONS ----------------------
 // Show those fancy 2 char arrows
-void ArduOSD::DrawArrow()
+void ArduOSD::DrawArrow(uint8_t dir)
 {
     uint8_t c = '\x90';
-    if (osd_home_direction > 1)
-        c += ((osd_home_direction-1) << 1);
+    if (dir > 1)
+        c += ((dir-1) << 1);
 
     write(c);
     write(++c);
@@ -446,7 +386,7 @@ inline void ArduOSD::DrawHorizon(uint8_t start_col, uint8_t start_row)
             subval = hit - minval;
             subval = round((subval*9)/18);
             if(subval == 0) subval = 1;
-            openSingle(start_col + col, start_row + row - 1);
+            OpenSingle(start_col + col, start_row + row - 1);
             write('\x05' + subval);
             //write('0' + start_row + row - 1);
         }
@@ -463,8 +403,8 @@ void ArduOSD::Draw()
     {
         if (setting.enable & (1UL << i))
         {
-            setPanel(setting.coord[i][0], setting.coord[i][1]);
-            openPanel();
+            SetPanel(setting.coord[i][0], setting.coord[i][1]);
+            OpenPanel();
 
             switch (i)
             {
@@ -478,10 +418,10 @@ void ArduOSD::Draw()
                 printf_P(PSTR("%4i\xb0\xb2"),osd_roll);
                 break;
             case OSD_ITEM_VBatA:
-                printf_P(PSTR(" \xE2%5.2f\x8E"), (double)osd_vbat_A);
+                printf_P(PSTR("\xE2%5.2f\x8E"), (double)osd_vbat_A);
                 break;
             case OSD_ITEM_VBatB:
-                printf_P(PSTR(" \xE3%5.2f\x8E"), (double)osd_vbat_B);
+                printf_P(PSTR("\xE3%5.2f\x8E"), (double)osd_vbat_B);
                 break;
             case OSD_ITEM_GPSats:
                 printf_P(PSTR("\x0f%2i"), osd_satellites_visible);
@@ -520,26 +460,44 @@ void ArduOSD::Draw()
                 }
                 break;//13x3
             case OSD_ITEM_HDis:
-                if (osd_got_home==1) printf_P(PSTR("\x1F%5.0f\x8D"), (double)osd_home_distance);
+                if (osd_got_home==1) printf_P(PSTR("\x1F%5.0f%c"), (double)(osd_home_distance * convertd), dst_sym);
                 break;//13x3
             case OSD_ITEM_HDir:
-                if (osd_got_home==1) DrawArrow();//panHomeDir(); //13x3
+                if (osd_got_home==1) DrawArrow(osd_home_direction);//panHomeDir(); //13x3
                 break;
+            case OSD_ITEM_WDir:
+            		{
+            				int8_t wp_target_bearing_rotate_int = round(((float)wp_target_bearing - osd_heading)/360.0 * 16.0) + 1; //Convert to int 0-16 
+    								if(wp_target_bearing_rotate_int < 0 ) wp_target_bearing_rotate_int += 16; //normalize
+    								DrawArrow((uint8_t)wp_target_bearing_rotate_int);
+            		}
+            		break;
+            case OSD_ITEM_WDis:
+            		printf_P(PSTR("\x57%2i\x00%4.0f%c"), wp_number, (double)(wp_dist * convertd), dst_sym);
+            		break;
             case OSD_ITEM_RSSI:
                 printf_P(PSTR("\xE1%3i%%"), osd_rssi);
                 break;
             case OSD_ITEM_CurrA:
-                printf_P(PSTR(" \xE4%5.2f\x8F"), osd_curr_A);
+                printf_P(PSTR("\xE4%5.2f\x8F"), osd_curr_A);
                 break;
             case OSD_ITEM_CurrB:
-                printf_P(PSTR(" \xE5%5.2f\x8F"), osd_curr_B);
+                printf_P(PSTR("\xE5%5.2f\x8F"), osd_curr_B);
                 break;
             case OSD_ITEM_Alt:
-                printf_P(PSTR("\x85%5.0f\x8D"),(double)(osd_alt));
+                printf_P(PSTR("\xe6%5.0f%c"),
+                	(double)(osd_alt*convertd), dst_sym);
                 break;
+            case OSD_ITEM_HAlt:
+            		printf_P(PSTR("\xe7%5.0f%c"),
+            			(double)((osd_alt - osd_home_alt) * convertd), dst_sym);
+            		break;
             case OSD_ITEM_Vel:
-                printf_P(PSTR("\x86%3.0f\x88"),(double)osd_groundspeed);
+                printf_P(PSTR("\xe9%3.0f%c"), (double)osd_groundspeed*converts, spd_sym);
                 break;
+            case OSD_ITEM_AS:
+            		printf_P(PSTR("\xe8%3.0f%c"), (double)osd_airspeed*converts, spd_sym);
+            		break;
             case OSD_ITEM_Thr:
                 printf_P(PSTR("\x87%3i%%"), osd_throttle);
                 break;
@@ -562,7 +520,7 @@ void ArduOSD::Draw()
                     write(++c);
                     write('|');
                 }
-                closePanel();
+                ClosePanel();
                 DrawHorizon(setting.coord[OSD_ITEM_Hor][0]+1, setting.coord[OSD_ITEM_Hor][1]);
                 break;
             case OSD_ITEM_SYS:
@@ -576,30 +534,30 @@ void ArduOSD::Draw()
             }
 
             if (i != OSD_ITEM_Hor)
-                closePanel();
+                ClosePanel();
         }
     }
 
 
 // OSD debug for development (Shown on top-middle panels)
 #ifdef membug
-    setPanel(13,4);
-    openPanel();
+    SetPanel(13,4);
+    OpenPanel();
     printf("%i",freeMem());
     printf(" %i", crlf_count);
-    closePanel();
+    ClosePanel();
 #endif
 }
 
 void ArduOSD::DrawWaitingHB()
 {
-    clear();
+    Clear();
     DrawLogo();
-    setPanel(5, 10);
-    openPanel();
+    SetPanel(5, 10);
+    OpenPanel();
     print_P(PSTR("Waiting for|MAVLink heartbeats..."));
 
-    closePanel();
+    ClosePanel();
 }
 
 
@@ -620,10 +578,10 @@ void ArduOSD::DrawLoadBar()   //change name due we don't have CLI anymore
 
     // Write plain panel to let users know what to do
     //panBoot(barX,barY);
-    setPanel(barX, barY);
-    openPanel();
+    SetPanel(barX, barY);
+    OpenPanel();
     print_P(PSTR("Booting up:\xed\xf2\xf2\xf2\xf2\xf2\xf2\xf2\xf2\xf2\xf3"));
-    closePanel();
+    ClosePanel();
 
     delay(500);    // To give small extra waittime to users
     uart_flush();
@@ -639,10 +597,10 @@ void ArduOSD::DrawLoadBar()   //change name due we don't have CLI anymore
         if(waitTimer % (BOOTTIME / 8) == 0)
         {
             // Update bar it self
-            setPanel(barX + 12 + barStep, barY);
-            openPanel();
+            SetPanel(barX + 12 + barStep, barY);
+            OpenPanel();
             write('\xee');
-            closePanel();
+            ClosePanel();
             barStep++;
         }
 
@@ -765,12 +723,12 @@ void ArduOSD::Run()
 
         if(mavlink_status == MAVLINK_STATUS_REQUIRE_DATA) //Request rate control
         {
-            clear();
+            Clear();
             DrawLogo();
-            setPanel(3,10);
-            openPanel();
+            SetPanel(3,10);
+            OpenPanel();
             print_P(PSTR("Requesting DataStreams..."));
-            closePanel();
+            ClosePanel();
             for(int n = 0; n < 3; n++)
             {
                 RequestMavlinkRates();//Three times to certify it will be readed
@@ -791,22 +749,22 @@ void ArduOSD::Run()
             {
                 SetHomeVars();
 
-                if (setting.enable & _bv(OSD_ITEM_VBatA_ADC))
+                if (setting.option & _bv(OSD_OPT_VBatA_ADC))
                     osd_vbat_A = analog_read(setting.ad_setting[AD_VBatA]);
-                if (setting.enable & _bv(OSD_ITEM_VBatB_ADC))
+                if (setting.option & _bv(OSD_OPT_VBatB_ADC))
                     osd_vbat_B = analog_read(setting.ad_setting[AD_VBatB]);
-                if (setting.enable & _bv(OSD_ITEM_CurrA_ADC))
+                if (setting.option & _bv(OSD_OPT_CurrA_ADC))
                     osd_curr_A = analog_read(setting.ad_setting[AD_CurrA]);
-                if (setting.enable & _bv(OSD_ITEM_CurrB_ADC))
+                if (setting.option & _bv(OSD_OPT_CurrB_ADC))
                     osd_curr_B = analog_read(setting.ad_setting[AD_CurrB]);
-                if (setting.enable & _bv(OSD_ITEM_RSSI_ADC))
+                if (setting.option & _bv(OSD_OPT_RSSI_ADC))
                     osd_rssi = (uint8_t)analog_read(setting.ad_setting[AD_RSSI]);
-                if (setting.enable & _bv(OSD_ITEM_Alt_R))
-                    osd_alt -= osd_home_lat;
+                //if (setting.enable & _bv(OSD_ITEM_Alt_R))
+                //    osd_alt -= osd_home_lat;
 
                 if (mavlink_status == (uint8_t)MAVLINK_STATUS_GET_DATA)
                 {
-                    clear();
+                    Clear();
                     mavlink_status = (uint8_t)MAVLINK_STATUS_UPDATE_DATA;
                 }
 

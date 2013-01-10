@@ -49,9 +49,14 @@ protected:
     static volatile int8_t   	osd_yaw;                    // relative heading form DCM
     static volatile float    	osd_heading;                // ground course heading from GPS
     static volatile float    	osd_alt;                    // altitude
+    static volatile float			osd_airspeed;
     static volatile float    	osd_groundspeed;            // ground speed
     static volatile uint16_t 	osd_throttle;               // throtle
 
+		static volatile uint8_t 	wp_number;
+		static volatile uint16_t	wp_dist;
+		static volatile int16_t		wp_target_bearing;
+		
     static volatile uint8_t		osd_sys_status;
 
     static volatile uint8_t		osd_rssi;

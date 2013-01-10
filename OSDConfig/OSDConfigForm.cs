@@ -89,7 +89,8 @@ namespace OSDConfig
                     LIST_items.SelectedItem = null;
                 else
                 {
-                    bool isalt = false;
+                    /*bool isalt = false;
+                    
                     foreach (var alt in OSDItemList.Alternates)
                         if (osd.SelectedItem == alt.Key && osd.Setting.IsEnabled(alt.Value))
                         {
@@ -98,9 +99,9 @@ namespace OSDConfig
                             isalt = true;
                             break;
                         }
-                    if (!isalt)
-                        //LIST_items.SelectedItem = OSDItemList.Names[(int)osd.SelectedItem];
-                        LIST_items.SelectedIndex = Array.IndexOf(OSDItemList.Avaliable, osd.SelectedItem);
+                    if (!isalt)*/
+                    //LIST_items.SelectedItem = OSDItemList.Names[(int)osd.SelectedItem];
+                    LIST_items.SelectedIndex = Array.IndexOf(OSDItemList.Avaliable, osd.SelectedItem);
                 }
             }
         }
@@ -191,7 +192,7 @@ namespace OSDConfig
             osdPort.ReadTimeout = 2000;
             osdPort.BaudRate = osdRate;
 
-            osd.Chars = mcm.readMCM2("OSD_SA_v5.mcm");
+            osd.Chars = mcm.readMCM2("OSD_Charset.mcm");//"/*OSD_SA_v5.mcm");
 
             try
             {
@@ -199,9 +200,13 @@ namespace OSDConfig
             }
             catch { }
 
+            
+
             osd.Draw();
 
             cbFunction.SelectedIndex = 0;
+
+            LoadSetting(new OSDSetting());
         }
 
         private void LIST_items_SelectedIndexChanged(object sender, EventArgs e)
@@ -217,12 +222,12 @@ namespace OSDConfig
                 OSDItem sel = OSDItemList.Avaliable[LIST_items.SelectedIndex];//(OSDItem)Array.IndexOf(OSDItemList.Names, item);
 
 
-                foreach (var alt in OSDItemList.Alternates)
-                    if (sel == alt.Value)
-                    {
-                        sel = alt.Key;
-                        break;
-                    }
+                //foreach (var alt in OSDItemList.Alternates)
+                //    if (sel == alt.Value)
+                //    {
+                //        sel = alt.Key;
+                //        break;
+                //    }
 
                 fromOSD = false;
                 osd.SelectedItem = sel;
@@ -260,25 +265,26 @@ namespace OSDConfig
                     }
                 }
 
-                foreach (var alt in OSDItemList.Alternates)
-                {
-                    if (item == alt.Key && e.NewValue == CheckState.Checked && (idx = Array.IndexOf(OSDItemList.Avaliable, alt.Value)) >= 0)
-                    {
-                        LIST_items.SetItemChecked(idx, false);
-                        osd.SetItemEnabled(alt.Value, false);
-                        break;
-                    }
-                    else if (item == alt.Value)
-                    {
-                        if (e.NewValue == CheckState.Checked
-                            //&& OSDItemList.Names[(int)alt.Key] != null
-                            && (idx = Array.IndexOf(OSDItemList.Avaliable, alt.Key)) >= 0)
-                            LIST_items.SetItemChecked(idx, false);
-                        osd.SetItemEnabled(alt.Key, e.NewValue == CheckState.Checked);
-                        break;
-                    }
-                }
-
+                /*
+                                foreach (var alt in OSDItemList.Alternates)
+                                {
+                                    if (item == alt.Key && e.NewValue == CheckState.Checked && (idx = Array.IndexOf(OSDItemList.Avaliable, alt.Value)) >= 0)
+                                    {
+                                        LIST_items.SetItemChecked(idx, false);
+                                        osd.SetItemEnabled(alt.Value, false);
+                                        break;
+                                    }
+                                    else if (item == alt.Value)
+                                    {
+                                        if (e.NewValue == CheckState.Checked
+                                            //&& OSDItemList.Names[(int)alt.Key] != null
+                                            && (idx = Array.IndexOf(OSDItemList.Avaliable, alt.Key)) >= 0)
+                                            LIST_items.SetItemChecked(idx, false);
+                                        osd.SetItemEnabled(alt.Key, e.NewValue == CheckState.Checked);
+                                        break;
+                                    }
+                                }
+                */
                 osd.SetItemEnabled(item, e.NewValue == CheckState.Checked);
             }
 
@@ -320,7 +326,7 @@ namespace OSDConfig
         {
             for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
             {
-                bool alt = false;
+                /*bool alt = false;
                 foreach (var a in OSDItemList.Alternates)
                     if (OSDItemList.Avaliable[i] == a.Key && setting.IsEnabled(a.Value))
                     {
@@ -328,8 +334,8 @@ namespace OSDConfig
                         alt = true;
                     }
 
-                if (!alt)
-                    LIST_items.SetItemChecked(i, setting.IsEnabled(OSDItemList.Avaliable[i]));
+                if (!alt)*/
+                LIST_items.SetItemChecked(i, setting.IsEnabled(OSDItemList.Avaliable[i]));
             }
 
             foreach (var r in adreadings)
@@ -337,9 +343,11 @@ namespace OSDConfig
                 r[0].reading = r[1].reading = 0;
                 r[0].value = r[1].value = 0;
             }
+            rbMetric.Checked = setting.GetOption(OSDOption.M_ISO);
+            rbImperial.Checked = !rbMetric.Checked;
 
             cbFunction_SelectedIndexChanged(this, new EventArgs());
-
+            
             osd.Setting = setting;
             osd.Draw();
         }
@@ -486,7 +494,7 @@ namespace OSDConfig
                     FLASH = hex.RawData;
                 }
                 catch { MessageBox.Show("Bad Hex File"); return; }
-                
+
                 toolStripStatusLabel1.Text = "Rebooting";
 
                 bool fail = false;
@@ -799,13 +807,13 @@ namespace OSDConfig
             {
                 //OSDItem info = (OSDItem)Array.IndexOf(OSDItemList.Names, LIST_items.SelectedItem.ToString());
                 OSDItem item = OSDItemList.Avaliable[LIST_items.SelectedIndex];
-                foreach (var alt in OSDItemList.Alternates)
+                /*foreach (var alt in OSDItemList.Alternates)
                     if (item == alt.Value)
                     {
                         item = alt.Key;
                         break;
                     }
-
+                */
                 osd.SetItemPosition(item, new Point((int)NUM_X.Value, (int)NUM_Y.Value));
                 osd.Draw();
             }
@@ -909,6 +917,7 @@ namespace OSDConfig
             numVperB.Value = (decimal)osd.Setting.ad_setting[idx].k;
             numVat0.Value = (decimal)osd.Setting.ad_setting[idx].b;
             cbChannel.SelectedIndex = osd.Setting.ad_setting[idx].channel;
+            cbADEnable.Checked = (osd.Setting.option & (1 << (2 + idx))) != 0;
             fromuser = true;
         }
 
@@ -990,5 +999,26 @@ namespace OSDConfig
         {
 
         }
+
+        private void cbADEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbFunction.SelectedIndex >= 0 && fromuser)
+            {
+                osd.Setting.SetOption((OSDOption)cbFunction.SelectedIndex, rbMetric.Checked);
+            }
+        }
+
+        private void rbMetric_CheckedChanged(object sender, EventArgs e)
+        {
+            osd.Setting.SetOption(OSDOption.M_ISO, rbMetric.Checked);
+        }
+
+
+        public int _BV(int i)
+        {
+            return 1 << i;
+        }
+
+        
     }
 }

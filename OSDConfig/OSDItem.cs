@@ -31,18 +31,20 @@ namespace OSDConfig
         CurA, //(!Not implemented)
         CurB, //(!Not implemented)
         Alt,
+        HAlt,
         Vel,
+        AS,
         Thr,
         FMod,
         Hor,
         //XXC, //Free
         SYS,
-        BatA_ADC,
-        BatB_ADC,
-        CurA_ADC,
-        CurB_ADC,
-        RSSI_ADC,
-        Alt_R,
+        //BatA_ADC,
+        //BatB_ADC,
+        //CurA_ADC,
+        //CurB_ADC,
+        //RSSI_ADC,
+        //Alt_R,
         NULL
     }
 
@@ -65,6 +67,7 @@ namespace OSDConfig
             new KeyValuePair<OSDItem, OSDItem>(OSDItem.Cen, OSDItem.Hor)
         };
 
+/*
         public static readonly KeyValuePair<OSDItem, OSDItem>[] Alternates = 
         {
             new KeyValuePair<OSDItem, OSDItem>(OSDItem.BatA, OSDItem.BatA_ADC),
@@ -74,17 +77,17 @@ namespace OSDConfig
             new KeyValuePair<OSDItem, OSDItem>(OSDItem.CurA, OSDItem.CurA_ADC),
             new KeyValuePair<OSDItem, OSDItem>(OSDItem.CurB, OSDItem.CurB_ADC)
         };
-
+*/
         public static readonly OSDItem[] Avaliable = { 
         OSDItem.Cen,
         OSDItem.Pit,
         OSDItem.Rol,
         OSDItem.BatA,
-        OSDItem.BatA_ADC,
-        OSDItem.BatB_ADC,
+        OSDItem.BatB,
+        //OSDItem.BatB_ADC,
         OSDItem.CurA,
-        OSDItem.CurA_ADC,
-        OSDItem.CurB_ADC,
+        //OSDItem.CurA_ADC,
+        OSDItem.CurB,
         OSDItem.GPSats,
         OSDItem.GPL,
         OSDItem.GPS,
@@ -95,12 +98,15 @@ namespace OSDConfig
         OSDItem.MavB,
         OSDItem.HDir,
         OSDItem.HDis,
+        OSDItem.WDir,
+        OSDItem.WDis,
         OSDItem.RSSI,
-        OSDItem.RSSI_ADC,
+        //OSDItem.RSSI_ADC,
 
         OSDItem.Alt,
-        OSDItem.Alt_R,
+        OSDItem.HAlt,
         OSDItem.Vel,
+        OSDItem.AS,
         OSDItem.Thr,
         OSDItem.FMod,
         OSDItem.Hor,
