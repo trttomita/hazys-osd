@@ -33,7 +33,7 @@ namespace OSDConfig
 
     public enum OSDOption
     {
-        VBatA_ADC, VBatB_ADC, CurrA_ADC, CurrB_ADC, RSSI_ADC, M_ISO = 6, Alt_R,
+        VBatA_ADC, VBatB_ADC, CurrA_ADC, CurrB_ADC, RSSI_ADC, M_ISO = 7,
     };
 
     public class OSDSetting
