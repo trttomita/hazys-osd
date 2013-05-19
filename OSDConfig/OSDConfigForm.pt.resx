@@ -117,132 +117,126 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="BUT_WriteOSD.Location" type="System.Drawing.Point, System.Drawing">
-    <value>602, 5</value>
-  </data>
   <data name="BUT_WriteOSD.Text" xml:space="preserve">
-    <value>Guardar en OSD</value>
-  </data>
-  <data name="CMB_ComPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 8</value>
-  </data>
-  <data name="BUT_ReadOSD.Location" type="System.Drawing.Point, System.Drawing">
-    <value>303, 5</value>
+    <value>Guardar no OSD</value>
   </data>
   <data name="BUT_ReadOSD.Text" xml:space="preserve">
-    <value>Leer desde OSD</value>
+    <value>Leitura do OSD</value>
   </data>
-  <data name="saveToFileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 24</value>
-  </data>
-  <data name="saveToFileToolStripMenuItem.Text" xml:space="preserve">
-    <value>Guardar archivo OSD...</value>
-  </data>
-  <data name="loadFromFileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 24</value>
-  </data>
-  <data name="loadFromFileToolStripMenuItem.Text" xml:space="preserve">
-    <value>Abrir archivo OSD...</value>
-  </data>
-  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>293, 6</value>
-  </data>
-  <data name="loadDefaultsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 24</value>
-  </data>
-  <data name="loadDefaultsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Configuración inicial</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>293, 6</value>
-  </data>
-  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 24</value>
-  </data>
-  <data name="exitToolStripMenuItem.Text" xml:space="preserve">
-    <value>Salir</value>
-  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="fileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>77, 24</value>
+    <value>79, 24</value>
   </data>
   <data name="fileToolStripMenuItem.Text" xml:space="preserve">
-    <value>&amp;Archivo</value>
+    <value>&amp;Ficheiro</value>
+  </data>
+  <data name="saveToFileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>359, 24</value>
+  </data>
+  <data name="saveToFileToolStripMenuItem.Text" xml:space="preserve">
+    <value>Guardar Ficheiro OSD...</value>
+  </data>
+  <data name="loadFromFileToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>359, 24</value>
+  </data>
+  <data name="loadFromFileToolStripMenuItem.Text" xml:space="preserve">
+    <value>Abrir o Ficheiro OSD...</value>
+  </data>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>356, 6</value>
+  </data>
+  <data name="loadDefaultsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>359, 24</value>
+  </data>
+  <data name="loadDefaultsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Carregamento dos parâmetros Básicos</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>356, 6</value>
+  </data>
+  <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>359, 24</value>
+  </data>
+  <data name="exitToolStripMenuItem.Text" xml:space="preserve">
+    <value>Saída</value>
+  </data>
+  <data name="videoModeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 24</value>
+  </data>
+  <data name="videoModeToolStripMenuItem.Text" xml:space="preserve">
+    <value>&amp;Modo Vídeo</value>
   </data>
   <data name="nTSCToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>118, 24</value>
   </data>
-  <data name="CHK_pal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 24</value>
-  </data>
-  <data name="videoModeToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 24</value>
-  </data>
-  <data name="videoModeToolStripMenuItem.Text" xml:space="preserve">
-    <value>&amp;Modo de vídeo</value>
-  </data>
-  <data name="showGrid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>240, 24</value>
-  </data>
-  <data name="showGrid.Text" xml:space="preserve">
-    <value>Mostrar cuadrícula</value>
-  </data>
-  <data name="customBGPictureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>240, 24</value>
-  </data>
-  <data name="customBGPictureToolStripMenuItem.Text" xml:space="preserve">
-    <value>Imagen de fondo...</value>
-  </data>
-  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>240, 24</value>
-  </data>
-  <data name="toolStripMenuItem1.Text" xml:space="preserve">
-    <value>Lenguage</value>
-  </data>
-  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>237, 6</value>
-  </data>
-  <data name="updateFirmwareToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>240, 24</value>
-  </data>
-  <data name="updateFirmwareToolStripMenuItem.Text" xml:space="preserve">
-    <value>Actualizar Firmware...</value>
-  </data>
-  <data name="updateFirmwareToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Re-Flashear el OSD con un nuevo firmware</value>
-  </data>
-  <data name="updateFontToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>240, 24</value>
-  </data>
-  <data name="updateFontToolStripMenuItem.Text" xml:space="preserve">
-    <value>Actualizar caracteres...</value>
-  </data>
-  <data name="updateFontToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Actualizar el archivo de caracteres del OSD</value>
-  </data>
-  <data name="sendTLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>240, 24</value>
-  </data>
-  <data name="sendTLogToolStripMenuItem.Text" xml:space="preserve">
-    <value>Enviar TLog..</value>
-  </data>
-  <data name="sendTLogToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Enviar cadena de datos Mavlink para probar el esquema</value>
-  </data>
   <data name="optionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 24</value>
+    <value>77, 24</value>
   </data>
   <data name="optionsToolStripMenuItem.Text" xml:space="preserve">
-    <value>&amp;Opciones</value>
+    <value>&amp;Opções</value>
+  </data>
+  <data name="showGrid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 24</value>
+  </data>
+  <data name="showGrid.Text" xml:space="preserve">
+    <value>Mostrar grelha</value>
+  </data>
+  <data name="customBGPictureToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 24</value>
+  </data>
+  <data name="customBGPictureToolStripMenuItem.Text" xml:space="preserve">
+    <value>Imagem de Fundo...</value>
+  </data>
+  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 24</value>
+  </data>
+  <data name="toolStripMenuItem1.Text" xml:space="preserve">
+    <value>Língua</value>
+  </data>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>421, 6</value>
+  </data>
+  <data name="updateFirmwareToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 24</value>
+  </data>
+  <data name="updateFirmwareToolStripMenuItem.Text" xml:space="preserve">
+    <value>Actualização de Firmware...</value>
+  </data>
+  <data name="updateFirmwareToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Actualização do OSD com nova imagem de programação</value>
+  </data>
+  <data name="updateFontToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 24</value>
+  </data>
+  <data name="updateFontToolStripMenuItem.Text" xml:space="preserve">
+    <value>Actualização da Configuaração dos Caractéres...</value>
+  </data>
+  <data name="updateFontToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Actualização do ficheiro de fontes no OSD</value>
+  </data>
+  <data name="sendTLogToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>424, 24</value>
+  </data>
+  <data name="sendTLogToolStripMenuItem.Text" xml:space="preserve">
+    <value>A enviar Tlog...</value>
+  </data>
+  <data name="sendTLogToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>A enviar um registo de transmissão Mavlink ao OSD para testar a configuração</value>
   </data>
   <data name="helpToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 24</value>
+    <value>63, 24</value>
   </data>
   <data name="helpToolStripMenuItem.Text" xml:space="preserve">
-    <value>A&amp;yuda</value>
+    <value>&amp;Ajuda</value>
   </data>
   <data name="tabPage1.Text" xml:space="preserve">
-    <value>Función</value>
+    <value>Função</value>
+  </data>
+  <data name="tabPage2.Text" xml:space="preserve">
+    <value>Configuração</value>
+  </data>
+  <data name="groupBox5.Text" xml:space="preserve">
+    <value>Unidades</value>
   </data>
   <data name="rbImperial.Size" type="System.Drawing.Size, System.Drawing">
     <value>89, 24</value>
@@ -253,59 +247,35 @@
   <data name="rbMetric.Text" xml:space="preserve">
     <value>Métrico</value>
   </data>
-  <data name="groupBox5.Text" xml:space="preserve">
-    <value>Unidades</value>
+  <data name="groupBox4.Text" xml:space="preserve">
+    <value>AD Configuração</value>
+  </data>
+  <data name="lReading2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>98, 20</value>
   </data>
   <data name="lReading2.Text" xml:space="preserve">
-    <value>Lectura ADC2</value>
+    <value>Leitura AD 2</value>
+  </data>
+  <data name="lReading1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>98, 20</value>
   </data>
   <data name="lReading1.Text" xml:space="preserve">
-    <value>Lectura ADC1</value>
-  </data>
-  <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 20</value>
+    <value>Leitura AD 1</value>
   </data>
   <data name="label4.Text" xml:space="preserve">
     <value>Valor Real 1</value>
   </data>
-  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 20</value>
-  </data>
   <data name="label5.Text" xml:space="preserve">
     <value>Valor Real 2</value>
-  </data>
-  <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>79, 20</value>
   </data>
   <data name="label7.Text" xml:space="preserve">
     <value>Valor @ 0</value>
   </data>
-  <data name="label8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 20</value>
-  </data>
   <data name="label8.Text" xml:space="preserve">
     <value>Valor / bit</value>
   </data>
-  <data name="cbFunction.Items" xml:space="preserve">
-    <value>Voltaje A</value>
-  </data>
-  <data name="cbFunction.Items1" xml:space="preserve">
-    <value>Voltaje B</value>
-  </data>
-  <data name="cbFunction.Items2" xml:space="preserve">
-    <value>Consumo A</value>
-  </data>
-  <data name="cbFunction.Items3" xml:space="preserve">
-    <value>Consumo B</value>
-  </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 20</value>
-  </data>
   <data name="label3.Text" xml:space="preserve">
-    <value>Función</value>
-  </data>
-  <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 20</value>
+    <value>Função</value>
   </data>
   <data name="label6.Text" xml:space="preserve">
     <value>Canal</value>
@@ -764,6 +734,6 @@
 </value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Hazy - Configurador de OSD</value>
+    <value>Configuração do OSD Hazy's</value>
   </data>
 </root>

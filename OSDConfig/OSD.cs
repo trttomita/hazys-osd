@@ -117,6 +117,9 @@ namespace OSDConfig
             }
         }
 
+        //public override onpain
+        
+
         public virtual void Draw()
         {
             //if (startup)
@@ -425,6 +428,17 @@ namespace OSDConfig
                     setting.enable &= ~(1U << (int)item);
                 mod = true;
             }
+        }
+
+        public bool GetOption(OSDOption opt)
+        {
+            return setting.GetOption(opt);
+        }
+
+        public void SetOption(OSDOption opt, bool on)
+        {
+            mod = true;
+            setting.SetOption(opt, on);
         }
     }
 }

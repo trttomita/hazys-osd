@@ -47,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="ArduinoSTK.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -98,8 +104,12 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Messages.es.resx" />
     <EmbeddedResource Include="Messages.PL.resx" />
+    <EmbeddedResource Include="Messages.pt.resx" />
     <EmbeddedResource Include="Messages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Messages.Designer.cs</LastGenOutput>
@@ -114,6 +124,9 @@
     <EmbeddedResource Include="OSDConfigForm.pl.resx">
       <DependentUpon>OSDConfigForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="OSDConfigForm.pt.resx">
+      <DependentUpon>OSDConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OSDConfigForm.resx">
       <DependentUpon>OSDConfigForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -122,6 +135,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OSDItemNames.es.resx" />
     <EmbeddedResource Include="OSDItemNames.PL.resx" />
+    <EmbeddedResource Include="OSDItemNames.pt.resx" />
     <EmbeddedResource Include="OSDItemNames.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>OSDItemNames.Designer.cs</LastGenOutput>
