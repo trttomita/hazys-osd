@@ -48,6 +48,12 @@ namespace OSDConfig
         }
         List<ADReading[]> adreadings = new List<ADReading[]>();
 
+        string[] ADFunctions = new string[] { 
+            "BatA",
+            "BatB",
+            "CurA",
+            "CurB",
+            "RSSI"};
 
         bool fromOSD = true;
 
@@ -60,12 +66,14 @@ namespace OSDConfig
                 EnglishUIToolStripMenuItem, 
                 SpanishUIToolStripMenuItem, 
                 PolishUIToolStripMenuItem,
+                PortugueseUIToolStripMenuItem,
                 ChineseUIToolStripMenuItem 
             };
             langs = new CultureInfo[] {
                 new CultureInfo("en-US"), 
                 new CultureInfo("es"),
                 new CultureInfo("pl"),
+                new CultureInfo("pt-PT"),
                 new CultureInfo("zh-Hans") 
             };
         }
@@ -177,6 +185,9 @@ namespace OSDConfig
             for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
                 LIST_items.Items.Add(rmItemNames.GetString(OSDItemList.Avaliable[i].ToString()),
                 osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
+
+            foreach (var ad in ADFunctions)
+                cbFunction.Items.Add(rmItemNames.GetString(ad));
 
             for (int i = 0; i < osd.Setting.ad_setting.Length; i++)
             {
@@ -361,20 +372,27 @@ namespace OSDConfig
 
             //ArduinoSTK sp;
             OSDSetting setting;
-            osdPort.PortName = CMB_ComPort.Text;
-            osdPort.Open();
-            int ok = osdPort.GetSetting(out setting);
-            osdPort.Close();
-            if (ok == 0)
+            try
             {
-                LoadSetting(setting);
-                MessageBox.Show(this, rmMessages.GetString("Read_OSD_Done"), rmMessages.GetString("Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                osdPort.PortName = CMB_ComPort.Text;
+                osdPort.Open();
+                int ok = osdPort.GetSetting(out setting);
+                osdPort.Close();
+                if (ok == 0)
+                {
+                    LoadSetting(setting);
+                    MessageBox.Show(this, rmMessages.GetString("Read_OSD_Done"), rmMessages.GetString("Info"), MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else if (ok == -1)
+                    MessageBox.Show(this, rmMessages.GetString("Read_OSD_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else if (ok == 1)
+                    MessageBox.Show(this, rmMessages.GetString("Read_OSD_Wrong_Ver"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                osdPort.Close();
             }
-            else if (ok == -1)
+            catch (Exception)
+            {
                 MessageBox.Show(this, rmMessages.GetString("Read_OSD_Failed"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-            else if (ok == 1)
-                MessageBox.Show(this, rmMessages.GetString("Read_OSD_Wrong_Ver"), rmMessages.GetString("Error"), MessageBoxButtons.OK, MessageBoxIcon.Error);
-            osdPort.Close();
+            }
         }
 
         void sp_Progress(int progress)
@@ -945,7 +963,6 @@ namespace OSDConfig
 
         private void UILanguageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
             for (int i = 0; i < langMenus.Length; i++)
                 if (object.ReferenceEquals(sender, langMenus[i]))
                 {
@@ -963,12 +980,13 @@ namespace OSDConfig
                 return;
 
             Thread.CurrentThread.CurrentUICulture = culture;
-
+            var res = rmItemNames.GetResourceSet(culture, false, true);
             LIST_items.Items.Clear();
             for (int i = 0; i < OSDItemList.Avaliable.Length; i++)
             {
-                LIST_items.Items.Add(rmItemNames.GetString(OSDItemList.Avaliable[i].ToString()),
-                    osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
+                string name = rmItemNames.GetString(OSDItemList.Avaliable[i].ToString());
+                bool check = osd.Setting.IsEnabled(OSDItemList.Avaliable[i]);
+                LIST_items.Items.Add(name, check);
 
                 //LIST_items.Items.Add(OSDItemList.Names[(int)OSDItemList.Avaliable[i]],
                 //osd.Setting.IsEnabled(OSDItemList.Avaliable[i]));
@@ -983,34 +1001,36 @@ namespace OSDConfig
             //cbFunctions
             int idx = cbFunction.SelectedIndex;
             cbFunction.Items.Clear();
-            cbFunction.Items.AddRange(new object[] {
-            rm.GetString("cbFunction.Items"),
-            rm.GetString("cbFunction.Items1"),
-            rm.GetString("cbFunction.Items2"),
-            rm.GetString("cbFunction.Items3"),
-            rm.GetString("cbFunction.Items4")});
+            foreach (var ad in ADFunctions)
+                cbFunction.Items.Add(rmItemNames.GetString(ad));
+            //cbFunction.Items.AddRange(new object[] {
+            ///*rm.GetString("cbFunction.Items"),
+            //rm.GetString("cbFunction.Items1"),
+            //rm.GetString("cbFunction.Items2"),
+            //rm.GetString("cbFunction.Items3"),
+            //rm.GetString("cbFunction.Items4")*/
+            //rmItemNames.GetStream(
+            //});
             cbFunction.SelectedIndex = idx;
 
             xmlconfig(true);
 
         }
 
-        private void PolishUIToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void cbADEnable_CheckedChanged(object sender, EventArgs e)
         {
             if (cbFunction.SelectedIndex >= 0 && fromuser)
             {
-                osd.Setting.SetOption((OSDOption)cbFunction.SelectedIndex, rbMetric.Checked);
+                osd.SetOption((OSDOption)cbFunction.SelectedIndex, rbMetric.Checked);
             }
         }
 
         private void rbMetric_CheckedChanged(object sender, EventArgs e)
         {
-            osd.Setting.SetOption(OSDOption.M_ISO, rbMetric.Checked);
+            osd.SetOption(OSDOption.M_ISO, rbMetric.Checked);
+            //osd.Invalidate();
+            osd.Draw();
         }
 
 
@@ -1018,6 +1038,20 @@ namespace OSDConfig
         {
             return 1 << i;
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutBox box = new AboutBox();
+            box.labelProductName.Text = this.Text;
+            box.ShowDialog();
+        }
+
+        private void wikipediaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://code.google.com/p/hazys-osd/wiki/Introduction?tm=6");
+        }
+
+
 
 
     }
