@@ -71,6 +71,7 @@ public:
 private:
     // config functions
     static void LoadSetting();
+    static void ApplySetting();
     static void UploadFont();
     static void UploadSetting();
     static void GetSetting();
@@ -91,6 +92,8 @@ private:
     static void DrawWaitingHB();
     static inline void DrawHorizon(uint8_t start_col, uint8_t start_row);
     static float analog_read(ad_setting_t& ad_setting);
+    
+    static void SetUnits(bool metric);
 private:
     
     static volatile uint8_t 	crlf_count;
