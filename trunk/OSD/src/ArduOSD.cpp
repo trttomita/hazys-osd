@@ -119,7 +119,12 @@ void ArduOSD::LoadSetting()
         eeprom_read_block(&setting, &setting_EE, sizeof(setting));
     }
 
-    if (GetMode() == MAX7456_MODE_NTCS)
+    ApplySetting();
+}
+
+void ArduOSD::ApplySetting()
+{
+	if (GetMode() == MAX7456_MODE_NTCS)
         for (int j = 0; j < 24; j++)
         {
             if(setting.coord[j][1] >= GetCenter())
@@ -132,7 +137,8 @@ void ArduOSD::LoadSetting()
         convertd = 1.0;
         spd_sym = 0x81;
         dst_sym = 0x8D;
-    } else 
+    } 
+    else 
     {
         converts = 2.23;
         convertd = 3.28;
@@ -242,6 +248,7 @@ void ArduOSD::UploadSetting()
             wdt_reset();
             ack = '!';
             Clear();
+            ApplySetting();
         }
     }
     uart_putc(ack);
