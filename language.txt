@@ -1,0 +1,86 @@
+﻿/*********** OSD Function Names **************/
+
+Altitude (Absolute)
+Altitude (Relative)
+Voltage A
+Voltage A (AD)
+Voltage B
+Voltage B (AD)
+Center
+Current A
+Current A (AD)
+Current B
+Current B (AD)
+Flight Mode
+GPS Lock
+GPS Coord
+Visible Sats
+Home Direction
+Home Distance
+Heading
+Horizon
+Heart Beat
+Pitch
+Roll
+Heading Rose
+RSSI
+RSSI (AD)
+System Status
+Throttle
+Velocity
+Waypoint Direction
+Waypoint Distance
+
+/************* Prompt Messages ****************/
+
+Error
+Read analog value failed.
+Info
+Invalid file format.
+Read OSD done.
+Read OSD failed.
+Read setting failed.
+Save setting failed.
+Upload charset done.
+Upload charset failed.
+Uploading
+Write OSD done.
+Write OSD failed.
+
+/************* Form UI ***********************/
+
+Hazy's OSD Config
+Read from OSD
+Save to OSD
+Voltage A
+Voltage B
+Current A
+Current B
+RSSI
+Background Image...
+Exit
+&File
+&Help
+Function
+Real Value 1
+Real Value 2
+Channel
+Value @ 0
+Value / bit
+Load Defaults
+Open OSD File...
+AD Reading 1
+AD Reading 2
+&Options
+Save OSD file...
+Send TLog...
+Send a Mavlink transmission log to the OSD to test the layout
+Show Grid
+Func
+AD
+Language
+Update Firmware...
+Re-Flash the OSD with a new firmware image
+Update CharSet...
+Update the font file on the OSD
+&Video Mode
